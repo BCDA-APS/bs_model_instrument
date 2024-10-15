@@ -18,6 +18,7 @@ To start the bluesky instrument session in a ipython execute the below command i
 ```bash
 ipython
 ```
+Inside the ipython console execute
 ```py
 from instrument.startup import *
 ```
