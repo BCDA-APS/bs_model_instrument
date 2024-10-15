@@ -46,6 +46,7 @@ See this [example](./docs/source/demo.ipynb).
 
 - `configs/iconfig.yml` - configuration for data collection
 - `configs/logging.yml` - configuration for session logging to console and/or files
+- `qs/qs-config.yml`    - contains all configuration of the QS host process. See the [documentation](https://blueskyproject.io/bluesky-queueserver/manager_config.html) for more details of the configuration.
 
 ## queueserver
 
@@ -54,9 +55,9 @@ will interact with that host process.
 
 ### Run a queueserver host process
 
-Use the queueserver host management script.  This option stops the server (if it
+Use the queueserver host management script to start the QS host process.  The below option stops the server (if it
 is running) and then starts it.  This is the usual way to (re)start the QS host
-process.
+process. Using the below command the process runs in the background.
 
 ```bash
 ./qs/qs_host.sh restart
@@ -64,33 +65,13 @@ process.
 
 ### Run a queueserver client GUI
 
-At this time, there is one GUI recommended for use with the bluesky queueserver.
-Other GUI clients are in development and show promise of improvements.  For now,
-use this one.
-
 ```bash
 queue-monitor &
 ```
 
-## Support for the Bluesky Queueserver.
+### Shell script explained
 
-File [`qs-config.yml`](../qs/qs-config.yml) contains all configuration of the QS
-host process. See the
-[documentation](https://blueskyproject.io/bluesky-queueserver/manager_config.html)
-for more details of the configuration.
-
-The QS host process writes files into this directory. This directory can be
-relocated. However, it should not be moved into the instrument package since
-that might be installed into a read-only directory.
-
-### shell script
-
-A [shell script](./qs_host.sh) is used to start the QS host process. Typically,
-it is run in the background: `./qs/qs_host.sh restart`.  This command looks for
-a running QS host process.  If found, that process is stopped.  Then, a new QS
-host process is started in a
-[screen](https://www.gnu.org/software/screen/manual/screen.html) session.
-
+A [shell script](./qs/qs_host.sh) is used to start the QS host process. Below are all the command options, and what they do. 
 ```bash
 (bstest) $ ./qs/qs_host.sh help
 Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
@@ -122,3 +103,10 @@ Use this command to run the test suite locally:
 ```bash
 pytest -vvv --lf ./src
 ```
+
+# Warnings
+##  For the Bluesky Queueserver.
+
+The QS host process writes files into the qs directory. This directory can be
+relocated. However, it should not be moved into the instrument package since
+that might be installed into a read-only directory.
