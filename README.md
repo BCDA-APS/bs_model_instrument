@@ -6,7 +6,7 @@ Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserv
 
 Set up the development environment.
 
-```
+```bash
 export ENV_NAME=bs_model_env
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
@@ -15,10 +15,10 @@ pip install -e ."[all]"
 
 ## IPython console
 
-```
+```bash
 ipython
 ```
-```
+```py
 from instrument.startup import *
 ```
 
@@ -35,8 +35,6 @@ from instrument.startup import *
 ## Sim Plan Demo
 
 ```py
-from instrument.startup import *
-
 RE(sim_print_plan())
 RE(sim_count_plan())
 RE(sim_rel_scan_plan())
