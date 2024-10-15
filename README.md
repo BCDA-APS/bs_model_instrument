@@ -2,33 +2,23 @@
 
 Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver.
 
-## Demo
-
-```py
-from instrument.startup import *
-
-RE(sim_print_plan())
-RE(sim_count_plan())
-RE(sim_rel_scan_plan())
-```
-
 ## Installation
 
 Set up the development environment.
 
-```bash
-conda create -y -n model_instrument python=3.11 pyepics
-conda activate model_instrument
+```
+export ENV_NAME=bs_model_env
+conda create -y -n $ENV_NAME python=3.11 pyepics
+conda activate $ENV_NAME
 pip install -e ."[all]"
 ```
 
 ## IPython console
 
-```bash
+```
 ipython
 ```
-
-```py
+```
 from instrument.startup import *
 ```
 
@@ -38,8 +28,18 @@ Start JupyterLab, a Jupyter notebook server, or a notebook, VSCode.
 
 Start the data acquisition:
 
+```
+from instrument.startup import *
+```
+
+## Sim Plan Demo
+
 ```py
 from instrument.startup import *
+
+RE(sim_print_plan())
+RE(sim_count_plan())
+RE(sim_rel_scan_plan())
 ```
 
 See this [example](./docs/source/demo.ipynb).
@@ -52,8 +52,7 @@ See this [example](./docs/source/demo.ipynb).
 ## queueserver
 
 The queueserver has a host process that manages a RunEngine. Client sessions
-will interact with that host process.  See [qs/README](./qs/README.md) for more
-details.
+will interact with that host process.
 
 ### Run a queueserver host process
 
