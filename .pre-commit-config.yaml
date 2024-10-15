@@ -27,8 +27,8 @@ repos:
     rev: v0.4.8
     hooks:
       - id: ruff # replaces Flake8, isort, pydocstyle, pyupgrade
-        args:
-          - --fix
-          - --ignore=E402
+        # args:
+        #   - --fix
+        #   - --ignore=E402
 
       - id: ruff-format # replaces Black

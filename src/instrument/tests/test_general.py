@@ -6,6 +6,9 @@ Here is just enough testing to get a CI workflow started. More are possible.
 
 import pytest
 
+from ..plans.sim_plans import sim_count_plan
+from ..plans.sim_plans import sim_print_plan
+from ..plans.sim_plans import sim_rel_scan_plan
 from ..startup import RE
 from ..startup import bec
 from ..startup import cat
@@ -14,9 +17,6 @@ from ..startup import peaks
 from ..startup import running_in_queueserver
 from ..startup import sd
 from ..startup import specwriter
-from .sim_plans import sim_count_plan
-from .sim_plans import sim_print_plan
-from .sim_plans import sim_rel_scan_plan
 
 
 def test_startup():

@@ -8,10 +8,10 @@ APS only: connect with facility information
 
 import logging
 
+import apstools
+
 logger = logging.getLogger(__name__)
 logger.info(__file__)
-
-import apstools.devices
 
 aps = apstools.devices.ApsMachineParametersDevice(name="aps")
 """
