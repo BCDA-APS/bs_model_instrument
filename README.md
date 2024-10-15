@@ -28,7 +28,7 @@ Start JupyterLab, a Jupyter notebook server, or a notebook, VSCode.
 
 Start the data acquisition:
 
-```
+```py
 from instrument.startup import *
 ```
 
@@ -119,5 +119,6 @@ start-re-manager --config=./qs-config.yml
 ## Testing
 
 Use this command to run the test suite locally:
-
-`pytest -vvv --lf ./src`
+```bash
+pytest -vvv --lf ./src
+```
