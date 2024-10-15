@@ -1,0 +1,72 @@
+name: Publish Sphinx docs to GitHub Pages
+# see: https://github.com/marketplace/actions/sphinx-to-github-pages
+
+on:
+  # Build the docs on pushes to main branch, PRs to main branch, and new tags.
+  # Publish only on demand.
+  push:
+    branches:
+      - main
+    tags:
+      - '*'  # all tags
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:   # allow manual triggering
+    inputs:
+      deploy:
+        description: 'Deploy documentation'
+        type: boolean
+        required: true
+        default: false
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+
+  pages:
+    name: Publish documentation
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Deploy Information
+      if: ${{ github.event.inputs.deploy }}
+      run: |
+        echo "The docs will be published from this workflow run."
+
+    - name: Install pandoc
+      run: |
+        set -vxeuo pipefail
+        sudo apt-get update
+        sudo apt-get -y install pandoc
+
+    - name: Set time zone
+      run: echo "TZ=America/Chicago" >> "$GITHUB_ENV"
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # required for push to dest repo
+
+    - uses: actions/setup-python@v5
+      with:
+          python-version: "3.11"
+
+    - name: Install our package
+      run: pip install -e .[doc] -vv
+
+    - name: Sphinx
+      id: deployment
+      run: make -C docs html
+
+    - name: Publish (push gh-pages branch) only on demand
+      uses: peaceiris/actions-gh-pages@v4
+      if: ${{ github.event.inputs.deploy }}
+      with:
+        publish_branch: gh-pages
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/build/html
+        force_orphan: true

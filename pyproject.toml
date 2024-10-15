@@ -1,0 +1,227 @@
+[build-system]
+requires = ["setuptools>=64.0", "setuptools_scm[toml]>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.copyright]
+copyright = "2014-2024, APS"
+
+[project]
+name = "instrument"
+dynamic = ["version"]
+description = "Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver."
+authors = [
+    { name = "Eric Codrea", email = "ecodrea@anl.gov" },
+    { name = "Pete Jemian", email = "prjemian+instrument@gmail.com" },
+    { name = "Rafael Vescovi", email = "rvescovi@anl.gov" },
+]
+maintainers = [
+    { name = "Eric Codrea", email = "ecodrea@anl.gov" },
+    { name = "Pete Jemian", email = "prjemian+instrument@gmail.com" },
+    { name = "Rafael Vescovi", email = "rvescovi@anl.gov" },
+]
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ['bluesky', 'queueserver']
+license = { file = "src/instrument/LICENSE" }
+classifiers = [
+    "Development Status :: 6 - Mature",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+    "License :: Freely Distributable",
+    "License :: Public Domain",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "apstools",
+    "bluesky-queueserver",
+    "bluesky-queueserver-api",
+    "bluesky",
+    "bluesky-widgets",
+    "databroker ==1.2.5",
+    "ipython",
+    "jupyterlab",
+    "ophyd-registry",
+    "ophyd",
+    "pysumreg",
+    "qtpy",
+    "PyQt5>5.15",
+]
+
+[project.optional-dependencies]
+dev = ["build", "isort", "mypy", "pre-commit", "pytest", "ruff"]
+
+# doc: conda install conda-forge::pandoc
+doc = [
+    "babel",
+    "ipykernel",
+    "jinja2",
+    "markupsafe",
+    "myst_parser",
+    "nbsphinx",
+    "pygments-ipython-console",
+    "pygments",
+    "sphinx-design",
+    "sphinx-tabs",
+    "sphinx",
+]
+
+all = ["instrument[dev,doc]"]
+
+[project.urls]
+"Homepage" = "https://prjemian.github.io/model_instrument/"
+"Bug Tracker" = "https://github.com/prjemian/model_instrument/issues"
+
+# [project.scripts]
+# instrument = "instrument.app:main"
+
+[tool.black]
+line-length = 115
+target-version = ['py311']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | \.pytest_cache
+    | _build
+    | build
+    | dist
+    | docs
+  )/
+)
+'''
+
+
+[tool.flake8]
+max-line-length = 115
+extend-ignore = [
+    "E203", # See https://github.com/PyCQA/pycodestyle/issues/373
+    "E402", # module level import not at top of file (for cansas.py)
+    "E501",
+    "F401", # imported but unused
+    "F405", # symbol may be undefined, or defined from star imports
+    "F722", # allow Annotated[typ, some_func("some string")]
+    "F811", # support typing.overload decorator
+    "W503",
+    "W504",
+]
+
+[tool.isort]
+force_single_line = true
+# multi_line_output = 1
+line_length = 88
+include_trailing_comma = true
+
+[tool.pytest.ini_options]
+# https://docs.pytest.org/en/stable/customize.html
+addopts = ["--import-mode=importlib", "-x"]
+junit_family = "xunit1"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+[tool.ruff]
+# https://docs.astral.sh/ruff/configuration/
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".mypy_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "build",
+    "dist",
+    "venv",
+    ".venv",
+    "docs",
+]
+
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+# Assume Python 3.10
+target-version = "py310"
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    # "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    # "SIM",
+    # isort
+    "I",
+    # Warning
+    "W",
+    # pydocstyle
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    # ruff
+    # "RUF"
+]
+ignore = [
+    "E501", # Line too long
+]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = [
+    "F405", # symbol may be undefined, or defined from star imports
+]
+
+[tool.ruff.lint.isort]
+force-single-line = true # Enforces single-line imports
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.setuptools.package-data]
+"*" = ["*.yml"]
+
+[tool.setuptools_scm]
+write_to = "src/instrument/_version.py"
