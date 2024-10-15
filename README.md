@@ -1,4 +1,4 @@
-# model_instrument
+# Model Package for Bluesky Instrument Minimal Installation
 
 Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver.
 
