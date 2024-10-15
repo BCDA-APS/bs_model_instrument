@@ -80,7 +80,7 @@ jobs:
 
       - name: Create environment Python ${{ matrix.python-version }} # - Redis ${{ matrix.redis-version }}
         # needed for Unpack step
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@v2
         with:
           cache-environment: true
           cache-environment-key: env-key-${{ matrix.python-version }}
