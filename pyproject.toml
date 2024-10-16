@@ -188,9 +188,6 @@ select = [
     # ruff
     # "RUF"
 ]
-ignore = [
-    "E501", # Line too long
-]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]

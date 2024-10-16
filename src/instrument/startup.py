@@ -17,6 +17,8 @@ from .core.best_effort_init import peaks  # noqa: F401
 from .core.catalog_init import cat  # noqa: F401
 from .core.run_engine_init import RE  # noqa: F401
 from .core.run_engine_init import sd  # noqa: F401
+from .devices import *  # noqa: F403
+from .plans import *  # noqa: F403
 
 # Bluesky data acquisition setup
 from .utils.config_loaders import iconfig
@@ -36,7 +38,8 @@ if iconfig.get("SPEC_DATA_FILES") is not None:
 
 # These imports must come after the above setup.
 if running_in_queueserver():
-    ### To make the standard plans available in QS, import by '*'.
+    ### To make all the standard plans available in QS, import by '*', otherwise import
+    ### plan by plan.
     from apstools.plans import lineup2  # noqa: F401
     from bluesky.plans import *  # noqa: F403
 
@@ -49,9 +52,3 @@ else:
     from bluesky import plans as bp  # noqa: F401
 
     from .utils.controls_setup import oregistry  # noqa: F401
-
-from .devices import *  # noqa: F403
-from .plans import *  # noqa: F403
-
-# Loads plans for development, remove for production.
-from .tests.sim_plans import *  # noqa: F403
