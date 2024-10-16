@@ -39,7 +39,7 @@ from instrument.startup import *
 ```
 
 ## Sim Plan Demo
-To run some simulated plans that ensure the installation worked as expected please run the below
+To run some simulated plans that ensure the installation worked as expected please run the below inside an ipython session or a jupyter notebook after starting the data acquisition
 ```py
 RE(sim_print_plan())
 RE(sim_count_plan())
