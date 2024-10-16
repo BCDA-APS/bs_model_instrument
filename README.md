@@ -72,7 +72,7 @@ queue-monitor &
 
 ### Shell script explained
 
-A [shell script](./qs/qs_host.sh) is used to start the QS host process. Below are all the command options, and what they do. 
+A [shell script](./qs/qs_host.sh) is used to start the QS host process. Below are all the command options, and what they do.
 ```bash
 (bstest) $ ./qs/qs_host.sh help
 Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
