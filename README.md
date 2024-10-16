@@ -3,6 +3,11 @@
 Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver.
 
 ## Installation
+Clone the repository
+```bash
+git clone git@github.com:BCDA-APS/bs_model_instrument.git
+cd bs_model_instrument
+```
 
 Set up the development environment.
 
@@ -34,7 +39,7 @@ from instrument.startup import *
 ```
 
 ## Sim Plan Demo
-
+To run some simulated plans that ensure the installation worked as expected please run the below
 ```py
 RE(sim_print_plan())
 RE(sim_count_plan())
@@ -44,7 +49,7 @@ RE(sim_rel_scan_plan())
 See this [example](./docs/source/demo.ipynb).
 
 ## Configuration files
-
+The files that can be configured to adhere to your preferences are:
 - `configs/iconfig.yml` - configuration for data collection
 - `configs/logging.yml` - configuration for session logging to console and/or files
 - `qs/qs-config.yml`    - contains all configuration of the QS host process. See the [documentation](https://blueskyproject.io/bluesky-queueserver/manager_config.html) for more details of the configuration.
@@ -65,7 +70,7 @@ process. Using the below command the process runs in the background.
 ```
 
 ### Run a queueserver client GUI
-
+To run the gui client for the queueserver you can use the below command inside the terminal
 ```bash
 queue-monitor &
 ```
