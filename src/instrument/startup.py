@@ -11,18 +11,21 @@ Includes:
 
 # logging setup first
 import logging
+import asyncio
 
 from .core.best_effort_init import bec  # noqa: F401
 from .core.best_effort_init import peaks  # noqa: F401
 from .core.catalog_init import cat  # noqa: F401
 from .core.run_engine_init import RE  # noqa: F401
 from .core.run_engine_init import sd  # noqa: F401
-from .devices import *  # noqa: F403
-from .plans import *  # noqa: F403
+# from .devices import *  # noqa: F403
+from ophyd.sim import motor as sim_motor  # noqa: F401
+# from .plans import *  # noqa: F403
 
 # Bluesky data acquisition setup
 from .utils.config_loaders import iconfig
 from .utils.helper_functions import running_in_queueserver
+from .utils.instrument import Instrument
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -52,3 +55,10 @@ else:
     from bluesky import plans as bp  # noqa: F401
 
     from .utils.controls_setup import oregistry  # noqa: F401
+
+beamline = Instrument(
+    {
+        "motor": sim_motor
+    },
+)
+asyncio.run(beamline.load())

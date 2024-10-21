@@ -80,3 +80,4 @@ OPHYD:
 
 # Control detail of exception traces in IPython (console and notebook).
 XMODE_DEBUG_LEVEL: Minimal
+# haven_instrument_path: 
