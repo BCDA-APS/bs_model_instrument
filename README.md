@@ -13,7 +13,7 @@ Set up the development environment.
 
 ```bash
 export ENV_NAME=bs_model_env
-conda create -y -n $ENV_NAME python=3.11 pyepics
+conda create -y -n $ENV_NAME python=3.11 pyepics pyqt=5
 conda activate $ENV_NAME
 pip install -e ."[all]"
 ```
