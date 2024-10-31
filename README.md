@@ -1,9 +1,12 @@
 # Model Package for Bluesky Instrument Minimal Installation
 
-Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver.
+Model of a Bluesky Data Acquisition Instrument in console, notebook, &
+queueserver.
 
 ## Installation
+
 Clone the repository.
+
 ```bash
 git clone git@github.com:BCDA-APS/bs_model_instrument.git
 cd bs_model_instrument
@@ -19,11 +22,15 @@ pip install -e ."[all]"
 ```
 
 ## IPython console
+
 To start the bluesky instrument session in a ipython execute the next command in a terminal:
+
 ```bash
 ipython
 ```
+
 Inside the ipython console execute:
+
 ```py
 from instrument.startup import *
 ```
@@ -39,7 +46,11 @@ from instrument.startup import *
 ```
 
 ## Sim Plan Demo
-To run some simulated plans that ensure the installation worked as expected please run the next commands inside an ipython session or a jupyter notebook after starting the data acquisition:
+
+To run some simulated plans that ensure the installation worked as expected
+please run the next commands inside an ipython session or a jupyter notebook
+after starting the data acquisition:
+
 ```py
 RE(sim_print_plan())
 RE(sim_count_plan())
@@ -49,7 +60,9 @@ RE(sim_rel_scan_plan())
 See this [example](./docs/source/demo.ipynb).
 
 ## Configuration files
+
 The files that can be configured to adhere to your preferences are:
+
 - `configs/iconfig.yml` - configuration for data collection
 - `configs/logging.yml` - configuration for session logging to console and/or files
 - `qs/qs-config.yml`    - contains all configuration of the QS host process. See the [documentation](https://blueskyproject.io/bluesky-queueserver/manager_config.html) for more details of the configuration.
@@ -71,14 +84,18 @@ runs in the background.
 ```
 
 ### Run a queueserver client GUI
+
 To run the gui client for the queueserver you can use the next command inside the terminal:
+
 ```bash
 queue-monitor &
 ```
 
 ### Shell script explained
 
-A [shell script](./qs/qs_host.sh) is used to start the QS host process. Below are all the command options, and what they do.
+A [shell script](./qs/qs_host.sh) is used to start the QS host process. Below
+are all the command options, and what they do.
+
 ```bash
 (bstest) $ ./qs/qs_host.sh help
 Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
@@ -107,6 +124,7 @@ start-re-manager --config=./qs-config.yml
 ## Testing
 
 Use this command to run the test suite locally:
+
 ```bash
 pytest -vvv --lf ./src
 ```
