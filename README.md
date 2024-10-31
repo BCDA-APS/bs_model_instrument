@@ -103,6 +103,12 @@ cd ./qs
 start-re-manager --config=./qs-config.yml
 ```
 
+### Warnings (queueserver)
+
+The QS host process writes files into the qs directory. This directory can be
+relocated. However, it should not be moved into the instrument package since
+that might be installed into a read-only directory.
+
 ## Testing
 
 Use this command to run the test suite locally:
@@ -110,9 +116,39 @@ Use this command to run the test suite locally:
 pytest -vvv --lf ./src
 ```
 
-# Warnings
-##  For the Bluesky Queueserver.
+## Documentation
 
-The QS host process writes files into the qs directory. This directory can be
-relocated. However, it should not be moved into the instrument package since
-that might be installed into a read-only directory.
+<details>
+<summary>prerequisite</summary>
+
+To build the documentation locally, install [`pandoc`](https://pandoc.org/) in
+your conda environment:
+
+```bash
+conda install conda-forge::pandoc
+```
+
+</details>
+
+Use this command to build the documentation locally:
+
+```bash
+make -C docs clean html
+```
+
+Once the documentation builds, view the HTML pages using your web browser:
+
+```bash
+BROWSER ./docs/build/html/index.html &
+```
+
+### Adding to the documentation source
+
+The documentation source is located in files and directories under
+`./docs/source`.  Various examples are provided.
+
+Documentation can be added in these formats:
+[`.rst`](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
+(reStructured text), [`.md`](https://en.wikipedia.org/wiki/Markdown) (markdown),
+and [`.ipynb`](https://jupyter.org/) (Jupyter notebook). For more information,
+see the [Sphinx](https://www.sphinx-doc.org/) documentation.
