@@ -11,7 +11,7 @@ import logging
 import apstools.devices
 
 logger = logging.getLogger(__name__)
-logger.info(__file__)
+logger.bsdev(__file__)
 
 aps = apstools.devices.ApsMachineParametersDevice(name="aps")
 """
