@@ -103,12 +103,6 @@ cd ./qs
 start-re-manager --config=./qs-config.yml
 ```
 
-### Warnings (queueserver)
-
-The QS host process writes files into the `qs/` directory. This directory can be
-relocated. However, it should not be moved into the instrument package since
-that might be installed into a read-only directory.
-
 ## Testing
 
 Use this command to run the test suite locally:
@@ -152,3 +146,11 @@ Documentation can be added in these formats:
 (reStructured text), [`.md`](https://en.wikipedia.org/wiki/Markdown) (markdown),
 and [`.ipynb`](https://jupyter.org/) (Jupyter notebook). For more information,
 see the [Sphinx](https://www.sphinx-doc.org/) documentation.
+
+## Warnings
+
+### Bluesky Queueserver
+
+The QS host process writes files into the `qs/` directory. This directory can be
+relocated. However, it should not be moved into the instrument package since
+that might be installed into a read-only directory.
