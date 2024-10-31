@@ -28,7 +28,7 @@ DEFAULT_TIMEOUT = 60  # default used next...
 ophyd_config = iconfig.get("OPHYD", {})
 
 
-def epics_scan_id_source(scan_id_epics, _md):
+def epics_scan_id_source(_md):
     """
     Callback function for RunEngine.  Returns *next* scan_id to be used.
 
@@ -42,6 +42,7 @@ def epics_scan_id_source(scan_id_epics, _md):
     Exception will be raised if PV is not connected when next
     ``bps.open_run()`` is called.
     """
+    scan_id_epics = oregistry.find(name="scan_id_epics")
     new_scan_id = max(scan_id_epics.get(), 0) + 1
     scan_id_epics.put(new_scan_id)
     return new_scan_id
@@ -61,8 +62,9 @@ def connect_scan_id_pv(RE, pv: str = None):
 
     scan_id_epics = EpicsSignal(pv, name="scan_id_epics")
 
-    # Setup the RunEngine to use the EPICS PV to provide the scan_id.
-    RE.scan_id_source = epics_scan_id_source(scan_id_epics)
+    # Setup the RunEngine to call epics_scan_id_source()
+    # which uses the EPICS PV to provide the scan_id.
+    RE.scan_id_source = epics_scan_id_source
 
     scan_id_epics.wait_for_connection()
     RE.md["scan_id_pv"] = scan_id_epics.pvname
