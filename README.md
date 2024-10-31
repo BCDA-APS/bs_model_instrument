@@ -105,7 +105,7 @@ start-re-manager --config=./qs-config.yml
 
 ### Warnings (queueserver)
 
-The QS host process writes files into the qs directory. This directory can be
+The QS host process writes files into the `qs/` directory. This directory can be
 relocated. However, it should not be moved into the instrument package since
 that might be installed into a read-only directory.
 
