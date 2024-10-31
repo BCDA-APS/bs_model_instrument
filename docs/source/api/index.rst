@@ -19,7 +19,7 @@ The instrument model is described by this directory structure:
             core/       create core components of Bluesky data acquisition
             devices/    your instrument's controls
             plans/      your instrument's measurement procedures
-            utils/      any other code for your instrument
+            utils/      other code to setup or use your instrument
 
 A Bluesky data acquisition session :ref:`begins with <api.startup>`:
 
