@@ -65,6 +65,7 @@ html_static_path = ['_static']
 html_title = project
 
 autodoc_mock_imports = """
+    apstools
     bluesky
     databroker
     epics
