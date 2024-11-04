@@ -31,9 +31,12 @@ RE = bluesky.RunEngine()
 
 # Save/restore RE.md dictionary, in this precise order.
 if MD_PATH is not None:
-    RE.md = bluesky.utils.PersistentDict(MD_PATH)
-RE.md.update(re_metadata(cat))  # programmatic metadata
-RE.md.update(re_config.get("DEFAULT_METADATA", {}))
+    try:
+        RE.md = bluesky.utils.PersistentDict(MD_PATH)
+        RE.md.update(re_metadata(cat))  # programmatic metadata
+        RE.md.update(re_config.get("DEFAULT_METADATA", {}))
+    except Exception as _:
+        print("\n cannot access .config folder \n")
 
 sd = bluesky.SupplementalData()
 """Baselines & monitors for ``RE``."""
