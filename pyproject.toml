@@ -71,8 +71,8 @@ doc = [
 all = ["instrument[dev,doc]"]
 
 [project.urls]
-"Homepage" = "https://prjemian.github.io/model_instrument/"
-"Bug Tracker" = "https://github.com/prjemian/model_instrument/issues"
+"Homepage" = "https://BCDA-APS.github.io/bs_model_instrument/"
+"Bug Tracker" = "https://github.com/BCDA-APS/bs_model_instrument/issues"
 
 # [project.scripts]
 # instrument = "instrument.app:main"
