@@ -57,11 +57,7 @@ VERSIONS = dict(
 
 def get_md_path():
     """Get PersistentDict directory for RE metadata."""
-    path = iconfig.get("MD_PATH")
-    if path is None:
-        path = DEFAULT_MD_PATH
-    else:
-        path = pathlib.Path(path)
+    path = pathlib.Path(iconfig.get("MD_PATH"), DEFAULT_MD_PATH)
     logger.info("RunEngine metadata saved in directory: %s", str(path))
     return str(path)
 
