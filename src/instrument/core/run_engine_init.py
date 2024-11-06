@@ -31,7 +31,14 @@ RE = bluesky.RunEngine()
 
 # Save/restore RE.md dictionary, in this precise order.
 if MD_PATH is not None:
-    RE.md = bluesky.utils.PersistentDict(MD_PATH)
+    try:
+        RE.md = bluesky.utils.PersistentDict(MD_PATH)
+    except Exception as e:
+        print(
+            f"\n Could not create PersistentDict for RE metadata. Continuing without "
+            f"saving metadata to disk. The error is: {e} \n"
+        )
+
 RE.md.update(re_metadata(cat))  # programmatic metadata
 RE.md.update(re_config.get("DEFAULT_METADATA", {}))
 
