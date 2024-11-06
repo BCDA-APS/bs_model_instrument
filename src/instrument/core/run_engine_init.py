@@ -36,8 +36,12 @@ if MD_PATH is not None:
 
     try:
         RE.md.update(re_config.get("DEFAULT_METADATA", {}))
-    except Exception:
-        print("\n cannot access .config folder \n")
+    except Exception as e:
+        print(
+            f"\n Could not create PersistentDict for RE metadata. Continuing without "
+            f"saving metadata to disk. The error is: {e} \n"
+        )
+
 
 sd = bluesky.SupplementalData()
 """Baselines & monitors for ``RE``."""
