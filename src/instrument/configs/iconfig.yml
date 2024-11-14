@@ -29,6 +29,9 @@ RUN_ENGINE:
     ### Default: True
     USE_PROGRESS_BAR: false
 
+# Command-line tools, such as %wa, %ct, ...
+USE_BLUESKY_MAGICS: True
+
 ### Best Effort Callback Configurations
 ### Defaults: all true (except no plots in queueserver)
 # BEC:

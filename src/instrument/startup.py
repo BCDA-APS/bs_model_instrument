@@ -22,10 +22,14 @@ from .plans import *  # noqa: F403
 
 # Bluesky data acquisition setup
 from .utils.config_loaders import iconfig
+from .utils.helper_functions import register_bluesky_magics
 from .utils.helper_functions import running_in_queueserver
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
+
+if iconfig.get("USE_BLUESKY_MAGICS", False):
+    register_bluesky_magics()
 
 # Configure the session with callbacks, devices, and plans.
 if iconfig.get("NEXUS_DATA_FILES") is not None:

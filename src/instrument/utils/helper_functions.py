@@ -3,6 +3,7 @@ Generic utility helper functions
 ================================
 
 .. autosummary::
+    ~register_bluesky_magics
     ~running_in_queueserver
     ~debug_python
     ~mpl_setup
@@ -13,6 +14,7 @@ import logging
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from bluesky.magics import BlueskyMagics
 from bluesky_queueserver import is_re_worker_active
 from IPython import get_ipython
 
@@ -20,6 +22,13 @@ from .config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
+
+
+def register_bluesky_magics():
+    """The Bluesky Magick functions are useful with command-lines."""
+    _ipython = get_ipython()
+    if _ipython is not None:
+        _ipython.register_magics(BlueskyMagics)
 
 
 def running_in_queueserver():
