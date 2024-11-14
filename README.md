@@ -65,7 +65,7 @@ The files that can be configured to adhere to your preferences are:
 
 - `configs/iconfig.yml` - configuration for data collection
 - `configs/logging.yml` - configuration for session logging to console and/or files
-- `qs/qs-config.yml`    - contains all configuration of the QS host process. See the [documentation](https://blueskyproject.io/bluesky-queueserver/manager_config.html) for more details of the configuration.
+- `qserver/qs-config.yml`    - contains all configuration of the QS host process. See the [documentation](https://blueskyproject.io/bluesky-queueserver/manager_config.html) for more details of the configuration.
 
 ## queueserver
 
@@ -80,7 +80,7 @@ the usual way to (re)start the QS host process. Using `restart`, the process
 runs in the background.
 
 ```bash
-./qs/qs_host.sh restart
+./qserver/qs_host.sh restart
 ```
 
 ### Run a queueserver client GUI
@@ -93,11 +93,11 @@ queue-monitor &
 
 ### Shell script explained
 
-A [shell script](./qs/qs_host.sh) is used to start the QS host process. Below
+A [shell script](./qserver/qs_host.sh) is used to start the QS host process. Below
 are all the command options, and what they do.
 
 ```bash
-(bstest) $ ./qs/qs_host.sh help
+(bstest) $ ./qserver/qs_host.sh help
 Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
 
     COMMANDS
@@ -113,11 +113,11 @@ Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
         NAME      name of process (default: bluesky_queueserver-)
 ```
 
-Alternatively, run the QS host's startup comand directly within the `qs/`
+Alternatively, run the QS host's startup comand directly within the `/`
 subdirectory.
 
 ```bash
-cd ./qs
+cd ./qserver
 start-re-manager --config=./qs-config.yml
 ```
 
@@ -170,6 +170,6 @@ see the [Sphinx](https://www.sphinx-doc.org/) documentation.
 
 ### Bluesky Queueserver
 
-The QS host process writes files into the `qs/` directory. This directory can be
+The QS host process writes files into the `qserver/` directory. This directory can be
 relocated. However, it should not be moved into the instrument package since
 that might be installed into a read-only directory.

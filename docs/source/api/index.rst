@@ -10,7 +10,7 @@ The instrument model is described by this directory structure:
 
     docs/source         sphinx documentation source
     pyproject.toml      project configuration
-    qs/                 files for running a queueserver host process
+    qserver/                 files for running a queueserver host process
     src/                Python source code tree
         instrument/     root of the 'instrument' package
             startup.py  Python code to setup a session for Bluesky data acquisition

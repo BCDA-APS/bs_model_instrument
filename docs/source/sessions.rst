@@ -11,5 +11,5 @@ queueserver.
 
     console
     notebook
-    qs
+    qserver
     script
