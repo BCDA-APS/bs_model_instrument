@@ -45,6 +45,7 @@ dependencies = [
     "jupyterlab",
     "ophyd-registry",
     "ophyd",
+    "pyRestTable",
     "pysumreg",
     "qtpy",
     "PyQt5>5.15",
