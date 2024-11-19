@@ -13,7 +13,7 @@ The project comes pre-configured to install the content in the
 ``src/instrument`` directory as a package named ``instrument``.  This name can
 be changed (by editing the ``name`` key in the ``pyproject.toml`` file) before
 running the ``pip`` step. If the package is installed under a different name,
-other code (such as ``qs/qs_host.sh``) will need to be edited to find the new
+other code (such as ``qserver/qs_host.sh``) will need to be edited to find the new
 package name.
 
 .. note:: All of these commands start with the current working directory set

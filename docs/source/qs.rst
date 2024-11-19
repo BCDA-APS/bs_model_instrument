@@ -8,7 +8,7 @@ It has a host process that manages a RunEngine. Client sessions will interact
 with that host process.  See :ref:`qs.host.configure` for more details.
 
 .. important:: The queueserver requires a ``redis`` service [#]_ to be running.
-    File ``./qs/qs-config.yml`` has settings to specify the ``redis`` service.
+    File ``./qserver/qs-config.yml`` has settings to specify the ``redis`` service.
 
 .. [#] https://blueskyproject.io/bluesky-queueserver/
 .. [#] https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-linux/
@@ -24,7 +24,7 @@ process.
 
 .. code-block:: bash
 
-    ./qs/qs_host.sh restart
+    ./qserver/qs_host.sh restart
 
 .. _qs.client:
 
@@ -52,24 +52,24 @@ The QS host process writes files into this directory. This directory can be
 relocated. However, it should not be moved into the instrument package since
 that might be installed into a read-only directory.
 
-.. [#] download file: :download:`qs-config.yml <../../qs/qs-config.yml>`
+.. [#] download file: :download:`qs-config.yml <../../qserver/qs-config.yml>`
 .. [#] https://blueskyproject.io/bluesky-queueserver/manager_config.html
 
 shell script ``qs_host.sh``
 ---------------------------
 
 A shell script ``qs_host.sh`` [#]_ is used to start the QS host process. Typically,
-it is run in the background: ``./qs/qs_host.sh restart``. This command looks for
+it is run in the background: ``./qserver/qs_host.sh restart``. This command looks for
 a running QS host process.  If found, that process is stopped.  Then, a new QS
 host process is started in a *screen* [#]_ session.
 
-.. [#] download file: :download:`qs_host.sh <../../qs/qs_host.sh>`
+.. [#] download file: :download:`qs_host.sh <../../qserver/qs_host.sh>`
 .. [#] https://www.gnu.org/software/screen/manual/screen.html
 
 .. code-block:: bash
     :linenos:
 
-    (bstest) $ ./qs/qs_host.sh help
+    (bstest) $ ./qserver/qs_host.sh help
     Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
 
         COMMANDS
@@ -84,11 +84,11 @@ host process is started in a *screen* [#]_ session.
         OPTIONAL TERMS
             NAME      name of process (default: bluesky_queueserver-)
 
-Alternatively, run the QS host's startup comand directly within the ``qs/``
+Alternatively, run the QS host's startup comand directly within the ``qserver/``
 subdirectory.
 
 .. code-block:: bash
     :linenos:
 
-    cd ./qs
+    cd ./qserver
     start-re-manager --config=./qs-config.yml
