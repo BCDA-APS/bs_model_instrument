@@ -12,7 +12,7 @@ The DM tools rely on the existence of a set of environment variables that define
 Use the `dm_list_processing_jobs()` plan stub to show DM any workflow jobs that
 are still running or pending.  These are installed by calling
 `aps_dm_setup(DM_SETUP_SCRIPT)` in each session before you call any other DM
-code.  
+code.
 
 Here, `DM_SETUP_SCRIPT` is the full path to the bash setup shell script provided
 by DM for this account.  The exact path can be different for some installations.
