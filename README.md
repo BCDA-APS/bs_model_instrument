@@ -173,3 +173,7 @@ see the [Sphinx](https://www.sphinx-doc.org/) documentation.
 The QS host process writes files into the `qserver/` directory. This directory can be
 relocated. However, it should not be moved into the instrument package since
 that might be installed into a read-only directory.
+
+## How-To Guides
+
+- [APS Data Management Plans](./docs/source/guides/dm.md)

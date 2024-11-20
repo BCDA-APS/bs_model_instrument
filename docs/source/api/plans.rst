@@ -3,5 +3,13 @@
 ``instrument.plans``
 ====================
 
-Add Python modules here that describe your instrument's custom measurement
-procedures
+Python modules that describe your instrument's custom measurement procedures.
+
+.. autosummary::
+    :nosignatures:
+
+    ~instrument.plans.dm_plans
+    ~instrument.plans.sim_plans
+
+.. automodule:: instrument.plans.dm_plans
+.. automodule:: instrument.plans.sim_plans
