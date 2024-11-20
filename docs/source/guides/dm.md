@@ -112,7 +112,7 @@ api = dm_api_proc()
 ```
 
 To see all capabilities this DM api object offers: `dir(api)`.
-To see all available workflows (with all their instructions): 
+To see all available workflows (with all their instructions):
 `api.listWorkflows(api.username)`.
 Show some basic `api` information:
 
@@ -213,11 +213,11 @@ workflow='xrf-maps'  id='9276f545-6e17-45c0-b5c5-b4d36a75f4dd'
 Out[7]: ()
 
 In [8]: print(f"{len(api.listProcessingJobs())=!r}")
-   ...: 
+   ...:
 len(api.listProcessingJobs())=17
 
 In [9]: RE(dm_list_processing_jobs())
-   ...: 
+   ...:
 Out[9]: ()
 
 In [10]: job_id = api.listProcessingJobs()[-1]["id"]
@@ -227,8 +227,8 @@ Out[10]: '9276f545-6e17-45c0-b5c5-b4d36a75f4dd'
 In [11]: details = api.getProcessingJobById(id=job_id, owner=api.username)
     ...: # Show the details in a readable format:
     ...: dict(details)
-    ...: 
-Out[11]: 
+    ...:
+Out[11]:
 {'filePath': 'README.md',
  'experimentName': 'Bluesky202411',
  'workflow': {'name': 'xrf-maps',
@@ -348,7 +348,7 @@ Out[11]:
 In [12]: wf_def = api.getWorkflowByName(owner=api.username, name=WORKFLOW)
 
 In [13]: dict(wf_def)
-Out[13]: 
+Out[13]:
 {'name': 'xrf-maps',
  'version': '0.0.0',
  'description': 'Workflow for XRF-Maps X-ray fluorescence microscopy data analysis package.\nhttps://github.com/AdvancedPhotonSource/XRF-Maps\nKeyword Arguments:\n\tfilePath - Raw data file path.\n\tfit - <roi,roi_plus,nnls,tails,matrix> - Comma seperated list of fitting routines.\n\tdataDir (optional) - Directory containing raw data files.\n\tnthreads (optional) - Number of threads to use. default: all\n\tquantifyWith (optional) - File to use as quantification standard.\n\tdetectors (optional) - Detectors to process. default: 0,1,2,3 for 4 detectors\n\tgenerateAvgH5 (optional) - Generate .h5 file which is the average of all detectors. default: False\n\taddV9Layout (optional) - Generate .h5 file which has v9 layout able to open in IDL MAPS software. default: False\n\taddExchange (optional) - Add exchange group into hdf5 file with normalized data. default: False\n\texportCSV (optional) - Export Integrated spec, fitted, background to csv file. default: False\n\tupdateTheta <theta_pv_string> (optional) - Update the theta dataset value using theta_pv_string as new pv string ref.\n\tupdateAmps <us_amp>,<ds_amp> (optional) - Updates upstream and downstream amps if they changed inbetween scans.\n\tupdateQuantAmps <us_amp>,<ds_amp> (optional) - Updates upstream and downstream amps for quantification if they changed inbetween scans.\n\tquickAndDirty (optional) - Integrate the detector range into 1 spectra. default: False\n\toptimizeFitOverrideParams (optional) - Integrate the 8 largest mda datasets and fit with multiple params. 1 = matrix batch fit, 2 = batch fit without tails, 3 = batch fit with tails, 4 = batch fit with free E & everything else fixed.\n\toptimizer <lmfit, mpfit> (optional) - Choose which optimizer to use for optimizeFitOverrideParams.',
