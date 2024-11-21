@@ -67,8 +67,11 @@ def connect_scan_id_pv(RE, pv: str = None):
     RE.scan_id_source = epics_scan_id_source
 
     scan_id_epics.wait_for_connection()
-    RE.md["scan_id_pv"] = scan_id_epics.pvname
-    RE.md["scan_id"] = scan_id_epics.get()  # set scan_id from EPICS
+    try:
+        RE.md["scan_id_pv"] = scan_id_epics.pvname
+        RE.md["scan_id"] = scan_id_epics.get()  # set scan_id from EPICS
+    except TypeError:
+        pass  # Ignore PersistentDict errors that only raise when making the docs
 
 
 def set_control_layer(control_layer: str = DEFAULT_CONTROL_LAYER):
