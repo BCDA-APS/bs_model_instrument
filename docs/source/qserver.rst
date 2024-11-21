@@ -1,4 +1,4 @@
-.. _qs:
+.. _qserver:
 
 queueserver
 ===========
