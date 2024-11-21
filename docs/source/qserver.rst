@@ -84,7 +84,7 @@ host process is started in a *screen* [#]_ session.
         OPTIONAL TERMS
             NAME      name of process (default: bluesky_queueserver-)
 
-Alternatively, run the QS host's startup comand directly within the ``qserver/``
+Alternatively, run the QS host's startup command directly within the ``./qserver/``
 subdirectory.
 
 .. code-block:: bash
