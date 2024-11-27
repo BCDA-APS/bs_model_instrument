@@ -172,3 +172,6 @@ qserver/existing_plans_and_devices.yaml
 .logs/
 *.dat
 *.hdf
+
+# Local Run Engine metadata dictionary
+.re_md_dict.yml
