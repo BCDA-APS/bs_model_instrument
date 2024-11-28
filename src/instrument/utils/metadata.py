@@ -53,11 +53,13 @@ VERSIONS = dict(
     pysumreg=pysumreg.__version__,
     spec2nexus=spec2nexus.__version__,
 )
+RE_CONFIG = iconfig.get("RUN_ENGINE", {})
 
 
 def get_md_path():
     """Get PersistentDict directory for RE metadata."""
-    path = pathlib.Path(iconfig.get("MD_PATH", DEFAULT_MD_PATH))
+    md_path_name = RE_CONFIG.get("MD_PATH", DEFAULT_MD_PATH)
+    path = pathlib.Path(md_path_name)
     logger.info("RunEngine metadata saved in directory: %s", str(path))
     return str(path)
 
