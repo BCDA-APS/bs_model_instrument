@@ -113,7 +113,7 @@ Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
         NAME      name of process (default: bluesky_queueserver-)
 ```
 
-Alternatively, run the QS host's startup comand directly within the `./qserver/`
+Alternatively, run the QS host's startup command directly within the `./qserver/`
 subdirectory.
 
 ```bash
