@@ -31,9 +31,9 @@ console, a Jupyter notebook, the queueserver, or even a Python script:
 About ...
 -----------
 
-:home: https://prjemian.github.io/model_instrument/
-:bug tracker: https://github.com/prjemian/model_instrument/issues
-:source: https://github.com/prjemian/model_instrument
+:home: https://BCDA-APS.github.io/bs_model_instrument/
+:bug tracker: https://github.com/BCDA-APS/bs_model_instrument/issues
+:source: https://github.com/BCDA-APS/bs_model_instrument
 :license: :ref:`license`
 :full version: |version|
 :published: |today|
