@@ -63,20 +63,20 @@ def test_StoredDict(md_file):
     assert _sync_threads[sync_key] is not None
     assert isinstance(_sync_threads[sync_key], threading.Thread)
     sdict.flush()
-    time.sleep(3*sdict._sync_while_loop_period)  # Luftpause for sync_agent.
+    time.sleep(3 * sdict._sync_while_loop_period)  # Luftpause for sync_agent.
     assert _sync_threads[sync_key] is None
     assert len(open(md_file).read().splitlines()) == 4
 
     # Change the only value.
     sdict["a"] = 2
     sdict.flush()
-    time.sleep(3*sdict._sync_while_loop_period)  # Luftpause.
+    time.sleep(3 * sdict._sync_while_loop_period)  # Luftpause.
     assert len(open(md_file).read().splitlines()) == 4  # Still.
 
     # Add another key.
     sdict["bee"] = "bumble"
     sdict.flush()
-    time.sleep(3*sdict._sync_while_loop_period)  # Luftpause.
+    time.sleep(3 * sdict._sync_while_loop_period)  # Luftpause.
     assert len(open(md_file).read().splitlines()) == 5
 
     # Test _delayed_sync_to_storage.
