@@ -50,6 +50,8 @@ Python has six *named* log levels.  The level specifies the minimum severity of
 messages to report. Each named level is assigned a specific integer indicating
 the severity of the log.
 
+This package adds `"BSDEV"` to the list.
+
 =========   =========   ==================================================
 name        severity    comments
 =========   =========   ==================================================
@@ -57,6 +59,7 @@ CRITICAL    50          Examine immediately. **Quietest** level.
 ERROR       40          Something has failed.  [#includes]_
 WARNING     30          Something needs attention.  [#includes]_
 INFO        20          A report that may be of interest.  [#includes]_
+BSDEV       15          A report of interest to developers.  [#includes]_
 DEBUG       10          Diagnostic. **Noisiest** level.  [#includes]_
 NOTSET      0           Initial setting, defaults to WARNING.
 =========   =========   ==================================================
