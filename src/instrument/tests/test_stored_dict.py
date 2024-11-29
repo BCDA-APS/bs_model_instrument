@@ -4,7 +4,6 @@ Test the utils.stored_dict module.
 
 import pathlib
 import tempfile
-import threading
 import time
 from contextlib import nullcontext as does_not_raise
 
@@ -12,7 +11,6 @@ import pytest
 
 from ..utils.config_loaders import load_config_yaml
 from ..utils.stored_dict import StoredDict
-from ..utils.stored_dict import _sync_threads
 
 
 @pytest.fixture
@@ -41,12 +39,8 @@ def test_StoredDict(md_file):
     assert sdict._delay == 0.2
     assert sdict._title == "unit testing"
     assert len(open(md_file).read().splitlines()) == 0  # still empty
-
-    # Check that the thread dictionary is setup.
-    assert len(_sync_threads) > 0
-    sync_key = id(sdict)
-    assert sync_key == sdict._sync_key
-    assert sync_key in _sync_threads
+    assert sdict._sync_key == f"sync_agent_{id(sdict):x}"
+    assert not sdict._sync_agent_running
 
     # Write an empty dictionary.
     sdict.flush()
@@ -58,25 +52,27 @@ def test_StoredDict(md_file):
     assert "unit testing" in buf[0]
 
     # Add a new {key: value} pair.
-    assert _sync_threads[sync_key] is None
+    assert not sdict._sync_agent_running
     sdict["a"] = 1
-    assert _sync_threads[sync_key] is not None
-    assert isinstance(_sync_threads[sync_key], threading.Thread)
+    # time.sleep(0.01)  # Luftpause for sync_agent.
+    assert sdict._sync_agent_running
     sdict.flush()
-    time.sleep(3 * sdict._sync_while_loop_period)  # Luftpause for sync_agent.
-    assert _sync_threads[sync_key] is None
+    assert time.time() > sdict._sync_deadline
+    # Luftpause for sync_agent polling loop plus a smidgen.
+    time.sleep(0.001 + sdict._sync_while_loop_period)
+    assert not sdict._sync_agent_running
     assert len(open(md_file).read().splitlines()) == 4
 
     # Change the only value.
     sdict["a"] = 2
     sdict.flush()
-    time.sleep(3 * sdict._sync_while_loop_period)  # Luftpause.
+    time.sleep(sdict._sync_while_loop_period)  # Luftpause.
     assert len(open(md_file).read().splitlines()) == 4  # Still.
 
     # Add another key.
     sdict["bee"] = "bumble"
     sdict.flush()
-    time.sleep(3 * sdict._sync_while_loop_period)  # Luftpause.
+    time.sleep(sdict._sync_while_loop_period)  # Luftpause.
     assert len(open(md_file).read().splitlines()) == 5
 
     # Test _delayed_sync_to_storage.
