@@ -76,10 +76,10 @@ class StoredDict(collections.abc.MutableMapping):
         self._title = title or f"Written by {self.__class__.__name__}."
         self.test_serializable = serializable
 
-        self._sync_agent_running = False
+        self.sync_in_progress = False
         self._sync_deadline = time.time()
         self._sync_key = f"sync_agent_{id(self):x}"
-        self._sync_while_loop_period = 0.005
+        self._sync_loop_period = 0.005
 
         self._cache = {}
         self.reload()
@@ -121,7 +121,7 @@ class StoredDict(collections.abc.MutableMapping):
         self._sync_deadline = time.time() + self._delay
         logger.debug("new sync deadline in %f s.", self._delay)
 
-        if not self._sync_agent_running:
+        if not self.sync_in_progress:
             # Start the sync_agent (thread).
             self._delayed_sync_to_storage()
 
@@ -136,11 +136,11 @@ class StoredDict(collections.abc.MutableMapping):
         def sync_agent():
             """Threaded task."""
             logger.debug("Starting sync_agent...")
-            self._sync_agent_running = True
+            self.sync_in_progress = True
             while time.time() < self._sync_deadline:
-                time.sleep(self._sync_while_loop_period)
-            self._sync_agent_running = False
+                time.sleep(self._sync_loop_period)
             logger.debug("Sync waiting period ended")
+            self.sync_in_progress = False
 
             StoredDict.dump(self._file, self._cache, title=self._title)
 
@@ -150,9 +150,10 @@ class StoredDict(collections.abc.MutableMapping):
     def flush(self):
         """Force a write of the dictionary to disk"""
         logger.debug("flush()")
-        if not self._sync_agent_running:
+        if not self.sync_in_progress:
             StoredDict.dump(self._file, self._cache, title=self._title)
         self._sync_deadline = time.time()
+        self.sync_in_progress = False
 
     def popitem(self):
         """

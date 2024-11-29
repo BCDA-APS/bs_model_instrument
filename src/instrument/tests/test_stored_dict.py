@@ -13,6 +13,11 @@ from ..utils.config_loaders import load_config_yaml
 from ..utils.stored_dict import StoredDict
 
 
+def luftpause(delay=0.01):
+    """A brief wait for content to flush to storage."""
+    time.sleep(max(0, delay))
+
+
 @pytest.fixture
 def md_file():
     """Provide a temporary file (deleted on close)."""
@@ -40,39 +45,38 @@ def test_StoredDict(md_file):
     assert sdict._title == "unit testing"
     assert len(open(md_file).read().splitlines()) == 0  # still empty
     assert sdict._sync_key == f"sync_agent_{id(sdict):x}"
-    assert not sdict._sync_agent_running
+    assert not sdict.sync_in_progress
 
     # Write an empty dictionary.
     sdict.flush()
+    luftpause()
     buf = open(md_file).read().splitlines()
-    assert len(buf) == 4
+    assert len(buf) == 4, f"{buf=}"
     assert buf[-1] == "{}"  # The empty dict.
     assert buf[0].startswith("# ")
     assert buf[1].startswith("# ")
     assert "unit testing" in buf[0]
 
     # Add a new {key: value} pair.
-    assert not sdict._sync_agent_running
+    assert not sdict.sync_in_progress
     sdict["a"] = 1
-    # time.sleep(0.01)  # Luftpause for sync_agent.
-    assert sdict._sync_agent_running
+    assert sdict.sync_in_progress
     sdict.flush()
     assert time.time() > sdict._sync_deadline
-    # Luftpause for sync_agent polling loop plus a smidgen.
-    time.sleep(0.001 + sdict._sync_while_loop_period)
-    assert not sdict._sync_agent_running
+    luftpause()
+    assert not sdict.sync_in_progress
     assert len(open(md_file).read().splitlines()) == 4
 
     # Change the only value.
     sdict["a"] = 2
     sdict.flush()
-    time.sleep(sdict._sync_while_loop_period)  # Luftpause.
+    luftpause()
     assert len(open(md_file).read().splitlines()) == 4  # Still.
 
     # Add another key.
     sdict["bee"] = "bumble"
     sdict.flush()
-    time.sleep(sdict._sync_while_loop_period)  # Luftpause.
+    luftpause()
     assert len(open(md_file).read().splitlines()) == 5
 
     # Test _delayed_sync_to_storage.
