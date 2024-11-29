@@ -76,8 +76,9 @@ class StoredDict(collections.abc.MutableMapping):
         self._title = title or f"Written by {self.__class__.__name__}."
         self.test_serializable = serializable
 
-        self._sync_key = f"sync_agent_{id(self):x}"
+        self._sync_agent_running = False
         self._sync_deadline = time.time()
+        self._sync_key = f"sync_agent_{id(self):x}"
         self._sync_while_loop_period = 0.005
 
         self._cache = {}
@@ -119,7 +120,9 @@ class StoredDict(collections.abc.MutableMapping):
         # Reset the deadline.
         self._sync_deadline = time.time() + self._delay
         logger.debug("new sync deadline in %f s.", self._delay)
+
         if not self._sync_agent_running:
+            # Start the sync_agent (thread).
             self._delayed_sync_to_storage()
 
     def _delayed_sync_to_storage(self):
@@ -133,23 +136,16 @@ class StoredDict(collections.abc.MutableMapping):
         def sync_agent():
             """Threaded task."""
             logger.debug("Starting sync_agent...")
+            self._sync_agent_running = True
             while time.time() < self._sync_deadline:
                 time.sleep(self._sync_while_loop_period)
+            self._sync_agent_running = False
             logger.debug("Sync waiting period ended")
 
             StoredDict.dump(self._file, self._cache, title=self._title)
 
         thred = threading.Thread(target=sync_agent)
         thred.start()
-
-    @property
-    def _sync_agent_running(self):
-        """Is our sync_agent thread running?"""
-        verdict = False
-        for thred in threading.enumerate():
-            if thred.name == self._sync_key:
-                verdict = True
-        return verdict
 
     def flush(self):
         """Force a write of the dictionary to disk"""
