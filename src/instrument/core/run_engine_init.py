@@ -18,6 +18,7 @@ from ..utils.controls_setup import set_control_layer
 from ..utils.controls_setup import set_timeouts
 from ..utils.metadata import MD_PATH
 from ..utils.metadata import re_metadata
+from ..utils.stored_dict import StoredDict
 from .best_effort_init import bec
 from .catalog_init import cat
 
@@ -31,13 +32,24 @@ RE = bluesky.RunEngine()
 
 # Save/restore RE.md dictionary, in this precise order.
 if MD_PATH is not None:
+    handler_name = re_config.get("MD_STORAGE_HANDLER", "StoredDict")
+    logger.debug(
+        "Select %r to store 'RE.md' dictionary in %s.",
+        handler_name,
+        MD_PATH,
+    )
     try:
-        RE.md = bluesky.utils.PersistentDict(MD_PATH)
-    except Exception as e:
+        if handler_name == "PersistentDict":
+            RE.md = bluesky.utils.PersistentDict(MD_PATH)
+        else:
+            RE.md = StoredDict(MD_PATH)
+    except Exception as error:
         print(
-            f"\n Could not create PersistentDict for RE metadata. Continuing without "
-            f"saving metadata to disk. The error is: {e} \n"
+            "\n"
+            f"Could not create {handler_name} for RE metadata. Continuing"
+            f" without saving metadata to disk. {error=}\n"
         )
+        logger.warning("%s('%s') error:%s", handler_name, MD_PATH, error)
 
 RE.md.update(re_metadata(cat))  # programmatic metadata
 RE.md.update(re_config.get("DEFAULT_METADATA", {}))

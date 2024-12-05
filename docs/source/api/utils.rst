@@ -15,6 +15,7 @@ configs, core, devices, or plans.
     ~instrument.utils.config_loaders
     ~instrument.utils.logging_setup
     ~instrument.utils.metadata
+    ~instrument.utils.stored_dict
 
 .. automodule:: instrument.utils.aps_functions
 .. automodule:: instrument.utils.controls_setup
@@ -22,3 +23,4 @@ configs, core, devices, or plans.
 .. automodule:: instrument.utils.config_loaders
 .. automodule:: instrument.utils.logging_setup
 .. automodule:: instrument.utils.metadata
+.. automodule:: instrument.utils.stored_dict

@@ -53,11 +53,26 @@ VERSIONS = dict(
     pysumreg=pysumreg.__version__,
     spec2nexus=spec2nexus.__version__,
 )
+RE_CONFIG = iconfig.get("RUN_ENGINE", {})
 
 
 def get_md_path():
-    """Get PersistentDict directory for RE metadata."""
-    path = pathlib.Path(iconfig.get("MD_PATH", DEFAULT_MD_PATH))
+    """
+    Get path for RE metadata.
+
+    ==============  ==============================================
+    support         path
+    ==============  ==============================================
+    PersistentDict  Directory where dictionary keys are stored in separate files.
+    StoredDict      File where dictionary is stored as YAML.
+    ==============  ==============================================
+
+    In either case, the 'path' can be relative or absolute.  Relative
+    paths are with respect to the present working directory when the
+    bluesky session is started.
+    """
+    md_path_name = RE_CONFIG.get("MD_PATH", DEFAULT_MD_PATH)
+    path = pathlib.Path(md_path_name)
     logger.info("RunEngine metadata saved in directory: %s", str(path))
     return str(path)
 

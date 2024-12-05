@@ -20,9 +20,10 @@ RUN_ENGINE:
     ### Default: `RE.md["scan_id"]` (not using an EPICS PV)
     # SCAN_ID_PV: f"{IOC}bluesky_scan_id"
 
-    ### Directory to "autosave" the RE.md dictionary (uses PersistentDict).
-    ### Default: HOME/.config/Bluesky_RunEngine_md'
-    # MD_PATH: /home/beams/USERNAME/.config/Bluesky_RunEngine_md
+    ### Where to "autosave" the RE.md dictionary.
+    ### Defaults:
+    MD_STORAGE_HANDLER: StoredDict
+    MD_PATH: .re_md_dict.yml
 
     ### The progress bar is nice to see,
     ### except when it clutters the output in Jupyter notebooks.
