@@ -32,13 +32,17 @@ RE = bluesky.RunEngine()
 
 # Save/restore RE.md dictionary, in this precise order.
 if MD_PATH is not None:
-    handler_name = re_config.get("MD_STORAGE_HANDLER", "PersistentDict")
+    handler_name = re_config.get("MD_STORAGE_HANDLER", "StoredDict")
+    logger.debug(
+        "Select %r to store 'RE.md' dictionary in %s.",
+        handler_name,
+        MD_PATH,
+    )
     try:
-        handler = {
-            "PersistentDict": bluesky.utils.PersistentDict,
-            "StoredDict": StoredDict,
-        }[handler_name]
-        RE.md = handler(MD_PATH)
+        if handler_name == "PersistentDict":
+            RE.md = bluesky.utils.PersistentDict(MD_PATH)
+        else:
+            RE.md = StoredDict(MD_PATH)
     except Exception as error:
         print(
             "\n"
