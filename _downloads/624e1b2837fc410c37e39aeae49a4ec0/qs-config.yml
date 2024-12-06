@@ -1,0 +1,51 @@
+# Bluesky-Queueserver start-re-manager configuration
+# use:
+#   queue-monitor &
+#   ./qserver/qs_host.sh start
+#
+#   or
+#   cd ./qserver
+#   start-re-manager --config=./qs-config.yml
+#
+# https://blueskyproject.io/bluesky-queueserver/manager_config.html
+
+network:
+    redis_addr: localhost:6379
+    redis_name_prefix: qs_default
+    zmq_control_addr: tcp://*:60615
+    zmq_info_addr: tcp://*:60625
+    zmq_publish_console: true
+
+operation:
+    # choices: SILENT QUIET NORMAL VERBOSE
+    console_logging_level: NORMAL
+
+    # emergency_lock_key: custom_lock_key
+
+    print_console_output: true
+
+    # choices: NEVER ENVIRONMENT_OPEN ALWAYS
+    update_existing_plans_and_devices: ENVIRONMENT_OPEN
+
+    # choices: NEVER ON_REQUEST ON_STARTUP
+    user_group_permissions_reload: ON_STARTUP
+
+run_engine:
+    # databroker_config: name_of_databroker_config_file
+
+    # kafka_server: 127.0.0.1:9092
+    # kafka_topic: custom_topic_name
+
+    use_persistent_metadata: true
+    zmq_data_proxy_addr: localhost:5567
+
+startup:
+    keep_re: true
+    startup_module: instrument.startup
+    existing_plans_and_devices_path: ./
+    user_group_permissions_path: ./
+
+worker:
+    use_ipython_kernel: true
+    # ipython_kernel_ip: auto
+    ipython_matplotlib: qt5

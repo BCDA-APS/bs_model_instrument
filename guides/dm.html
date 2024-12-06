@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Guide: APS Data Management Plans &#8212; instrument</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <script src="../_static/documentation_options.js?v=aa402110"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation" href="../install.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="guide-aps-data-management-plans">
+<h1>Guide: APS Data Management Plans<a class="headerlink" href="#guide-aps-data-management-plans" title="Link to this heading">¶</a></h1>
+<p>Provides a few examples of the plans that interact with APS Data Management (DM)
+tools.</p>
+<section id="required">
+<h2>Required<a class="headerlink" href="#required" title="Link to this heading">¶</a></h2>
+<p>The DM tools rely on the existence of a set of environment variables that define various aspects of the DM system.</p>
+</section>
+<section id="show-any-dm-jobs-still-processing">
+<h2>Show any DM jobs still processing<a class="headerlink" href="#show-any-dm-jobs-still-processing" title="Link to this heading">¶</a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">dm_list_processing_jobs()</span></code> plan stub to show DM any workflow jobs that
+are still running or pending.  These are installed by calling
+<code class="docutils literal notranslate"><span class="pre">aps_dm_setup(DM_SETUP_SCRIPT)</span></code> in each session before you call any other DM
+code.</p>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">DM_SETUP_SCRIPT</span></code> is the full path to the bash setup shell script provided
+by DM for this account.  The exact path can be different for some installations.
+If unsure, contact the APS DM team for advice.</p>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">aps_dm_setup</span></code> is not a bluesky plan stub.  Call it as a standard Python
+function.</p>
+<p>Here’s an example:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">instrument.utils.aps_functions</span> <span class="kn">import</span> <span class="n">aps_dm_setup</span>
+
+<span class="n">aps_dm_setup</span><span class="p">(</span><span class="s2">&quot;/home/dm/etc/dm.setup.sh&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="start-a-new-workflow-job">
+<h2>Start a new workflow job<a class="headerlink" href="#start-a-new-workflow-job" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">dm_kickoff_workflow()</span></code> plan can be used to start a DM workflow job.  See
+the source code for additional options (such as how often to report progress and
+how to wait for the workflow to finish before the bluesky plan proceeds).</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">instrument.plans.dm_plans</span> <span class="kn">import</span> <span class="n">dm_kickoff_workflow</span>
+
+<span class="c1"># Use the run with `uid` from the catalog `cat`.</span>
+<span class="n">run</span> <span class="o">=</span> <span class="n">cat</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span>
+
+<span class="c1"># Create the dictionary of arguments for the chosen workflow.</span>
+<span class="n">argsDict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;filePath&quot;</span><span class="p">:</span> <span class="s2">&quot;path/to/data/file.mda&quot;</span><span class="p">,</span>  <span class="c1"># example</span>
+    <span class="s2">&quot;experimentName&quot;</span><span class="p">:</span> <span class="s2">&quot;testing-2024-11&quot;</span><span class="p">,</span>  <span class="c1"># example</span>
+    <span class="s2">&quot;workflowName&quot;</span><span class="p">:</span> <span class="s2">&quot;processing&quot;</span><span class="p">,</span>  <span class="c1"># existing workflow name</span>
+    <span class="c1"># ... any other items required by the workflow</span>
+<span class="p">}</span>
+
+<span class="c1"># Start the workflow job from the command line:</span>
+<span class="n">RE</span><span class="p">(</span><span class="n">dm_kickoff_workflow</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">argsDict</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In a plan, replace the call to <code class="docutils literal notranslate"><span class="pre">RE(...)</span></code> with <code class="docutils literal notranslate"><span class="pre">yield</span> <span class="pre">from</span> <span class="pre">...</span></code>, such as:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">a_plan</span><span class="p">():</span>
+    <span class="c1"># earlier steps</span>
+    <span class="k">yield from</span> <span class="n">dm_kickoff_workflow</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">argsDict</span><span class="p">)</span>
+    <span class="c1"># later steps</span>
+</pre></div>
+</div>
+</section>
+<section id="start-a-new-workflow-job-low-level">
+<h2>Start a new workflow job (Low-level)<a class="headerlink" href="#start-a-new-workflow-job-low-level" title="Link to this heading">¶</a></h2>
+<p>If the <code class="docutils literal notranslate"><span class="pre">dm_kickoff_workflow()</span></code> plan stub does more than you want, you might consider the <code class="docutils literal notranslate"><span class="pre">dm_submit_workflow_job()</span></code>
+plan stub.  The <code class="docutils literal notranslate"><span class="pre">dm_submit_workflow_job()</span></code> plan stub is
+a thin wrapper around DM’s <code class="docutils literal notranslate"><span class="pre">startProcessingJob()</span></code> function.
+The plan stub converts this DM function into a bluesky plan, and reports the DM workflow job <code class="docutils literal notranslate"><span class="pre">id</span></code> once the job has been submitted.</p>
+<p>As above, you’ll need the <code class="docutils literal notranslate"><span class="pre">workflowName</span></code> and the <code class="docutils literal notranslate"><span class="pre">argsDict</span></code>.</p>
+<p>From the command line: <code class="docutils literal notranslate"><span class="pre">RE(dm_submit_workflow_job(workflowName,</span> <span class="pre">argsDict))</span></code></p>
+<p>In a plan: <code class="docutils literal notranslate"><span class="pre">yield</span> <span class="pre">from</span> <span class="pre">dm_submit_workflow_job(workflowName,</span> <span class="pre">argsDict)</span></code></p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">apstools</span></code>
+<a class="reference external" href="https://bcda-aps.github.io/apstools/latest/api/_utils.html#aps-data-management">package</a>
+has more support to integrate various capabilities of the DM tools.</p>
+<p>For more information about DM, see its <a class="reference external" href="https://git.aps.anl.gov/DM/dm-docs/-/wikis/DM/Beamline-Services/API-Reference">API
+Reference</a>.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">instrument</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../demo.html">Demo: Notebook Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sessions.html">Sessions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Guide: APS Data Management Plans</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#required">Required</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#show-any-dm-jobs-still-processing">Show any DM jobs still processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-a-new-workflow-job">Start a new workflow job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-a-new-workflow-job-low-level">Start a new workflow job (Low-level)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging_config.html">Session logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API: The Source Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">Software License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">&lt;no title&gt;</a></li>
+      <li>Next: <a href="../install.html" title="next chapter">Installation</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023-2024, APS BCDA.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/guides/dm.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

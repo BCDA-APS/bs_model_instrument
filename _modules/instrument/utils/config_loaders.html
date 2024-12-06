@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>instrument.utils.config_loaders &#8212; instrument</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../_static/documentation_options.js?v=aa402110"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for instrument.utils.config_loaders</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Load configuration files</span>
+<span class="sd">========================</span>
+
+<span class="sd">Load supported configuration files, such as ``iconfig.yml``.</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    ~load_config_yaml</span>
+<span class="sd">    ~IConfigFileVersionError</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">bsdev</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">instrument_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+<span class="n">DEFAULT_ICONFIG_YML_FILE</span> <span class="o">=</span> <span class="n">instrument_path</span> <span class="o">/</span> <span class="s2">&quot;configs&quot;</span> <span class="o">/</span> <span class="s2">&quot;iconfig.yml&quot;</span>
+<span class="n">ICONFIG_MINIMUM_VERSION</span> <span class="o">=</span> <span class="s2">&quot;2.0.0&quot;</span>
+
+
+<div class="viewcode-block" id="load_config_yaml">
+<a class="viewcode-back" href="../../../api/utils.html#instrument.utils.config_loaders.load_config_yaml">[docs]</a>
+<span class="k">def</span> <span class="nf">load_config_yaml</span><span class="p">(</span><span class="n">iconfig_yml</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load iconfig.yml (and other YAML) configuration files.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    iconfig_yml: str</span>
+<span class="sd">        Name of the YAML file to be loaded.  The name can be</span>
+<span class="sd">        absolute or relative to the current working directory.</span>
+<span class="sd">        Default: ``INSTRUMENT/configs/iconfig.yml``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">iconfig_yml</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">DEFAULT_ICONFIG_YML_FILE</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">iconfig_yml</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuration file &#39;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&#39; does not exist.&quot;</span><span class="p">)</span>
+    <span class="n">iconfig</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">yaml</span><span class="o">.</span><span class="n">Loader</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">iconfig</span></div>
+
+
+
+<div class="viewcode-block" id="IConfigFileVersionError">
+<a class="viewcode-back" href="../../../api/utils.html#instrument.utils.config_loaders.IConfigFileVersionError">[docs]</a>
+<span class="k">class</span> <span class="nc">IConfigFileVersionError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration file version too old.&quot;&quot;&quot;</span></div>
+
+
+
+<span class="n">iconfig</span> <span class="o">=</span> <span class="n">load_config_yaml</span><span class="p">(</span><span class="n">DEFAULT_ICONFIG_YML_FILE</span><span class="p">)</span>
+
+<span class="c1"># Validate the iconfig file has the minimum version.</span>
+<span class="n">_version</span> <span class="o">=</span> <span class="n">iconfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ICONFIG_VERSION&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">_version</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">_version</span> <span class="o">&lt;</span> <span class="n">ICONFIG_MINIMUM_VERSION</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">IConfigFileVersionError</span><span class="p">(</span>
+        <span class="s2">&quot;Configuration file version too old.&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot; Found </span><span class="si">{</span><span class="n">_version</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot; Expected minimum </span><span class="si">{</span><span class="n">ICONFIG_MINIMUM_VERSION</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot; Configuration file &#39;</span><span class="si">{</span><span class="n">DEFAULT_ICONFIG_YML_FILE</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">instrument</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../demo.html">Demo: Notebook Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sessions.html">Sessions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/dm.html">Guide: APS Data Management Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../logging_config.html">Session logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API: The Source Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">Software License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023-2024, APS BCDA.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

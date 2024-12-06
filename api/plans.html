@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>instrument.plans &#8212; instrument</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <script src="../_static/documentation_options.js?v=aa402110"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="instrument.utils" href="utils.html" />
+    <link rel="prev" title="instrument.devices" href="devices.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="instrument-plans">
+<span id="api-plans"></span><h1><code class="docutils literal notranslate"><span class="pre">instrument.plans</span></code><a class="headerlink" href="#instrument-plans" title="Link to this heading">¶</a></h1>
+<p>Python modules that describe your instrument’s custom measurement procedures.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-instrument.plans.dm_plans" title="instrument.plans.dm_plans"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dm_plans</span></code></a></p></td>
+<td><p>Plans in support of APS Data Management.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-instrument.plans.sim_plans" title="instrument.plans.sim_plans"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sim_plans</span></code></a></p></td>
+<td><p>For development and testing only, provides plans.</p></td>
+</tr>
+</tbody>
+</table>
+<p id="module-instrument.plans.dm_plans">Plans in support of APS Data Management.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#instrument.plans.dm_plans.dm_kickoff_workflow" title="instrument.plans.dm_plans.dm_kickoff_workflow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dm_kickoff_workflow</span></code></a>(run, argsDict[, ...])</p></td>
+<td><p>Start a DM workflow for this bluesky run and share run's metadata with DM.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#instrument.plans.dm_plans.dm_list_processing_jobs" title="instrument.plans.dm_plans.dm_list_processing_jobs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dm_list_processing_jobs</span></code></a>([exclude])</p></td>
+<td><p>Show all the DM jobs with status not excluded.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#instrument.plans.dm_plans.dm_submit_workflow_job" title="instrument.plans.dm_plans.dm_submit_workflow_job"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dm_submit_workflow_job</span></code></a>(workflowName, argsDict)</p></td>
+<td><p>Low-level plan stub to submit a job to a DM workflow.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="instrument.plans.dm_plans.dm_kickoff_workflow">
+<span class="sig-prename descclassname"><span class="pre">instrument.plans.dm_plans.</span></span><span class="sig-name descname"><span class="pre">dm_kickoff_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argsDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/instrument/plans/dm_plans.html#dm_kickoff_workflow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#instrument.plans.dm_plans.dm_kickoff_workflow" title="Link to this definition">¶</a></dt>
+<dd><p>Start a DM workflow for this bluesky run and share run’s metadata with DM.</p>
+<p>PARAMETERS:</p>
+<p>run (<em>obj</em>): Bluesky run object (such as ‘run = cat[uid]’).</p>
+<dl class="simple">
+<dt>argsDict (<em>dict</em>): Dictionary of parameters needed by ‘workflowName’.</dt><dd><p>At minimum, most workflows expect these keys: ‘filePath’ and
+‘experimentName’.  Consult the workflow for the expected
+content of ‘argsDict’.</p>
+</dd>
+<dt>timeout (<em>number</em>): When should bluesky stop reporting on this</dt><dd><p>DM workflow job (if it has not ended). Units are seconds.
+Default is forever.</p>
+</dd>
+<dt>wait (<em>bool</em>): Should this plan stub wait for the job to end?</dt><dd><p>Default is ‘False’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="instrument.plans.dm_plans.dm_list_processing_jobs">
+<span class="sig-prename descclassname"><span class="pre">instrument.plans.dm_plans.</span></span><span class="sig-name descname"><span class="pre">dm_list_processing_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/instrument/plans/dm_plans.html#dm_list_processing_jobs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#instrument.plans.dm_plans.dm_list_processing_jobs" title="Link to this definition">¶</a></dt>
+<dd><p>Show all the DM jobs with status not excluded.</p>
+<p>Excluded status (default): ‘done’, ‘failed’</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="instrument.plans.dm_plans.dm_submit_workflow_job">
+<span class="sig-prename descclassname"><span class="pre">instrument.plans.dm_plans.</span></span><span class="sig-name descname"><span class="pre">dm_submit_workflow_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflowName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argsDict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/instrument/plans/dm_plans.html#dm_submit_workflow_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#instrument.plans.dm_plans.dm_submit_workflow_job" title="Link to this definition">¶</a></dt>
+<dd><p>Low-level plan stub to submit a job to a DM workflow.</p>
+<p>It is recommended to use dm_kickoff_workflow() instead.
+This plan does not share run metadata with DM.</p>
+<p>PARAMETERS:</p>
+<p>workflowName (<em>str</em>): Name of the DM workflow to be run.</p>
+<dl class="simple">
+<dt>argsDict (<em>dict</em>): Dictionary of parameters needed by ‘workflowName’.</dt><dd><p>At minimum, most workflows expect these keys: ‘filePath’ and
+‘experimentName’.  Consult the workflow for the expected
+content of ‘argsDict’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="for-development-and-testing-only-provides-plans">
+<span id="module-instrument.plans.sim_plans"></span><h2>For development and testing only, provides plans.<a class="headerlink" href="#for-development-and-testing-only-provides-plans" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#instrument.plans.sim_plans.sim_count_plan" title="instrument.plans.sim_plans.sim_count_plan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sim_count_plan</span></code></a>([num, imax, md])</p></td>
+<td><p>Demonstrate the count() plan.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#instrument.plans.sim_plans.sim_print_plan" title="instrument.plans.sim_plans.sim_print_plan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sim_print_plan</span></code></a>()</p></td>
+<td><p>Demonstrate a print() plan stub (no data streams).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#instrument.plans.sim_plans.sim_rel_scan_plan" title="instrument.plans.sim_plans.sim_rel_scan_plan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sim_rel_scan_plan</span></code></a>([span, num, imax, center, ...])</p></td>
+<td><p>Demonstrate the rel_scan() plan.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="instrument.plans.sim_plans.sim_count_plan">
+<span class="sig-prename descclassname"><span class="pre">instrument.plans.sim_plans.</span></span><span class="sig-name descname"><span class="pre">sim_count_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">md</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'title':</span> <span class="pre">'test</span> <span class="pre">run</span> <span class="pre">with</span> <span class="pre">simulator(s)'}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/instrument/plans/sim_plans.html#sim_count_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#instrument.plans.sim_plans.sim_count_plan" title="Link to this definition">¶</a></dt>
+<dd><p>Demonstrate the count() plan.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="instrument.plans.sim_plans.sim_print_plan">
+<span class="sig-prename descclassname"><span class="pre">instrument.plans.sim_plans.</span></span><span class="sig-name descname"><span class="pre">sim_print_plan</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/instrument/plans/sim_plans.html#sim_print_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#instrument.plans.sim_plans.sim_print_plan" title="Link to this definition">¶</a></dt>
+<dd><p>Demonstrate a print() plan stub (no data streams).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="instrument.plans.sim_plans.sim_rel_scan_plan">
+<span class="sig-prename descclassname"><span class="pre">instrument.plans.sim_plans.</span></span><span class="sig-name descname"><span class="pre">sim_rel_scan_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uniform'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">md</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'title':</span> <span class="pre">'test</span> <span class="pre">run</span> <span class="pre">with</span> <span class="pre">simulator(s)'}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/instrument/plans/sim_plans.html#sim_rel_scan_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#instrument.plans.sim_plans.sim_rel_scan_plan" title="Link to this definition">¶</a></dt>
+<dd><p>Demonstrate the rel_scan() plan.</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">instrument</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../demo.html">Demo: Notebook Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sessions.html">Sessions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/dm.html">Guide: APS Data Management Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging_config.html">Session logging</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API: The Source Code</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="startup.html"><code class="docutils literal notranslate"><span class="pre">instrument.startup</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="callbacks.html"><code class="docutils literal notranslate"><span class="pre">instrument.callbacks</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="configs.html"><code class="docutils literal notranslate"><span class="pre">instrument.configs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html"><code class="docutils literal notranslate"><span class="pre">instrument.core</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="devices.html"><code class="docutils literal notranslate"><span class="pre">instrument.devices</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">instrument.plans</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html"><code class="docutils literal notranslate"><span class="pre">instrument.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">Software License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API: The Source Code</a><ul>
+      <li>Previous: <a href="devices.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">instrument.devices</span></code></a></li>
+      <li>Next: <a href="utils.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">instrument.utils</span></code></a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023-2024, APS BCDA.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/plans.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

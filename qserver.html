@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>queueserver &#8212; instrument</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <script src="_static/documentation_options.js?v=aa402110"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python scripts" href="script.html" />
+    <link rel="prev" title="Jupyter notebook" href="notebook.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="queueserver">
+<span id="qserver"></span><h1>queueserver<a class="headerlink" href="#queueserver" title="Link to this heading">¶</a></h1>
+<p>The bluesky queueserver <a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> manages sequencing and execution of Bluesky plans.
+It has a host process that manages a RunEngine. Client sessions will interact
+with that host process.  See <a class="reference internal" href="#qs-host-configure"><span class="std std-ref">Configure the QS Host</span></a> for more details.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The queueserver requires a <code class="docutils literal notranslate"><span class="pre">redis</span></code> service <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> to be running.
+File <code class="docutils literal notranslate"><span class="pre">./qserver/qs-config.yml</span></code> has settings to specify the <code class="docutils literal notranslate"><span class="pre">redis</span></code> service.</p>
+</div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://blueskyproject.io/bluesky-queueserver/">https://blueskyproject.io/bluesky-queueserver/</a></p>
+</aside>
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-linux/">https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-linux/</a></p>
+</aside>
+</aside>
+<section id="qs-host-queueserver-host-process">
+<span id="qs-host"></span><h2>QS host – queueserver host process<a class="headerlink" href="#qs-host-queueserver-host-process" title="Link to this heading">¶</a></h2>
+<p>Use the queueserver host management script.  This option stops the server (if it
+is running) and then starts it.  This is the usual way to (re)start the QS host
+process.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./qserver/qs_host.sh<span class="w"> </span>restart
+</pre></div>
+</div>
+</section>
+<section id="queueserver-client-gui">
+<span id="qs-client"></span><h2>queueserver client GUI<a class="headerlink" href="#queueserver-client-gui" title="Link to this heading">¶</a></h2>
+<p>At this time, there is one GUI recommended for use with the bluesky queueserver.
+Other GUI clients are in development and show promise of improvements.  For now,
+use this one.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>queue-monitor<span class="w"> </span><span class="p">&amp;</span>
+</pre></div>
+</div>
+</section>
+<section id="configure-the-qs-host">
+<span id="qs-host-configure"></span><h2>Configure the QS Host<a class="headerlink" href="#configure-the-qs-host" title="Link to this heading">¶</a></h2>
+<p>File <code class="docutils literal notranslate"><span class="pre">qs-config.yml</span></code> <a class="footnote-reference brackets" href="#id7" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> contains all configuration of the QS host process.
+The source code contains lots of comments about the various settings. See the
+bluesky-queueserver documentation <a class="footnote-reference brackets" href="#id8" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> for more details of the configuration.</p>
+<p>The QS host process writes files into this directory. This directory can be
+relocated. However, it should not be moved into the instrument package since
+that might be installed into a read-only directory.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id7" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">3</a><span class="fn-bracket">]</span></span>
+<p>download file: <a class="reference download internal" download="" href="_downloads/624e1b2837fc410c37e39aeae49a4ec0/qs-config.yml"><code class="xref download docutils literal notranslate"><span class="pre">qs-config.yml</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="id8" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">4</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://blueskyproject.io/bluesky-queueserver/manager_config.html">https://blueskyproject.io/bluesky-queueserver/manager_config.html</a></p>
+</aside>
+</aside>
+</section>
+<section id="shell-script-qs-host-sh">
+<h2>shell script <code class="docutils literal notranslate"><span class="pre">qs_host.sh</span></code><a class="headerlink" href="#shell-script-qs-host-sh" title="Link to this heading">¶</a></h2>
+<p>A shell script <code class="docutils literal notranslate"><span class="pre">qs_host.sh</span></code> <a class="footnote-reference brackets" href="#id11" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> is used to start the QS host process. Typically,
+it is run in the background: <code class="docutils literal notranslate"><span class="pre">./qserver/qs_host.sh</span> <span class="pre">restart</span></code>. This command looks for
+a running QS host process.  If found, that process is stopped.  Then, a new QS
+host process is started in a <em>screen</em> <a class="footnote-reference brackets" href="#id12" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> session.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id11" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">5</a><span class="fn-bracket">]</span></span>
+<p>download file: <a class="reference download internal" download="" href="_downloads/2cc04aac2c6b6e96e214c923fbd75e44/qs_host.sh"><code class="xref download docutils literal notranslate"><span class="pre">qs_host.sh</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="id12" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">6</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://www.gnu.org/software/screen/manual/screen.html">https://www.gnu.org/software/screen/manual/screen.html</a></p>
+</aside>
+</aside>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="o">(</span>bstest<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>./qserver/qs_host.sh<span class="w"> </span><span class="nb">help</span>
+<span class="linenos"> 2</span>Usage:<span class="w"> </span>qs_host.sh<span class="w"> </span><span class="o">{</span>start<span class="p">|</span>stop<span class="p">|</span>restart<span class="p">|</span>status<span class="p">|</span>checkup<span class="p">|</span>console<span class="p">|</span>run<span class="o">}</span><span class="w"> </span><span class="o">[</span>NAME<span class="o">]</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="w">    </span>COMMANDS
+<span class="linenos"> 5</span><span class="w">        </span>console<span class="w">   </span>attach<span class="w"> </span>to<span class="w"> </span>process<span class="w"> </span>console<span class="w"> </span><span class="k">if</span><span class="w"> </span>process<span class="w"> </span>is<span class="w"> </span>running<span class="w"> </span><span class="k">in</span><span class="w"> </span>screen
+<span class="linenos"> 6</span><span class="w">        </span>checkup<span class="w">   </span>check<span class="w"> </span>that<span class="w"> </span>process<span class="w"> </span>is<span class="w"> </span>running,<span class="w"> </span>restart<span class="w"> </span><span class="k">if</span><span class="w"> </span>not
+<span class="linenos"> 7</span><span class="w">        </span>restart<span class="w">   </span>restart<span class="w"> </span>process
+<span class="linenos"> 8</span><span class="w">        </span>run<span class="w">       </span>run<span class="w"> </span>process<span class="w"> </span><span class="k">in</span><span class="w"> </span>console<span class="w"> </span><span class="o">(</span>not<span class="w"> </span>screen<span class="o">)</span>
+<span class="linenos"> 9</span><span class="w">        </span>start<span class="w">     </span>start<span class="w"> </span>process
+<span class="linenos">10</span><span class="w">        </span>status<span class="w">    </span>report<span class="w"> </span><span class="k">if</span><span class="w"> </span>process<span class="w"> </span>is<span class="w"> </span>running
+<span class="linenos">11</span><span class="w">        </span>stop<span class="w">      </span>stop<span class="w"> </span>process
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">    </span>OPTIONAL<span class="w"> </span>TERMS
+<span class="linenos">14</span><span class="w">        </span>NAME<span class="w">      </span>name<span class="w"> </span>of<span class="w"> </span>process<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span>bluesky_queueserver-<span class="o">)</span>
+</pre></div>
+</div>
+<p>Alternatively, run the QS host’s startup command directly within the <code class="docutils literal notranslate"><span class="pre">./qserver/</span></code>
+subdirectory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nb">cd</span><span class="w"> </span>./qserver
+<span class="linenos">2</span>start-re-manager<span class="w"> </span>--config<span class="o">=</span>./qs-config.yml
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">instrument</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo: Notebook Startup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="sessions.html">Sessions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="console.html">IPython console</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebook.html">Jupyter notebook</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">queueserver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="script.html">Python scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/dm.html">Guide: APS Data Management Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging_config.html">Session logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API: The Source Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Software License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sessions.html">Sessions</a><ul>
+      <li>Previous: <a href="notebook.html" title="previous chapter">Jupyter notebook</a></li>
+      <li>Next: <a href="script.html" title="next chapter">Python scripts</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023-2024, APS BCDA.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/qserver.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

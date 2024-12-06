@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>instrument.utils.controls_setup &#8212; instrument</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../_static/documentation_options.js?v=aa402110"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for instrument.utils.controls_setup</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">EPICS &amp; ophyd related setup</span>
+<span class="sd">===========================</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    ~oregistry</span>
+<span class="sd">    ~set_control_layer</span>
+<span class="sd">    ~set_timeouts</span>
+<span class="sd">    ~epics_scan_id_source</span>
+<span class="sd">    ~connect_scan_id_pv</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">ophyd</span>
+<span class="kn">from</span> <span class="nn">ophyd.signal</span> <span class="kn">import</span> <span class="n">EpicsSignalBase</span>
+<span class="kn">from</span> <span class="nn">ophydregistry</span> <span class="kn">import</span> <span class="n">Registry</span>
+
+<span class="kn">from</span> <span class="nn">.config_loaders</span> <span class="kn">import</span> <span class="n">iconfig</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">bsdev</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+<span class="n">re_config</span> <span class="o">=</span> <span class="n">iconfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RUN_ENGINE&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+<span class="n">DEFAULT_CONTROL_LAYER</span> <span class="o">=</span> <span class="s2">&quot;PyEpics&quot;</span>
+<span class="n">DEFAULT_TIMEOUT</span> <span class="o">=</span> <span class="mi">60</span>  <span class="c1"># default used next...</span>
+<span class="n">ophyd_config</span> <span class="o">=</span> <span class="n">iconfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OPHYD&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+
+<div class="viewcode-block" id="epics_scan_id_source">
+<a class="viewcode-back" href="../../../api/utils.html#instrument.utils.controls_setup.epics_scan_id_source">[docs]</a>
+<span class="k">def</span> <span class="nf">epics_scan_id_source</span><span class="p">(</span><span class="n">_md</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Callback function for RunEngine.  Returns *next* scan_id to be used.</span>
+
+<span class="sd">    * Ignore metadata dictionary passed as argument.</span>
+<span class="sd">    * Get current scan_id from PV.</span>
+<span class="sd">    * Apply lower limit of zero.</span>
+<span class="sd">    * Increment (so that scan_id numbering starts from 1).</span>
+<span class="sd">    * Set PV with new value.</span>
+<span class="sd">    * Return new value.</span>
+
+<span class="sd">    Exception will be raised if PV is not connected when next</span>
+<span class="sd">    ``bps.open_run()`` is called.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">scan_id_epics</span> <span class="o">=</span> <span class="n">oregistry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;scan_id_epics&quot;</span><span class="p">)</span>
+    <span class="n">new_scan_id</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">scan_id_epics</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">scan_id_epics</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">new_scan_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_scan_id</span></div>
+
+
+
+<div class="viewcode-block" id="connect_scan_id_pv">
+<a class="viewcode-back" href="../../../api/utils.html#instrument.utils.controls_setup.connect_scan_id_pv">[docs]</a>
+<span class="k">def</span> <span class="nf">connect_scan_id_pv</span><span class="p">(</span><span class="n">RE</span><span class="p">,</span> <span class="n">pv</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Define a PV to use for the RunEngine&#39;s `scan_id`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">ophyd</span> <span class="kn">import</span> <span class="n">EpicsSignal</span>
+
+    <span class="n">pv</span> <span class="o">=</span> <span class="n">pv</span> <span class="ow">or</span> <span class="n">re_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SCAN_ID_PV&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using EPICS PV </span><span class="si">%r</span><span class="s2"> for RunEngine &#39;scan_id&#39;&quot;</span><span class="p">,</span> <span class="n">pv</span><span class="p">)</span>
+
+    <span class="n">scan_id_epics</span> <span class="o">=</span> <span class="n">EpicsSignal</span><span class="p">(</span><span class="n">pv</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;scan_id_epics&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Setup the RunEngine to call epics_scan_id_source()</span>
+    <span class="c1"># which uses the EPICS PV to provide the scan_id.</span>
+    <span class="n">RE</span><span class="o">.</span><span class="n">scan_id_source</span> <span class="o">=</span> <span class="n">epics_scan_id_source</span>
+
+    <span class="n">scan_id_epics</span><span class="o">.</span><span class="n">wait_for_connection</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">RE</span><span class="o">.</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;scan_id_pv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan_id_epics</span><span class="o">.</span><span class="n">pvname</span>
+        <span class="n">RE</span><span class="o">.</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;scan_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan_id_epics</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>  <span class="c1"># set scan_id from EPICS</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">pass</span>  <span class="c1"># Ignore PersistentDict errors that only raise when making the docs</span></div>
+
+
+
+<div class="viewcode-block" id="set_control_layer">
+<a class="viewcode-back" href="../../../api/utils.html#instrument.utils.controls_setup.set_control_layer">[docs]</a>
+<span class="k">def</span> <span class="nf">set_control_layer</span><span class="p">(</span><span class="n">control_layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_CONTROL_LAYER</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Communications library between ophyd and EPICS Channel Access.</span>
+
+<span class="sd">    Choices are: PyEpics (default) or caproto.</span>
+
+<span class="sd">    OPHYD_CONTROL_LAYER is an application of &quot;lessons learned.&quot;</span>
+
+<span class="sd">    Only used in a couple rare cases where PyEpics code was failing.</span>
+<span class="sd">    It&#39;s defined here since it was difficult to find how to do this</span>
+<span class="sd">    in the ophyd documentation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">control_layer</span> <span class="o">=</span> <span class="n">ophyd_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CONTROL_LAYER&quot;</span><span class="p">,</span> <span class="n">control_layer</span><span class="p">)</span>
+    <span class="n">ophyd</span><span class="o">.</span><span class="n">set_cl</span><span class="p">(</span><span class="n">control_layer</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;using ophyd control layer: </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ophyd</span><span class="o">.</span><span class="n">cl</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_timeouts">
+<a class="viewcode-back" href="../../../api/utils.html#instrument.utils.controls_setup.set_timeouts">[docs]</a>
+<span class="k">def</span> <span class="nf">set_timeouts</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set default timeout for all EpicsSignal connections &amp; communications.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">EpicsSignalBase</span><span class="o">.</span><span class="n">_EpicsSignalBase__any_instantiated</span><span class="p">:</span>
+        <span class="c1"># Only BEFORE any EpicsSignalBase (or subclass) are created!</span>
+        <span class="n">timeouts</span> <span class="o">=</span> <span class="n">ophyd_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TIMEOUTS&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">EpicsSignalBase</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span>
+            <span class="n">auto_monitor</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeouts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PV_READ&quot;</span><span class="p">,</span> <span class="n">DEFAULT_TIMEOUT</span><span class="p">),</span>
+            <span class="n">write_timeout</span><span class="o">=</span><span class="n">timeouts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PV_WRITE&quot;</span><span class="p">,</span> <span class="n">DEFAULT_TIMEOUT</span><span class="p">),</span>
+            <span class="n">connection_timeout</span><span class="o">=</span><span class="n">iconfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PV_CONNECTION&quot;</span><span class="p">,</span> <span class="n">DEFAULT_TIMEOUT</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="n">oregistry</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="n">auto_register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Registry of all ophyd-style Devices and Signals.&quot;&quot;&quot;</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">instrument</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../demo.html">Demo: Notebook Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sessions.html">Sessions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/dm.html">Guide: APS Data Management Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../logging_config.html">Session logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API: The Source Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">Software License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023-2024, APS BCDA.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
