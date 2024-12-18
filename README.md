@@ -175,5 +175,24 @@ relocated. However, it should not be moved into the instrument package since
 that might be installed into a read-only directory.
 
 ## How-To Guides
+### How to use the template
+1) Click on use as template button
+2) Change the following parameters in the following files:
+    - configs/iconfig:
+        - beamline_id
+        - instrument_name
+        - databroker catalog
+        - dm_setup_file
+        - BEC
+    - [pyproject.toml]
+        - [project] name
+        - [project.urls]
+        - package-dir = {"instrument" = "src/instrument"}
+    - qserver/qs-config.yml
+        - startup module
+    - init.py
+        - package = "instrument"
+    - docs/conf.py
+        - import instrument
 
 - [APS Data Management Plans](./docs/source/guides/dm.md)
