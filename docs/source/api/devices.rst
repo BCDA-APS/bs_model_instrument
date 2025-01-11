@@ -8,6 +8,11 @@ Add Python modules here that describe your instrument's controls.
 .. autosummary::
     :nosignatures:
 
-    ~instrument.devices.aps_source
+    ~instrument.devices.local_controls
 
-.. automodule:: instrument.devices.aps_source
+See these configuration files:
+
+* :ref:`api.configs.local_controls`
+* :ref:`api.configs.aps_controls`
+
+.. automodule:: instrument.devices.local_controls
