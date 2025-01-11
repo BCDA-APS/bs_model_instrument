@@ -1,0 +1,5 @@
+# Guarneri-style device YAML configuration
+
+apstools.devices.SimulatedApsPssShutterWithStatus:
+  - name: shutter
+    labels: ["shutters"]
