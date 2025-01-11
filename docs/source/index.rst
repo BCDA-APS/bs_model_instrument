@@ -25,8 +25,8 @@ console, a Jupyter notebook, the queueserver, or even a Python script:
    guides/index
    install
    logging_config
-   api/index
    license
+   api/index
 
 About ...
 -----------

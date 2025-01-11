@@ -1,5 +1,6 @@
 """
-Plans in support of APS Data Management.
+Plans in support of APS Data Management
+=======================================
 
 .. autosummary::
 

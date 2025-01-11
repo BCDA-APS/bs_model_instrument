@@ -9,7 +9,7 @@
 import instrument
 
 project = "instrument"
-copyright = "2023-2024, APS BCDA"
+copyright = "2023-2025, APS BCDA"
 author = "APS BCDA"
 version = instrument.__version__
 release = version.split("+")[0]
@@ -68,7 +68,9 @@ autodoc_mock_imports = """
     apstools
     bluesky
     databroker
+    dm
     epics
+    guarneri
     intake
     matplotlib
     numpy

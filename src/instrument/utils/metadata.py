@@ -87,7 +87,7 @@ def re_metadata(cat=None):
     }
     if cat is not None:
         md["databroker_catalog"] = cat.name
-    md.update(iconfig.get("RUNENGINE_METADATA", {}))
+    md.update(RE_CONFIG.get("DEFAULT_METADATA", {}))
 
     conda_prefix = os.environ.get("CONDA_PREFIX")
     if conda_prefix is not None:
@@ -96,4 +96,4 @@ def re_metadata(cat=None):
 
 
 MD_PATH = get_md_path()
-""" PersistentDict Directory to save RE metadata between sessions."""
+"""Storage path to save RE metadata between sessions."""

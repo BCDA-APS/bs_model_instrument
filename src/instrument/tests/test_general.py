@@ -28,7 +28,8 @@ def test_startup():
     assert iconfig is not None
     assert RE is not None
     assert specwriter is not None
-    assert len(cat) == 0
+    if iconfig.get("DATABROKER_CATALOG", "temp") == "temp":
+        assert len(cat) == 0
     assert not running_in_queueserver()
 
 

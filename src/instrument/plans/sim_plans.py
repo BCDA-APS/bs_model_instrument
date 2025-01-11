@@ -1,6 +1,8 @@
 """
+Simulators from ophyd
+=====================
+
 For development and testing only, provides plans.
-=================================================
 
 .. autosummary::
     ~sim_count_plan
@@ -12,9 +14,8 @@ import logging
 
 from bluesky import plan_stubs as bps
 from bluesky import plans as bp
-
-from ..devices import sim_det
-from ..devices import sim_motor
+from ophyd.sim import motor as sim_motor  # noqa: F401
+from ophyd.sim import noisy_det as sim_det  # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -23,14 +24,14 @@ DEFAULT_MD = {"title": "test run with simulator(s)"}
 
 
 def sim_count_plan(num: int = 1, imax: float = 10_000, md: dict = DEFAULT_MD):
-    """Demonstrate the count() plan."""
+    """Demonstrate the ``count()`` plan."""
     logger.debug("sim_count_plan()")
     yield from bps.mv(sim_det.Imax, imax)
     yield from bp.count([sim_det], num=num, md=md)
 
 
 def sim_print_plan():
-    """Demonstrate a print() plan stub (no data streams)."""
+    """Demonstrate a ``print()`` plan stub (no data streams)."""
     logger.debug("sim_print_plan()")
     yield from bps.null()
     print("sim_print_plan(): This is a test.")
@@ -46,7 +47,7 @@ def sim_rel_scan_plan(
     noise: str = "uniform",  # none poisson uniform
     md: dict = DEFAULT_MD,
 ):
-    """Demonstrate the rel_scan() plan."""
+    """Demonstrate the ``rel_scan()`` plan."""
     logger.debug("sim_rel_scan_plan()")
     # fmt: off
     yield from bps.mv(
