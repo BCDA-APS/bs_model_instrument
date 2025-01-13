@@ -18,27 +18,27 @@ Various constants and terms used to configure the instrument package.
     :language: yaml
     :linenos:
 
-.. _api.configs.local_controls:
+.. _api.configs.devices:
 
-``local_controls.yml``
+``devices.yml``
 ------------------------------
 
 Declarations of the ophyd (and ophyd-like) devices and signals used by the
 instrument package.  Configuration is used by the guarneri package to create the
 objects.
 
-.. literalinclude:: ../../../src/instrument/configs/local_controls.yml
+.. literalinclude:: ../../../src/instrument/configs/devices.yml
     :language: yaml
     :linenos:
 
-.. _api.configs.aps_controls:
+.. _api.configs.devices_aps_only:
 
-``aps_controls.yml``
+``devices_aps_only.yml``
 ------------------------------
 
 Declarations of the ophyd (and ophyd-like) devices and signals
 only available when Bluesky is used at the APS.
 
-.. literalinclude:: ../../../src/instrument/configs/aps_controls.yml
+.. literalinclude:: ../../../src/instrument/configs/devices_aps_only.yml
     :language: yaml
     :linenos:

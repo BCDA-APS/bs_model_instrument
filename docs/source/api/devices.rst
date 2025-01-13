@@ -3,16 +3,9 @@
 ``instrument.devices``
 ======================
 
-Add Python modules here that describe your instrument's controls.
-
-.. autosummary::
-    :nosignatures:
-
-    ~instrument.devices.local_controls
+Add Python modules here that describe your instrument's custom controls.
 
 See these configuration files:
 
-* :ref:`api.configs.local_controls`
-* :ref:`api.configs.aps_controls`
-
-.. automodule:: instrument.devices.local_controls
+* :ref:`api.configs.devices`
+* :ref:`api.configs.devices_aps_only`
