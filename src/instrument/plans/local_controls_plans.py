@@ -21,10 +21,10 @@ import time
 from apstools.plans import run_blocking_function
 from bluesky import plan_stubs as bps
 
-from ..utils.local_controls import Instrument
 from ..utils.aps_functions import host_on_aps_subnet
+from ..utils.config_loaders import iconfig
 from ..utils.controls_setup import oregistry  # noqa: F401
-from ..utils.config_loaders import iconfig 
+from ..utils.local_controls import Instrument
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -33,8 +33,9 @@ logger.bsdev(__file__)
 configs_path = pathlib.Path(__file__).parent.parent / "configs"
 instr = Instrument({}, registry=oregistry)  # singleton
 main_namespace = sys.modules["__main__"]
-local_control_devices_file  = iconfig["LOCAL_DEVICES_FILE"]
-aps_control_devices_file  = iconfig["APS_DEVICES_FILE"]
+local_control_devices_file = iconfig["LOCAL_DEVICES_FILE"]
+aps_control_devices_file = iconfig["APS_DEVICES_FILE"]
+
 
 def make_controls(*, pause: float = 1):
     """
@@ -55,7 +56,6 @@ def make_controls(*, pause: float = 1):
     logger.debug("(Re)Loading local control objects.")
     yield from run_blocking_function(
         _loader, configs_path / local_control_devices_file, main=True
-
     )
 
     if host_on_aps_subnet():
