@@ -17,7 +17,7 @@ import pathlib
 import guarneri
 from apstools.utils import dynamic_import
 
-from ..utils.config_loaders import load_config_yaml
+from .config_loaders import load_config_yaml
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

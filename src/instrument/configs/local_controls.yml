@@ -3,3 +3,11 @@
 apstools.devices.SimulatedApsPssShutterWithStatus:
   - name: shutter
     labels: ["shutters"]
+
+ophyd.Signal:
+  - name: test
+    value: 50.7
+  - name: t2
+    value: 2
+# ophyd.sim:
+#   - name: sim_motor

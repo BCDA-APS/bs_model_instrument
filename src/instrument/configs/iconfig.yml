@@ -68,6 +68,10 @@ SPEC_DATA_FILES:
 ### Use bash shell, deactivate all conda environments, source this file:
 DM_SETUP_FILE: "/home/dm/etc/dm.setup.sh"
 
+### Local OPHYD Device Control Yaml
+LOCAL_DEVICES_FILE: local_controls.yml
+APS_DEVICES_FILE: aps_controls.yml
+
 # ----------------------------------
 
 OPHYD:
