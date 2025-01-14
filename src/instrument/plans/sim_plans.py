@@ -14,8 +14,9 @@ import logging
 
 from bluesky import plan_stubs as bps
 from bluesky import plans as bp
-from ophyd.sim import motor as sim_motor  # noqa: F401
-from ophyd.sim import noisy_det as sim_det  # noqa: F401
+
+from ..devices import sim_det
+from ..devices import sim_motor
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
