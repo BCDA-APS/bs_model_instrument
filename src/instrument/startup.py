@@ -20,11 +20,11 @@ from .core.run_engine_init import sd  # noqa: F401
 from .devices import *  # noqa: F403
 from .plans import *  # noqa: F403
 
-#
 # Bluesky data acquisition setup
 from .utils.config_loaders import iconfig
 from .utils.helper_functions import register_bluesky_magics
 from .utils.helper_functions import running_in_queueserver
+from .utils.yaml_devices import make_devices
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -57,3 +57,5 @@ else:
     from bluesky import plans as bp  # noqa: F401
 
     from .utils.controls_setup import oregistry  # noqa: F401
+
+RE(make_devices())  # create all the ophyd-style control devices
