@@ -25,7 +25,7 @@ from .plans import *  # noqa: F403
 from .utils.config_loaders import iconfig
 from .utils.helper_functions import register_bluesky_magics
 from .utils.helper_functions import running_in_queueserver
-from .utils.yaml_devices import make_devices
+from .utils.make_devices_yaml import make_devices
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
