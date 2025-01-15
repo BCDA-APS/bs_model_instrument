@@ -199,6 +199,7 @@ instrument.  This will be the name by which it is `pip` installed and also used 
         - `startup_module: instrument.startup` *example: `my_instrument.startup`*
     - `docs/source/conf.py`
         - `import instrument` *example `import my_instrument`*
-        - `project = "instrument"` *example: `project = "my_instrument"`*
+        - `project = "instrument"` *example: `"my_instrument"`*
+        - `version = instrument.__version__` *example: `my_instrument.__version__`*
 
 - [APS Data Management Plans](./docs/source/guides/dm.md)
