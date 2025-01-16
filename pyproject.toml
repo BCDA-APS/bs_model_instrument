@@ -63,6 +63,7 @@ doc = [
     "markupsafe",
     "myst_parser",
     "nbsphinx",
+    "numpy <1.999",
     "pygments-ipython-console",
     "pygments",
     "sphinx-design",
