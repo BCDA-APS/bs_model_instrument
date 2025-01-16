@@ -77,4 +77,5 @@ autodoc_mock_imports = """
     ophyd
     ophydregistry
     pandas
+    pyRestTable
 """.split()
