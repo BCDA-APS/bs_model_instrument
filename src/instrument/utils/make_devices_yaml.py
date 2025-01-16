@@ -55,14 +55,18 @@ def make_devices(*, pause: float = 1):
 
     """
     logger.debug("(Re)Loading local control objects.")
+    logger.warning("------> DIAGNOSTIC")
     yield from run_blocking_function(
         _loader, configs_path / local_control_devices_file, main=True
     )
+    logger.warning("------> DIAGNOSTIC")
 
     if host_on_aps_subnet():
+        logger.warning("------> DIAGNOSTIC")
         yield from run_blocking_function(
             _loader, configs_path / aps_control_devices_file, main=True
         )
+        logger.warning("------> DIAGNOSTIC")
 
     if pause > 0:
         logger.debug(
@@ -86,20 +90,25 @@ def _loader(yaml_device_file, main=True):
         If ``True`` add these devices to the ``__main__`` namespace.
 
     """
+    logger.warning("------> DIAGNOSTIC")
     logger.debug("Devices file %r.", str(yaml_device_file))
     t0 = time.time()
     _instr.load(yaml_device_file)
     logger.debug("Devices loaded in %.3f s.", time.time() - t0)
+    logger.warning("------> DIAGNOSTIC")
 
     if main and not _sphinx_is_running():
         # CI will stall here when building the docs.
+        logger.warning("------> DIAGNOSTIC")
         for label in oregistry.device_names:
             # add to __main__ namespace
             setattr(main_namespace, label, oregistry[label])
+        logger.warning("------> DIAGNOSTIC")
 
 
 def _sphinx_is_running() -> bool:
     """Are we running 'sphinx-build'?"""
+    
     outermost_frame = inspect.getouterframes(inspect.currentframe())[-1]
     return "sphinx-build" in outermost_frame.filename
     #     # When Sphinx is building the documentation,
