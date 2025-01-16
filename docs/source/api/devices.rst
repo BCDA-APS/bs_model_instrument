@@ -22,16 +22,69 @@ All ophyd-style devices are declared in one of the two YAML files listed above:
   * create local custom code that defines the class or factory
   * refer to local custom code in the YAML file
 
-Guarneri (via the YAML file) expects the callable to be compatible with
-this API signature::
+Any device can be created with python code that is compatible with
+this API signature:
+
+.. code-block:: py
+    :linenos:
 
     callable(*, prefix="", name="", labels=[], **kwargs)
 
+.. rubric:: Quick example
+    
+An ophyd object for an EPICS motor PV ``gp:m1`` is created in Python code where
+``ophyd.EpicsMotor`` is the *callable*, ``"gp:m1"`` is the `prefix`, and the
+other kwargs are ``name`` and ``labels``.
+
+.. code-block:: py
+    :linenos:
+
+    import ophyd
+    m1 = ophyd.EpicsMotor("ioc:m1", name="m1", labels=["motor"])
+
+This YAML replaces all the Python code above to create the ``m1`` object:
+
+.. code-block:: yaml
+    :linenos:
+
+    ophyd.EpicsMotor:
+    - name: "m1"
+      prefix: "ioc:m1"
+      labels: ["motor"]
+
 .. tip:: The devices are (re)created each time ``RE(make_devices())`` is run.
 
-    If you edit either of these YAML files after starting your session,
-    you can run ``RE(make_devices())`` again (without restarting your session)
-    to (re)create the devices.
+    If you edit either of these YAML files after starting your session, you can
+    run ``RE(make_devices())`` again (without restarting your session) to
+    (re)create the devices.  You only need to restart your session if you edit
+    the Python code.
+
+    The :func:`instrument.utils.make_devices_yaml.make_devices()` plan stub
+    imports the callable and creates any devices listed below it.  In YAML:
+
+    * Each callable can only be listed once.
+    * All devices that are created with a callable are listed below it.
+    * Each device starts with a `-` and then the kwargs, as shown.
+    
+    Indentation is important. Follow the examples.
+
+.. tip::  These YAML representations are functionally equivalent:
+
+    See `yaml.org <https://yaml.org>`_ for more information and YAML examples.
+
+    .. code-block:: yaml
+        :linenos:
+
+        ophyd.EpicsMotor:
+        - name: m1
+          prefix: ioc:m1
+          labels:
+            - motor
+
+        ophyd.EpicsMotor:
+        - {name: m1, prefix: ioc:m1, labels: ["motor"]}
+
+        ophyd.EpicsMotor: [{name: m1, prefix: ioc:m1, labels: ["motor"]}]
 
 Examples
 --------
@@ -47,9 +100,9 @@ area detectors, slits, shutters, ...).
 Motors
 ~~~~~~
 
-When support is used for more than one device, create a YAML list.
-Each item in the list can be a dictionary with appropriate keyword arguments.
-Here are five motors, using a one-line format for each dictionary.
+When support is used for more than one device, create a YAML list. Each item in
+the list can be a dictionary with appropriate keyword arguments. This YAML code
+describes five motors, using a one-line format for each dictionary.
 
 .. code-block:: yaml
     :linenos:
@@ -60,22 +113,6 @@ Here are five motors, using a one-line format for each dictionary.
     - {name: m3, prefix: ioc:m3, labels: ["motor"]}
     - {name: dx, prefix: vme:m58:c0:m1, labels: ["motor"]}
     - {name: dy, prefix: vme:m58:c0:m2, labels: ["motor"]}
-
-.. tip::  These YAML representations are functionally equivalent:
-
-    .. code-block:: yaml
-        :linenos:
-
-        ophyd.EpicsMotor:
-        - name: m1
-          prefix: ioc:m1
-          labels:
-            - motor
-
-        ophyd.EpicsMotor:
-        - {name: m1, prefix: ioc:m1, labels: ["motor"]}
-
-        ophyd.EpicsMotor: [{name: m1, prefix: ioc:m1, labels: ["motor"]}]
 
 Scalers
 ~~~~~~~
@@ -102,20 +139,20 @@ ADSimDetector with various plugins.
     :linenos:
 
     apstools.devices.ad_creator:
-      - name: adsimdet
-        prefix: "ad:"
-        labels: ["area_detector", "detectors"]
-        plugins:
-            - cam:
-                class: apstools.devices.SimDetectorCam_V34
-            - image
-            - pva
-            - hdf1:
-                class: apstools.devices.AD_EpicsFileNameHDF5Plugin
-                read_path_template: "/mnt/iocad/tmp/"
-                write_path_template: "/tmp/"
-            - roi1
-            - stats1
+    - name: adsimdet
+      prefix: "ad:"
+      labels: ["area_detector", "detectors"]
+      plugins:
+      - cam:
+            class: apstools.devices.SimDetectorCam_V34
+      - image
+      - pva
+      - hdf1:
+            class: apstools.devices.AD_EpicsFileNameHDF5Plugin
+            read_path_template: "/mnt/iocad/tmp/"
+            write_path_template: "/tmp/"
+      - roi1
+      - stats1
 
 Local custom devices
 ++++++++++++++++++++
@@ -192,15 +229,15 @@ custom ``SixCircle`` support with the assigned motors and other kwargs:
     :linenos:
 
     instrument.devices.diffractometers.SixCircle:
-      - name: sixc
-        prefix: "gp:"
-        labels: ["diffractometer"]
-        m_mu: m23
-        m_omega: m24
-        m_chi: m25
-        m_phi: m26
-        m_gamma: m27
-        m_delta: m28
+    - name: sixc
+      prefix: "gp:"
+      labels: ["diffractometer"]
+      m_mu: m23
+      m_omega: m24
+      m_chi: m25
+      m_phi: m26
+      m_gamma: m27
+      m_delta: m28
 
 Using the devices
 -----------------
