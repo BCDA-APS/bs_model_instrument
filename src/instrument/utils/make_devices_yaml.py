@@ -91,14 +91,14 @@ def _loader(yaml_device_file, main=True):
     _instr.load(yaml_device_file)
     logger.debug("Devices loaded in %.3f s.", time.time() - t0)
 
-    if main and not _sphinx_is_running():
+    if main and not building_the_documentation():
         # CI will stall here when building the docs.
         for label in oregistry.device_names:
             # add to __main__ namespace
             setattr(main_namespace, label, oregistry[label])
 
 
-def _sphinx_is_running() -> bool:
+def building_the_documentation() -> bool:
     """Are we running 'sphinx-build'?"""
     outermost_frame = inspect.getouterframes(inspect.currentframe())[-1]
     return "sphinx-build" in outermost_frame.filename
