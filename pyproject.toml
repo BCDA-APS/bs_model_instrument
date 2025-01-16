@@ -44,7 +44,6 @@ dependencies = [
     "guarneri",
     "ipython",
     "jupyterlab",
-    "numpy <2",
     "ophyd-registry",
     "ophyd",
     "PyQt5>5.15",

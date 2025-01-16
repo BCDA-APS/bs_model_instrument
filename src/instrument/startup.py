@@ -59,6 +59,6 @@ else:
     from .utils.controls_setup import oregistry  # noqa: F401
 
 logger.warning("------> DIAGNOSTIC")
-if not building_the_documentation():
-    RE(make_devices())  # create all the ophyd-style control devices
+# if not building_the_documentation():
+RE(make_devices())  # create all the ophyd-style control devices
 logger.warning("------> DIAGNOSTIC")
