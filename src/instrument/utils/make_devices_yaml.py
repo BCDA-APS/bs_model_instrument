@@ -91,7 +91,7 @@ def _loader(yaml_device_file, main=True):
     _instr.load(yaml_device_file)
     logger.debug("Devices loaded in %.3f s.", time.time() - t0)
 
-    if main and not building_the_documentation():
+    if main:  # TODO  and not building_the_documentation()
         # CI will stall here when building the docs.
         for label in oregistry.device_names:
             # add to __main__ namespace
