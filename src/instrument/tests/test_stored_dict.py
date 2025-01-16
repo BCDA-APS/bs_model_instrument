@@ -13,7 +13,7 @@ from ..utils.config_loaders import load_config_yaml
 from ..utils.stored_dict import StoredDict
 
 
-def luftpause(delay=0.01):
+def luftpause(delay=0.05):
     """A brief wait for content to flush to storage."""
     time.sleep(max(0, delay))
 
