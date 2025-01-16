@@ -59,7 +59,7 @@ This YAML replaces all the Python code above to create the ``m1`` object:
     (re)create the devices.  You only need to restart your session if you edit
     the Python code.
 
-    The :func:`instrument.utils.make_devices_yaml.make_devices()` plan stub
+    The :func:`~instrument.utils.make_devices_yaml.make_devices()` plan stub
     imports the callable and creates any devices listed below it.  In YAML:
 
     * Each callable can only be listed once.

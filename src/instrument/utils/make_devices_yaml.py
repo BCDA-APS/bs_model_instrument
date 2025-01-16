@@ -5,12 +5,11 @@ Make devices from YAML files
 Construct ophyd-style devices from simple specifications in YAML files.
 
 .. autosummary::
+    :nosignatures:
 
-    ~Instrument
     ~make_devices
+    ~Instrument
 """
-
-__all__ = ["Instrument"]
 
 import logging
 import pathlib
@@ -39,7 +38,7 @@ aps_control_devices_file = iconfig["APS_DEVICES_FILE"]
 
 def make_devices(*, pause: float = 1):
     """
-    (plan) Create the ophyd-style controls for this instrument.
+    (plan stub) Create the ophyd-style controls for this instrument.
 
     Feel free to modify this plan to suit the needs of your instrument.
 

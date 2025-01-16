@@ -3,6 +3,8 @@ custom callbacks
 ================
 
 .. autosummary::
+    :nosignatures:
+
     ~newSpecFile
     ~spec_comment
     ~specwriter
