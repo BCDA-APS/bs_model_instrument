@@ -54,7 +54,6 @@ def make_devices(*, pause: float = 1):
         Wait 'pause' seconds (default: 1) for slow objects to connect.
 
     """
-    logger.warning("************* DEBUG make_devices()")
     logger.debug("(Re)Loading local control objects.")
     yield from run_blocking_function(
         _loader, configs_path / local_control_devices_file, main=True
@@ -108,57 +107,33 @@ def _sphinx_is_running() -> bool:
 
 
 class Instrument(guarneri.Instrument):
-    """
-    Custom YAML loader for guarneri.
-
-    EXAMPLES:
-
-    .. code-block:: yaml
-
-        apstools.synApps.Optics2Slit2D_HV:
-            - name: slit1
-                prefix: ioc:Slit1
-                labels: ["slits"]
-
-        hkl.SimulatedE4CV:
-            - name: sim4c
-                prefix: ""
-                labels: ["diffractometer"]
-
-        ophyd.scaler.ScalerCH:
-            - name: scaler1
-                prefix: vme:scaler1
-                labels: ["scalers", "detectors"]
-
-        ophyd.EpicsMotor:
-            - {name: m1, prefix: gp:m1, labels: ["motor"]}
-            - {name: m2, prefix: gp:m2, labels: ["motor"]}
-            - {name: m3, prefix: gp:m3, labels: ["motor"]}
-            - {name: m4, prefix: gp:m4, labels: ["motor"]}
-    """
+    """Custom YAML loader for guarneri."""
 
     def parse_yaml_file(self, config_file: pathlib.Path | str) -> list[dict]:
         """Read device configurations from YAML format file."""
         if isinstance(config_file, str):
             config_file = pathlib.Path(config_file)
 
-        def parse(class_name, specs):
+        def parser(class_name, specs):
             if class_name not in self.device_classes:
                 self.device_classes[class_name] = dynamic_import(class_name)
-            entries = []
-            for table in specs:
-                entry = {
+            entries = [
+                {
                     "device_class": class_name,
                     "args": (),  # ALL specs are kwargs!
                     "kwargs": table,
                 }
-                entries.append(entry)
+                for table in specs
+            ]
             return entries
 
-        controls = load_config_yaml(config_file)
-        devices = []
-        for k, v in controls.items():
-            devices += parse(k, v)
+        devices = [
+            device
+            # parse the file
+            for k, v in load_config_yaml(config_file).items()
+            # each support type (class, factory, function, ...)
+            for device in parser(k, v)
+        ]
         return devices
 
 
