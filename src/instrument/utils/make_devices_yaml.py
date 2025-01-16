@@ -12,7 +12,6 @@ Construct ophyd-style devices from simple specifications in YAML files.
 
 __all__ = ["Instrument"]
 
-import inspect
 import logging
 import pathlib
 import sys
@@ -91,19 +90,10 @@ def _loader(yaml_device_file, main=True):
     _instr.load(yaml_device_file)
     logger.debug("Devices loaded in %.3f s.", time.time() - t0)
 
-    if main:  # TODO  and not building_the_documentation()
-        # CI will stall here when building the docs.
+    if main:
         for label in oregistry.device_names:
             # add to __main__ namespace
             setattr(main_namespace, label, oregistry[label])
-
-
-def building_the_documentation() -> bool:
-    """Are we running 'sphinx-build'?"""
-    outermost_frame = inspect.getouterframes(inspect.currentframe())[-1]
-    return "sphinx-build" in outermost_frame.filename
-    #     # When Sphinx is building the documentation,
-    #     # CI stalls here.  So, protect this call.
 
 
 class Instrument(guarneri.Instrument):
