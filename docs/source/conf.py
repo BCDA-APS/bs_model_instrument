@@ -71,6 +71,7 @@ autodoc_mock_imports = """
     dm
     epics
     guarneri
+    h5py
     intake
     matplotlib
     numpy
@@ -78,4 +79,6 @@ autodoc_mock_imports = """
     ophydregistry
     pandas
     pyRestTable
+    pysumreg
+    spec2nexus
 """.split()
