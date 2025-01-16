@@ -54,6 +54,7 @@ def make_devices(*, pause: float = 1):
         Wait 'pause' seconds (default: 1) for slow objects to connect.
 
     """
+    logger.warning("************* DEBUG make_devices()")
     logger.debug("(Re)Loading local control objects.")
     yield from run_blocking_function(
         _loader, configs_path / local_control_devices_file, main=True
