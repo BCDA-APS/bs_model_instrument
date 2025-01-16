@@ -52,13 +52,30 @@ Each item in the list can be a dictionary with appropriate keyword arguments.
 Here are five motors, using a one-line format for each dictionary.
 
 .. code-block:: yaml
+    :linenos:
 
     ophyd.EpicsMotor:
-      - {name: m1, prefix: ioc:m1, labels: ["motor"]}
-      - {name: m2, prefix: ioc:m2, labels: ["motor"]}
-      - {name: m3, prefix: ioc:m3, labels: ["motor"]}
-      - {name: dx, prefix: vme:c0:m1, labels: ["motor"]}
-      - {name: dy, prefix: vme:c0:m2, labels: ["motor"]}
+    - {name: m1, prefix: ioc:m1, labels: ["motor"]}
+    - {name: m2, prefix: ioc:m2, labels: ["motor"]}
+    - {name: m3, prefix: ioc:m3, labels: ["motor"]}
+    - {name: dx, prefix: vme:m58:c0:m1, labels: ["motor"]}
+    - {name: dy, prefix: vme:m58:c0:m2, labels: ["motor"]}
+
+.. tip::  These YAML representations are functionally equivalent:
+
+    .. code-block:: yaml
+        :linenos:
+
+        ophyd.EpicsMotor:
+        - name: m1
+          prefix: ioc:m1
+          labels:
+            - motor
+
+        ophyd.EpicsMotor:
+        - {name: m1, prefix: ioc:m1, labels: ["motor"]}
+
+        ophyd.EpicsMotor: [{name: m1, prefix: ioc:m1, labels: ["motor"]}]
 
 Scalers
 ~~~~~~~
@@ -67,10 +84,12 @@ This example creates a single scaler named `scaler`.  Two keyword
 arguments are provided.
 
 .. code-block:: yaml
+    :linenos:
 
     ophyd.scaler.ScalerCH:
-      - name: scaler
-        prefix: ioc:scaler1
+    - name: scaler
+      prefix: ioc:scaler1
+      labels: ["scalers", "detectors"]
 
 Area detectors
 ~~~~~~~~~~~~~~
@@ -80,6 +99,7 @@ declare one or more area detector devices.  Here's an instance of
 ADSimDetector with various plugins.
 
 .. code-block:: yaml
+    :linenos:
 
     apstools.devices.ad_creator:
       - name: adsimdet
@@ -108,7 +128,7 @@ diffractometers
 While the ``hklpy`` package provides a 6-circle diffractometer, it does
 not provide a class with name substitutions for the motor axes.  We need those
 substitutions to describe our diffractometer's motor assignments.
-(That's a DIY feature for improvement in a future version.) We'll have
+(That's a DIY feature for improvement in a future version of ``hklpy``.) We'll have
 to make some local code that provides motor name substitutions as keyword
 arguments.
 
@@ -116,6 +136,7 @@ Here's the local support code (in new file
 ``src/instrument/devices/diffractometers.py``):
 
 .. code-block:: py
+    :linenos:
 
     """Diffractometers"""
 
@@ -168,6 +189,7 @@ The YAML description of our 6-circle diffractometer uses our local
 custom ``SixCircle`` support with the assigned motors and other kwargs:
 
 .. code-block:: yaml
+    :linenos:
 
     instrument.devices.diffractometers.SixCircle:
       - name: sixc
@@ -183,14 +205,15 @@ custom ``SixCircle`` support with the assigned motors and other kwargs:
 Using the devices
 -----------------
 
-The :ref:`make_devices()` plan stub adds all devices to the command line
-level (the ``__main__`` namespace, as Python calls it).  Plans or other code
-can obtain a reference to any of these devices through use of the
-:ref:`oregistry`.  The default instrument provides a ``shutter`` device.
-This ``setup_shutter`` plan stub configures the shutter to wait a finite
-time every time it opens or closes.
+The :func:`instrument.utils.make_devices_yaml.make_devices()` plan stub adds all
+devices to the command line level (the ``__main__`` namespace, as Python calls
+it).  Plans or other code can obtain a reference to any of these devices through
+use of the :data:`~instrument.utils.controls_setup.oregistry`.  The default
+instrument provides a ``shutter`` device. This ``setup_shutter`` plan stub
+configures the shutter to wait a finite time every time it opens or closes.
 
 .. code-block:: py
+    :linenos:
 
     def setup_shutter(delay=0.05):
         """
@@ -207,10 +230,15 @@ time every time it opens or closes.
 With this YAML content:
 
 .. code-block:: yaml
+    :linenos:
 
     apstools.synApps.UserCalcsDevice: [{name: user_calcs, prefix: "gp:"}]
 
-you might have a plan that needs two of the userCalcs:
+you might have a plan stub that needs two of the userCalcs.  The ``oregistry``
+can provide them to your plan stub:
+
+.. code-block:: py
+    :linenos:
 
     dither_x = oregistry["user_calcs.calc9"]
     dither_y = oregistry["user_calcs.calc10"]
