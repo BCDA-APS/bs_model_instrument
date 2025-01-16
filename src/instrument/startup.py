@@ -9,8 +9,6 @@ Includes:
 * Bluesky queueserver
 """
 
-# logging setup first
-import inspect
 import logging
 
 from .core.best_effort_init import bec  # noqa: F401
@@ -59,8 +57,4 @@ else:
 
     from .utils.controls_setup import oregistry  # noqa: F401
 
-outermost_frame = inspect.getouterframes(inspect.currentframe())[-1]
-if "sphinx-build" not in outermost_frame.filename:
-    # When Sphinx is building the documentation,
-    # CI stalls here.  So, protect this call.
-    RE(make_devices())  # create all the ophyd-style control devices
+RE(make_devices())  # create all the ophyd-style control devices
