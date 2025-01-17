@@ -176,23 +176,30 @@ that might be installed into a read-only directory.
 
 ## How-To Guides
 ### How to use the template
+
+Consider renaming this `instrument` package to be more clear that is specific to *this*
+instrument.  This will be the name by which it is `pip` installed and also used with
+`import`.  Let's use an example instrument package name `my_instrument` below to show which parts are edited.
+
 1) Click on use as template button
-2) Change the following parameters in the following files:
-    - configs/iconfig:
-        - beamline_id
-        - instrument_name
-        - databroker catalog
-        - dm_setup_file
-        - BEC
-    - [pyproject.toml]
-        - [project] name
-        - [project.urls]
-        - package-dir = {"instrument" = "src/instrument"}
-    - qserver/qs-config.yml
-        - startup module
-    - init.py
-        - package = "instrument"
-    - docs/conf.py
-        - import instrument
+2) Adjust the following parameters in the following files:
+    - `pyproject.toml`
+        - `[project]` `name =` *example: `my_instrument`*
+        - `[project.urls]`  *change URLs for your repo*
+        - `[tool.setuptools]` `package-dir = {"instrument" = "src/instrument"}` *example: `{"my_instrument" = "src/instrument"}`*
+    - `src/instrument/init.py`
+        - `__package__ = "instrument"` *example: `"my_instrument"`*
+    - `src/instrument/configs/iconfig.yml`
+        - `DATABROKER_CATALOG:` *change from `temp` to your catalog's name*
+        - `beamline_id:` *one word beamline name (such as known by APS scheduling system)*
+        - `instrument_name:` *descriptive name of your beamline*
+        - `DM_SETUP_FILE:` *Path to DM bash setup file, comment out if you do not have*
+        - `BEC:` *adjust for your preferences*
+    - `qserver/qs-config.yml`
+        - `startup_module: instrument.startup` *example: `my_instrument.startup`*
+    - `docs/source/conf.py`
+        - `import instrument` *example `import my_instrument`*
+        - `project = "instrument"` *example: `"my_instrument"`*
+        - `version = instrument.__version__` *example: `my_instrument.__version__`*
 
 - [APS Data Management Plans](./docs/source/guides/dm.md)
