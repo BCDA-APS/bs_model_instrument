@@ -3,7 +3,7 @@ requires = ["setuptools>=64.0", "setuptools_scm[toml]>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.copyright]
-copyright = "2014-2024, APS"
+copyright = "2014-2025, APS"
 
 [project]
 name = "instrument"
@@ -35,20 +35,21 @@ classifiers = [
     "Topic :: Utilities",
 ]
 dependencies = [
-    "apstools",
-    "bluesky-queueserver",
+    "apstools >= 1.7.2",
     "bluesky-queueserver-api",
-    "bluesky",
+    "bluesky-queueserver",
     "bluesky-widgets",
+    "bluesky",
     "databroker ==1.2.5",
+    "guarneri",
     "ipython",
     "jupyterlab",
     "ophyd-registry",
     "ophyd",
+    "PyQt5>5.15",
     "pyRestTable",
     "pysumreg",
     "qtpy",
-    "PyQt5>5.15",
 ]
 
 [project.optional-dependencies]

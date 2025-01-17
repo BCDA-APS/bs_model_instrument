@@ -1,0 +1,32 @@
+# Guarneri-style device YAML configuration
+
+apstools.devices.SimulatedApsPssShutterWithStatus:
+- name: shutter
+  labels: ["shutters"]
+
+# ophyd.Signal:
+# - name: test
+#   value: 50.7
+# - name: t2
+#   value: 2
+
+# apstools.synApps.Optics2Slit2D_HV:
+# - name: slit1
+#   prefix: ioc:Slit1
+#   labels: ["slits"]
+
+# hkl.SimulatedE4CV:
+# - name: sim4c
+#   prefix: ""
+#   labels: ["diffractometer"]
+
+# ophyd.scaler.ScalerCH:
+# - name: scaler1
+#   prefix: vme:scaler1
+#   labels: ["scalers", "detectors"]
+
+# ophyd.EpicsMotor:
+# - {name: m1, prefix: gp:m1, labels: ["motor"]}
+# - {name: m2, prefix: gp:m2, labels: ["motor"]}
+# - {name: m3, prefix: gp:m3, labels: ["motor"]}
+# - {name: m4, prefix: gp:m4, labels: ["motor"]}

@@ -63,3 +63,8 @@ For development and other activities, replace the ``pip`` command above with:
 .. code-block:: bash
 
     pip install -e .[all]
+
+.. hint:: For `zsh` shell users,
+.. code-block:: zsh
+
+    pip install -e ."[all]"

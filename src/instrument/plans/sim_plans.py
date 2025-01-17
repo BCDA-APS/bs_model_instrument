@@ -1,6 +1,8 @@
 """
+Simulators from ophyd
+=====================
+
 For development and testing only, provides plans.
-=================================================
 
 .. autosummary::
     ~sim_count_plan
@@ -23,14 +25,14 @@ DEFAULT_MD = {"title": "test run with simulator(s)"}
 
 
 def sim_count_plan(num: int = 1, imax: float = 10_000, md: dict = DEFAULT_MD):
-    """Demonstrate the count() plan."""
+    """Demonstrate the ``count()`` plan."""
     logger.debug("sim_count_plan()")
     yield from bps.mv(sim_det.Imax, imax)
     yield from bp.count([sim_det], num=num, md=md)
 
 
 def sim_print_plan():
-    """Demonstrate a print() plan stub (no data streams)."""
+    """Demonstrate a ``print()`` plan stub (no data streams)."""
     logger.debug("sim_print_plan()")
     yield from bps.null()
     print("sim_print_plan(): This is a test.")
@@ -46,7 +48,7 @@ def sim_rel_scan_plan(
     noise: str = "uniform",  # none poisson uniform
     md: dict = DEFAULT_MD,
 ):
-    """Demonstrate the rel_scan() plan."""
+    """Demonstrate the ``rel_scan()`` plan."""
     logger.debug("sim_rel_scan_plan()")
     # fmt: off
     yield from bps.mv(

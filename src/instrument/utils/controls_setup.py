@@ -58,9 +58,11 @@ def connect_scan_id_pv(RE, pv: str = None):
     if pv is None:
         return
 
+    try:
+        scan_id_epics = EpicsSignal(pv, name="scan_id_epics")
+    except TypeError:  # when Sphinx substitutes EpicsSignal with _MockModule
+        return
     logger.info("Using EPICS PV %r for RunEngine 'scan_id'", pv)
-
-    scan_id_epics = EpicsSignal(pv, name="scan_id_epics")
 
     # Setup the RunEngine to call epics_scan_id_source()
     # which uses the EPICS PV to provide the scan_id.
@@ -108,3 +110,4 @@ def set_timeouts():
 
 oregistry = Registry(auto_register=True)
 """Registry of all ophyd-style Devices and Signals."""
+oregistry.warn_duplicates = False

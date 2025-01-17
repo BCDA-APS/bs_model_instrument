@@ -1,5 +1,15 @@
 """
+
+NeXus Writer
+============
+
 Write scan(s) to a NeXus/HDF5 file.
+
+.. autosummary::
+    :nosignatures:
+
+    ~MyNXWriter
+    ~nxwriter
 """
 
 import logging
