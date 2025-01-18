@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>instrument.callbacks.spec_data_file_writer &#8212; instrument</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <script src="../../../_static/documentation_options.js?v=fd3409cb"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for instrument.callbacks.spec_data_file_writer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">custom callbacks</span>
+<span class="sd">================</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :nosignatures:</span>
+
+<span class="sd">    ~newSpecFile</span>
+<span class="sd">    ~spec_comment</span>
+<span class="sd">    ~specwriter</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">apstools.callbacks</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">apstools.utils</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.run_engine_init</span><span class="w"> </span><span class="kn">import</span> <span class="n">RE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.config_loaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">iconfig</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">bsdev</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+
+<span class="n">DEFAULT_FILE_EXTENSION</span> <span class="o">=</span> <span class="s2">&quot;dat&quot;</span>
+<span class="n">file_extension</span> <span class="o">=</span> <span class="n">iconfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FILE_EXTENSION&quot;</span><span class="p">,</span> <span class="n">DEFAULT_FILE_EXTENSION</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="spec_comment">
+<a class="viewcode-back" href="../../../api/callbacks.html#instrument.callbacks.spec_data_file_writer.spec_comment">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">spec_comment</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make it easy for user to add comments to the data file.&quot;&quot;&quot;</span>
+    <span class="n">apstools</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">spec_comment</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">specwriter</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="newSpecFile">
+<a class="viewcode-back" href="../../../api/callbacks.html#instrument.callbacks.spec_data_file_writer.newSpecFile">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">newSpecFile</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">scan_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">RE</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    User choice of the SPEC file name.</span>
+
+<span class="sd">    Cleans up title, prepends month and day and appends file extension.</span>
+<span class="sd">    If ``RE`` is passed, then resets ``RE.md[&quot;scan_id&quot;] = scan_id``.</span>
+
+<span class="sd">    If the SPEC file already exists, then ``scan_id`` is ignored and</span>
+<span class="sd">    ``RE.md[&quot;scan_id&quot;]`` is set to the last scan number in the file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">RE</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;RE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RE</span>
+
+    <span class="n">mmdd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">5</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">apstools</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">cleanupText</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mmdd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">clean</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; file already exists: </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> &lt;&lt;&lt;&quot;</span><span class="p">)</span>
+        <span class="n">handled</span> <span class="o">=</span> <span class="s2">&quot;appended&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;scan_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan_id</span> <span class="ow">or</span> <span class="mi">1</span>
+        <span class="n">handled</span> <span class="o">=</span> <span class="s2">&quot;created&quot;</span>
+
+    <span class="n">specwriter</span><span class="o">.</span><span class="n">newfile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SPEC file name : </span><span class="si">{</span><span class="n">specwriter</span><span class="o">.</span><span class="n">spec_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File will be </span><span class="si">{</span><span class="n">handled</span><span class="si">}</span><span class="s2"> at end of next bluesky scan.&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># write scans to SPEC data file</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># apstools &gt;=1.6.21</span>
+    <span class="n">_specwriter</span> <span class="o">=</span> <span class="n">apstools</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">SpecWriterCallback2</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+    <span class="c1"># apstools &lt;1.6.21</span>
+    <span class="n">_specwriter</span> <span class="o">=</span> <span class="n">apstools</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">SpecWriterCallback</span><span class="p">()</span>
+
+<span class="n">specwriter</span> <span class="o">=</span> <span class="n">_specwriter</span>
+<span class="sd">&quot;&quot;&quot;The SPEC file writer object.&quot;&quot;&quot;</span>
+
+<span class="c1"># make the SPEC file in current working directory (assumes is writable)</span>
+<span class="n">specwriter</span><span class="o">.</span><span class="n">newfile</span><span class="p">(</span><span class="n">specwriter</span><span class="o">.</span><span class="n">spec_filename</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="s2">&quot;SPEC_DATA_FILES&quot;</span> <span class="ow">in</span> <span class="n">iconfig</span><span class="p">:</span>
+    <span class="n">RE</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">specwriter</span><span class="o">.</span><span class="n">receiver</span><span class="p">)</span>  <span class="c1"># write data to SPEC files</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;SPEC data file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">specwriter</span><span class="o">.</span><span class="n">spec_filename</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># feature new in apstools 1.6.14</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">apstools.plans</span><span class="w"> </span><span class="kn">import</span> <span class="n">label_stream_wrapper</span>
+
+<div class="viewcode-block" id="motor_start_preprocessor">
+<a class="viewcode-back" href="../../../api/callbacks.html#instrument.callbacks.spec_data_file_writer.motor_start_preprocessor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">motor_start_preprocessor</span><span class="p">(</span><span class="n">plan</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Record motor positions at start of each run.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">label_stream_wrapper</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="s2">&quot;motor&quot;</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="s2">&quot;start&quot;</span><span class="p">)</span></div>
+
+
+    <span class="n">RE</span><span class="o">.</span><span class="n">preprocessors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">motor_start_preprocessor</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could load support to log motors positions.&quot;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">instrument</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../demo.html">Demo: Notebook Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sessions.html">Sessions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/dm.html">Guide: APS Data Management Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../logging_config.html">Session logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">Software License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API: The Source Code</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023-2025, APS BCDA.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
