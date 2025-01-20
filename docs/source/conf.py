@@ -22,6 +22,8 @@ if "+" in version:
 extensions = """
     IPython.sphinxext.ipython_console_highlighting
     IPython.sphinxext.ipython_directive
+    myst_parser
+    nbsphinx
     sphinx.ext.autodoc
     sphinx.ext.autosummary
     sphinx.ext.coverage
@@ -30,8 +32,7 @@ extensions = """
     sphinx.ext.mathjax
     sphinx.ext.todo
     sphinx.ext.viewcode
-    nbsphinx
-    myst_parser
+    sphinx_design
 """.split()
 myst_enable_extensions = ["colon_fence"]
 
@@ -60,9 +61,11 @@ autodoc_default_options = {
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
 html_static_path = ['_static']
+html_theme = "pydata_sphinx_theme"
 html_title = project
+
+# -- autodoc_mock packages -------------------------------------------------
 
 autodoc_mock_imports = """
     apstools
