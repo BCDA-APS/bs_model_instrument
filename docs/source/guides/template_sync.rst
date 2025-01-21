@@ -99,17 +99,16 @@ Visit your GitHub account
 `settings <https://github.com/settings/tokens>`__ to create a token
 (PAT). The token value will be used in a later step.  Remember it.
 
-The **name** of the token does not matter here. We'll only use its
-value.
+The token **Note** does not matter here. We'll only use its value.
 
 ========== =============================
 term       choice
 ========== =============================
 style      ``classic``
-Name       ``pat_16bmb_model_test``
-Repo       ``prjemian/16bmb_instrument``
-Checkboxes ``workflow``
-expires    *your choice*
+Note       ``pat_16bmb_model_test``
+Expiration  *your choice*
+Scope      Check ``workflow`` box
+Repo       Fine-grained (new) tokens allow to specify which repo.
 ========== =============================
 
 With these settings GitHub will create a **token** and show it to you.
@@ -148,3 +147,24 @@ Review the PR
 
 Review the PR and merge it if seems appropriate for your repo. Delete
 the branch when done.
+
+Troubleshooting
+---------------
+
+If *no token has been provided*, an error such as this appears in the workflow
+log:
+
+.. code-block:: text
+   :linenos:
+
+   ! [remote rejected] chore/template_sync_68c5869 -> chore/template_sync_68c5869 (refusing to allow a GitHub App to create or update workflow `.github/workflows/docs.yml` without `workflows` permission)
+
+If the provided *token has been deleted*, an error such as this appears in the workflow
+log:
+
+.. code-block:: text
+   :linenos:
+
+    /usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +7620ae9e802c2f769e7f21988d195478eb99ac78:refs/remotes/origin/main
+    Error: fatal: could not read Username for 'https://github.com': terminal prompts disabled
+    The process '/usr/bin/git' failed with exit code 128
