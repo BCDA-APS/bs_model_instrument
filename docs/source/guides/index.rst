@@ -6,3 +6,4 @@ Guides show how to use certain features of this instrument.
     :maxdepth: 2
 
     dm
+    template_sync
