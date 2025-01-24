@@ -7,7 +7,7 @@ from ..devices.factories import predefined_device
 
 
 @pytest.mark.parametrize(
-    "callable, name, klass",
+    "creator, name, klass",
     [
         ["ophyd.sim.motor", None, "SynAxis"],
         ["ophyd.sim.motor", "sim_motor", "SynAxis"],
@@ -15,9 +15,9 @@ from ..devices.factories import predefined_device
         ["ophyd.sim.noisy_det", "sim_det", "SynGauss"],
     ],
 )
-def test_predefined(callable, name, klass):
+def test_predefined(creator, name, klass):
     """import predefined devices"""
-    for device in predefined_device(callable=callable, name=name):
+    for device in predefined_device(creator=creator, name=name):
         assert device is not None
         assert device.__class__.__name__ == klass
         if name is not None:

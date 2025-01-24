@@ -36,12 +36,12 @@ this API signature:
 .. code-block:: py
     :linenos:
 
-    callable(*, prefix="", name="", labels=[], **kwargs)
+    creator(*, prefix="", name="", labels=[], **kwargs)
 
 .. rubric:: Quick example
 
 An ophyd object for an EPICS motor PV ``gp:m1`` is created in Python code where
-``ophyd.EpicsMotor`` is the *callable*, ``"gp:m1"`` is the `prefix`, and the
+``ophyd.EpicsMotor`` is the *creator*, ``"gp:m1"`` is the `prefix`, and the
 other kwargs are ``name`` and ``labels``.
 
 .. code-block:: py
@@ -68,10 +68,11 @@ This YAML replaces all the Python code above to create the ``m1`` object:
     the Python code.
 
     The :func:`~instrument.utils.make_devices_yaml.make_devices()` plan stub
-    imports the callable and creates any devices listed below it.  In YAML:
+    imports the 'creator' (Python code) and creates any devices listed
+    below it.  In YAML:
 
-    * Each callable can only be listed once.
-    * All devices that are created with a callable are listed below it.
+    * Each 'creator' can only be listed once.
+    * All devices that are created with a 'creator' are listed below it.
     * Each device starts with a `-` and then the kwargs, as shown.
 
     Indentation is important. Follow the examples.

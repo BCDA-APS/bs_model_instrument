@@ -25,13 +25,13 @@ logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-def predefined_device(*, name="", callable=""):
+def predefined_device(*, name="", creator=""):
     """
     Provide a predefined device such as from the 'ophyd.sim' module.
 
     PARAMETERS
 
-    callable : str
+    creator : str
         Name of the predefined device to be used
     name : str
         Simulator will be assigned this name.  (default: use existing name)
@@ -42,12 +42,12 @@ def predefined_device(*, name="", callable=""):
         :linenos:
 
         instrument.devices.factories.predefined_device:
-          - {callable: ophyd.sim.motor, name: sim_motor}
-          - {callable: ophyd.sim.noisy_det, name: sim_det}
+          - {creator: ophyd.sim.motor, name: sim_motor}
+          - {creator: ophyd.sim.noisy_det, name: sim_det}
     """
-    if callable == "":
-        raise ValueError("Must provide a value for 'callable'.")
-    device = dynamic_import(callable)
+    if creator == "":
+        raise ValueError("Must provide a value for 'creator'.")
+    device = dynamic_import(creator)
     if name != "":
         device.name = name
     logger.debug(device)
@@ -60,11 +60,11 @@ def factory_base(
     names="object{}",
     first=0,
     last=0,
-    callable="ophyd.Signal",
+    creator="ophyd.Signal",
     **kwargs,
 ):
     """
-    Make one or more 'callable' objects.
+    Make one or more objects using  'creator'.
 
     PARAMETERS
 
@@ -88,8 +88,8 @@ def factory_base(
         The first object number in the continuous series from 'first' through
         'last' (inclusive).
 
-    callable : str
-        Name of the *callable* that will be used to construct each device.
+    creator : str
+        Name of the *creator* code that will be used to construct each device.
         (default: ``"ophyd.Signal"``)
 
     kwargs : dict
@@ -101,7 +101,7 @@ def factory_base(
     if prefix is not None and "{" not in prefix:
         prefix += "{}"
 
-    klass = dynamic_import(callable)
+    klass = dynamic_import(creator)
 
     first, last = sorted([first, last])
     for i in range(first, 1 + last):
@@ -191,7 +191,7 @@ def motors(
             "names": names or "m{}",
             "first": first,
             "last": last,
-            "callable": "ophyd.EpicsMotor",
+            "creator": "ophyd.EpicsMotor",
         }
     )
 
