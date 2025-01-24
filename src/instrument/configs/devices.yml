@@ -1,5 +1,9 @@
 # Guarneri-style device YAML configuration
 
+instrument.devices.factories.predefined_device:
+- {callable: ophyd.sim.motor, name: sim_motor}
+- {callable: ophyd.sim.noisy_det, name: sim_det}
+
 apstools.devices.SimulatedApsPssShutterWithStatus:
 - name: shutter
   labels: ["shutters"]

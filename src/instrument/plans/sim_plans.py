@@ -15,8 +15,7 @@ import logging
 from bluesky import plan_stubs as bps
 from bluesky import plans as bp
 
-from ..devices import sim_det
-from ..devices import sim_motor
+from ..utils.controls_setup import oregistry
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -27,6 +26,7 @@ DEFAULT_MD = {"title": "test run with simulator(s)"}
 def sim_count_plan(num: int = 1, imax: float = 10_000, md: dict = DEFAULT_MD):
     """Demonstrate the ``count()`` plan."""
     logger.debug("sim_count_plan()")
+    sim_det = oregistry["sim_det"]
     yield from bps.mv(sim_det.Imax, imax)
     yield from bp.count([sim_det], num=num, md=md)
 
@@ -35,6 +35,8 @@ def sim_print_plan():
     """Demonstrate a ``print()`` plan stub (no data streams)."""
     logger.debug("sim_print_plan()")
     yield from bps.null()
+    sim_det = oregistry["sim_det"]
+    sim_motor = oregistry["sim_motor"]
     print("sim_print_plan(): This is a test.")
     print(f"sim_print_plan():  {sim_motor.position=}  {sim_det.read()=}.")
 
@@ -50,6 +52,8 @@ def sim_rel_scan_plan(
 ):
     """Demonstrate the ``rel_scan()`` plan."""
     logger.debug("sim_rel_scan_plan()")
+    sim_det = oregistry["sim_det"]
+    sim_motor = oregistry["sim_motor"]
     # fmt: off
     yield from bps.mv(
         sim_det.Imax, imax,
