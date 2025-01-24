@@ -8,6 +8,11 @@ See the advice below to declare your instrument's ophyd-style in YAML files:
 * :ref:`api.configs.devices`
 * :ref:`api.configs.devices_aps_only`
 
+.. autosummary::
+    :nosignatures:
+
+    ~instrument.devices.factories
+
 The `instrument.startup` module calls ``RE(make_devices())`` to
 make the devices as described.
 
@@ -17,8 +22,11 @@ Declare all devices
 All ophyd-style devices are declared in one of the two YAML files listed above:
 
 * when code (classes, factory functions) is provided by a package:
+
   * refer to the package class (or function) directly in the YAML file
+
 * when local customization is needed (new support or modify a packaged class):
+
   * create local custom code that defines the class or factory
   * refer to local custom code in the YAML file
 
@@ -28,19 +36,19 @@ this API signature:
 .. code-block:: py
     :linenos:
 
-    callable(*, prefix="", name="", labels=[], **kwargs)
+    creator(*, prefix="", name="", labels=[], **kwargs)
 
 .. rubric:: Quick example
 
 An ophyd object for an EPICS motor PV ``gp:m1`` is created in Python code where
-``ophyd.EpicsMotor`` is the *callable*, ``"gp:m1"`` is the `prefix`, and the
+``ophyd.EpicsMotor`` is the *creator*, ``"gp:m1"`` is the `prefix`, and the
 other kwargs are ``name`` and ``labels``.
 
 .. code-block:: py
     :linenos:
 
     import ophyd
-    m1 = ophyd.EpicsMotor("ioc:m1", name="m1", labels=["motor"])
+    m1 = ophyd.EpicsMotor("ioc:m1", name="m1", labels=["motors"])
 
 This YAML replaces all the Python code above to create the ``m1`` object:
 
@@ -50,7 +58,7 @@ This YAML replaces all the Python code above to create the ``m1`` object:
     ophyd.EpicsMotor:
     - name: "m1"
       prefix: "ioc:m1"
-      labels: ["motor"]
+      labels: ["motors"]
 
 .. tip:: The devices are (re)created each time ``RE(make_devices())`` is run.
 
@@ -60,10 +68,11 @@ This YAML replaces all the Python code above to create the ``m1`` object:
     the Python code.
 
     The :func:`~instrument.utils.make_devices_yaml.make_devices()` plan stub
-    imports the callable and creates any devices listed below it.  In YAML:
+    imports the 'creator' (Python code) and creates any devices listed
+    below it.  In YAML:
 
-    * Each callable can only be listed once.
-    * All devices that are created with a callable are listed below it.
+    * Each 'creator' can only be listed once.
+    * All devices that are created with a 'creator' are listed below it.
     * Each device starts with a `-` and then the kwargs, as shown.
 
     Indentation is important. Follow the examples.
@@ -82,9 +91,12 @@ This YAML replaces all the Python code above to create the ``m1`` object:
             - motor
 
         ophyd.EpicsMotor:
-        - {name: m1, prefix: ioc:m1, labels: ["motor"]}
+        - {name: m1, prefix: ioc:m1, labels: ["motors"]}
 
-        ophyd.EpicsMotor: [{name: m1, prefix: ioc:m1, labels: ["motor"]}]
+        ophyd.EpicsMotor: [{name: m1, prefix: ioc:m1, labels: ["motors"]}]
+
+        instrument.devices.factories.motors:
+        - {prefix: ioc:m, names: m, first: 1, last: 1, labels: ["motors"]}
 
 Examples
 --------
@@ -108,11 +120,23 @@ describes five motors, using a one-line format for each dictionary.
     :linenos:
 
     ophyd.EpicsMotor:
-    - {name: m1, prefix: ioc:m1, labels: ["motor"]}
-    - {name: m2, prefix: ioc:m2, labels: ["motor"]}
-    - {name: m3, prefix: ioc:m3, labels: ["motor"]}
-    - {name: dx, prefix: vme:m58:c0:m1, labels: ["motor"]}
-    - {name: dy, prefix: vme:m58:c0:m2, labels: ["motor"]}
+    - {name: m1, prefix: ioc:m1, labels: ["motors"]}
+    - {name: m2, prefix: ioc:m2, labels: ["motors"]}
+    - {name: m3, prefix: ioc:m3, labels: ["motors"]}
+    - {name: dx, prefix: vme:m58:c0:m1, labels: ["motors"]}
+    - {name: dy, prefix: vme:m58:c0:m2, labels: ["motors"]}
+
+Using a factory to define some of these motors that fit a numerical pattern:
+
+.. code-block:: yaml
+    :linenos:
+
+    instrument.devices.factories.motors:
+    - {prefix: ioc:m, names: m, first: 1, last: 3, labels: ["motors"]}
+
+    ophyd.EpicsMotor:
+    - {name: dx, prefix: vme:m58:c0:m1, labels: ["motors"]}
+    - {name: dy, prefix: vme:m58:c0:m2, labels: ["motors"]}
 
 Scalers
 ~~~~~~~
@@ -192,12 +216,12 @@ Here's the local support code (in new file
 
         # the reciprocal axes are defined by SimMixin
 
-        mu = FCpt(EpicsMotor, "{prefix}{m_mu}", kind="hinted", labels=["motor"])
-        omega = FCpt(EpicsMotor, "{prefix}{m_omega}", kind="hinted", labels=["motor"])
-        chi = FCpt(EpicsMotor, "{prefix}{m_chi}", kind="hinted", labels=["motor"])
-        phi = FCpt(EpicsMotor, "{prefix}{m_phi}", kind="hinted", labels=["motor"])
-        gamma = FCpt(EpicsMotor, "{prefix}{m_gamma}", kind="hinted", labels=["motor"])
-        delta = FCpt(EpicsMotor, "{prefix}{m_delta}", kind="hinted", labels=["motor"])
+        mu = FCpt(EpicsMotor, "{prefix}{m_mu}", kind="hinted", labels=["motors"])
+        omega = FCpt(EpicsMotor, "{prefix}{m_omega}", kind="hinted", labels=["motors"])
+        chi = FCpt(EpicsMotor, "{prefix}{m_chi}", kind="hinted", labels=["motors"])
+        phi = FCpt(EpicsMotor, "{prefix}{m_phi}", kind="hinted", labels=["motors"])
+        gamma = FCpt(EpicsMotor, "{prefix}{m_gamma}", kind="hinted", labels=["motors"])
+        delta = FCpt(EpicsMotor, "{prefix}{m_delta}", kind="hinted", labels=["motors"])
 
         energy = Component(EpicsSignalRO, "BraggERdbkAO", kind="hinted", labels=["energy"])
         energy_units = Component(EpicsSignalRO, "BraggERdbkAO.EGU", kind="config")
@@ -279,3 +303,7 @@ can provide them to your plan stub:
 
     dither_x = oregistry["user_calcs.calc9"]
     dither_y = oregistry["user_calcs.calc10"]
+
+------------------
+
+.. automodule:: instrument.devices.factories

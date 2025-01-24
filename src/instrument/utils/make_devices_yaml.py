@@ -103,12 +103,12 @@ class Instrument(guarneri.Instrument):
         if isinstance(config_file, str):
             config_file = pathlib.Path(config_file)
 
-        def parser(class_name, specs):
-            if class_name not in self.device_classes:
-                self.device_classes[class_name] = dynamic_import(class_name)
+        def parser(creator, specs):
+            if creator not in self.device_classes:
+                self.device_classes[creator] = dynamic_import(creator)
             entries = [
                 {
-                    "device_class": class_name,
+                    "device_class": creator,
                     "args": (),  # ALL specs are kwargs!
                     "kwargs": table,
                 }
