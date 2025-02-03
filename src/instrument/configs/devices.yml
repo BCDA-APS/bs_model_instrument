@@ -30,3 +30,19 @@ apstools.devices.SimulatedApsPssShutterWithStatus:
 # - {name: m2, prefix: gp:m2, labels: ["motor"]}
 # - {name: m3, prefix: gp:m3, labels: ["motor"]}
 # - {name: m4, prefix: gp:m4, labels: ["motor"]}
+
+# apstools.devices.ad_creator:
+#   - name: adsimdet
+#     prefix: "ad:"
+#     labels: ["area_detector", "detectors"]
+#     plugins:
+#       - cam:
+#           class: apstools.devices.SimDetectorCam_V34
+#       - image
+#       - pva
+#       - hdf1:
+#           class: apstools.devices.AD_EpicsFileNameHDF5Plugin
+#           read_path_template: "/path/to/bluesky/tmp/"
+#           write_path_template: "/path/to/ioc/tmp/"
+#       - roi1
+#       - stats1
