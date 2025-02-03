@@ -41,20 +41,6 @@ USE_BLUESKY_MAGICS: True
 #     PLOTS: false
 #     TABLE: false
 
-AREA_DETECTOR:
-    ### General configuration for area detectors.
-    ALLOW_PLUGIN_WARMUP: true
-    BLUESKY_FILES_ROOT: &BLUESKY_DATA_ROOT "/path/to/data/"
-    IMAGE_DIR: "sub/directory/path"
-    HDF5_FILE_TEMPLATE: "%s%s_%6.6d.h5"
-    ### Add configuration for specific detector(s).
-    ### Suggestion:
-    # ADSIM_16M:
-    #     # IOC host: workstation_name
-    #     IOC_FILES_ROOT: *BLUESKY_DATA_ROOT
-    #     NAME: simdet16M
-    #     PV_PREFIX: "simdet16m:"
-
 ### Support for known output file formats.
 ### Uncomment to use.  If undefined, will not write that type of file.
 ### Each callback should apply its configuration from here.
