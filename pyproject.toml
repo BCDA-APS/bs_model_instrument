@@ -63,6 +63,7 @@ doc = [
     "markupsafe",
     "myst_parser",
     "nbsphinx",
+    "pydata-sphinx-theme",
     "pygments-ipython-console",
     "pygments",
     "sphinx-design",
