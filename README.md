@@ -16,8 +16,8 @@ cd BITS
 
 Set up the development environment.
 
-
-export ENV_NAME=bits
+```bash
+export ENV_NAME=BITS_env
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
 pip install -e ."[all]"
