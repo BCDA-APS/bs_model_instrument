@@ -67,7 +67,7 @@ contents, just copy/paste):
        workflow_dispatch:
 
    env:
-     TEMPLATE_REPO: BCDA-APS/bs_model_instrument
+     TEMPLATE_REPO: BCDA-APS/BITS
 
    jobs:
      repo-sync:
