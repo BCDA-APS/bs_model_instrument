@@ -40,7 +40,7 @@ For the purpose of demonstration, these docs have used these repositories:
 =========== ======================
 purpose     repo
 =========== ======================
-template    `BCDA-APS/bs_model_instrument <https://github.com/BCDA-APS/bs_model_instrument>`__
+template    `BCDA-APS/BITS<https://github.com/BCDA-APS/BITS>`__
 instrument  `prjemian/16bmb_instrument <https://github.com/prjemian/16bmb_instrument>`__
 =========== ======================
 
