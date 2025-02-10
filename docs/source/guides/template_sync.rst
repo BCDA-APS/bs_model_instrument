@@ -2,7 +2,7 @@ How to Update from Template Repo
 ================================
 
 The ``BITS``
-`repository <https://github.com/BCDA-APS/bs_model_instrument>`__ is a
+`repository <https://github.com/BCDA-APS/BITS>`__ is a
 `template <https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository>`__
 for Bluesky instrument packages at the Advanced Photon Source. A new
 instrument repository is created from the template repo.
