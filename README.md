@@ -1,6 +1,8 @@
-# Model Package for Bluesky Instrument Minimal Installation
+# BITS: Template Package for Bluesky Instruments
 
-Model of a Bluesky Data Acquisition Instrument in console, notebook, &
+BITS: **B**luesky **I**nstrument **T**emplate**S**
+
+Template of a Bluesky Data Acquisition Instrument in console, notebook, &
 queueserver.
 
 ## Installation
