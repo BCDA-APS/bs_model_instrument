@@ -17,7 +17,7 @@ cd bs_model_instrument
 Set up the development environment.
 
 ```bash
-export ENV_NAME=bs_model_env
+export ENV_NAME=bits
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
 pip install -e ."[all]"
