@@ -34,7 +34,7 @@ ipython
 ## Jupyter Notebook
 Start JupyterLab, a Jupyter notebook server, or a notebook, VSCode.
 
-## Starting the Aquisition
+## Starting the BITS Package
 
 ```py
 from instrument.startup import *
