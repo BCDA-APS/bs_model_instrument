@@ -23,7 +23,7 @@ conda activate $ENV_NAME
 pip install -e ."[all]"
 ```
 
-## IPython console
+## IPython console & Jupyter notebook
 
 To start the bluesky instrument session in a ipython execute the next command in a terminal:
 
@@ -31,20 +31,14 @@ To start the bluesky instrument session in a ipython execute the next command in
 ipython
 ```
 
-Inside the ipython console execute:
-
-```py
-from instrument.startup import *
-```
-
-## Jupyter notebook
-
+## Jupyter Notebook
 Start JupyterLab, a Jupyter notebook server, or a notebook, VSCode.
 
-Start the data acquisition:
+## Starting the Aquisition
 
 ```py
 from instrument.startup import *
+RE(make_devices())  # create all the ophyd-style control devices
 ```
 
 ## Sim Plan Demo
