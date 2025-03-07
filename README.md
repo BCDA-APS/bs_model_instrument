@@ -41,7 +41,7 @@ from instrument.startup import *
 RE(make_devices())  # create all the ophyd-style control devices
 ```
 
-## Sim Plan Demo
+## Running Sim Plan Demo
 
 To run some simulated plans that ensure the installation worked as expected
 please run the next commands inside an ipython session or a jupyter notebook

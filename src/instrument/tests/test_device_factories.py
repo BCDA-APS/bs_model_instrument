@@ -2,8 +2,8 @@
 
 import pytest
 
-from ..devices.factories import motors
-from ..devices.factories import predefined_device
+from ..utils.factories import motors
+from ..utils.factories import predefined_device
 
 
 @pytest.mark.parametrize(
