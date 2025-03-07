@@ -28,4 +28,5 @@ def runengine_with_devices() -> Any:
     Returns:
         Any: An instance of the RunEngine with devices configured.
     """
-    return RE(make_devices())
+    RE(make_devices())
+    return RE
