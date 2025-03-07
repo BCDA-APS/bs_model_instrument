@@ -132,6 +132,12 @@ jobs:
           COVERALLS_FLAG_NAME: ${{ matrix.python-version }} # -${{ matrix.redis-version }}
           COVERALLS_PARALLEL: true
 
+      - name: IPython Startup Test
+        shell: bash -l {0}
+        run: |
+          set -vxeuo pipefail
+          ipython -c "from instrument.startup import *; RE(make_devices())"
+
   # https://coveralls-python.readthedocs.io/en/latest/usage/configuration.html#github-actions-support
   coveralls:
     name: Report unit test coverage to coveralls
