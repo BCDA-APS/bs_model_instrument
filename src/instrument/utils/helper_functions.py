@@ -11,7 +11,6 @@ Generic utility helper functions
 """
 
 import logging
-from typing import Any
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -29,7 +28,8 @@ def register_bluesky_magics() -> None:
     """
     Register Bluesky magics if an IPython environment is detected.
 
-    This function registers the BlueskyMagics if get_ipython() returns a valid IPython instance.
+    This function registers the BlueskyMagics if get_ipython() returns a valid IPython
+      instance.
     """
     ipython = get_ipython()
     if ipython is not None:
@@ -55,7 +55,8 @@ def debug_python() -> None:
     """
     Enable detailed debugging for Python exceptions in the IPython environment.
 
-    This function adjusts the xmode settings for exception tracebacks based on the configuration.
+    This function adjusts the xmode settings for exception tracebacks based on the
+      configuration.
     """
     ipython = get_ipython()
     if ipython is not None:
@@ -70,7 +71,8 @@ def is_notebook() -> bool:
     Detect if the current environment is a Jupyter Notebook.
 
     Returns:
-        bool: True if running in a notebook (Jupyter notebook or qtconsole), False otherwise.
+        bool: True if running in a notebook (Jupyter notebook or qtconsole),
+        False otherwise.
     """
     try:
         shell: str = get_ipython().__class__.__name__
@@ -88,8 +90,10 @@ def mpl_setup() -> None:
     """
     Configure the Matplotlib backend based on the current environment.
 
-    For non-queueserver and non-notebook environments, attempts to use the 'qtAgg' backend.
-    If 'qtAgg' is not available due to missing dependencies, falls back to the 'Agg' backend.
+    For non-queueserver and non-notebook environments, attempts to use the 'qtAgg'
+      backend.
+    If 'qtAgg' is not available due to missing dependencies, falls back to the 'Agg'
+      backend.
 
     Returns:
         None
@@ -101,5 +105,9 @@ def mpl_setup() -> None:
                 plt.ion()
                 logger.info("Using qtAgg backend for matplotlib.")
             except Exception as exc:
-                logger.error("qtAgg backend is not available, falling back to Agg backend. Error: %s", exc)
+                logger.error(
+                    "qtAgg backend is not available, falling back to Agg backend. \
+                    Error: %s",
+                    exc,
+                )
                 mpl.use("Agg")
