@@ -193,7 +193,7 @@ def _setup_ipython_logger(logger, cfg):
                 "\nBelow are the IPython logging settings for your session."
                 "\nThese settings have no impact on your experiment.\n"
             )
-            _ipython.magic(f"logstart {options} {log_file} {log_mode}")
+            _ipython.run_line_magic("logstart", f"{options} {log_file} {log_mode}")
             if logger is not None:
                 logger.bsdev("Console logging: %s", log_file)
     except Exception as exc:
