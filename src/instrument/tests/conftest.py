@@ -6,7 +6,7 @@ allowing tests to operate with device-dependent configurations without relying
 on the production startup logic.
 
 Fixtures:
-    runengine_with_devices: An initialized RunEngine with devices configured.
+    runengine_with_devices: A RunEngine object in a session with devices configured.
 """
 
 from typing import Any
