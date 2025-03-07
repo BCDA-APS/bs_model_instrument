@@ -11,8 +11,8 @@ from ..plans.sim_plans import sim_print_plan
 from ..plans.sim_plans import sim_rel_scan_plan
 from ..startup import bec
 from ..startup import cat
-from ..startup.startup import iconfig
-from ..startup.startup import peaks
+from ..startup import iconfig
+from ..startup import peaks
 from ..startup import running_in_queueserver
 from ..startup import sd
 from ..startup import specwriter
