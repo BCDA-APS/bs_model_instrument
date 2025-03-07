@@ -1,6 +1,8 @@
-# Model Package for Bluesky Instrument Minimal Installation
+# BITS: Template Package for Bluesky Instruments
 
-Model of a Bluesky Data Acquisition Instrument in console, notebook, &
+BITS: **B**luesky **I**nstrument **T**emplate**S**
+
+Template of a Bluesky Data Acquisition Instrument in console, notebook, &
 queueserver.
 
 ## Installation
@@ -14,8 +16,8 @@ cd BITS
 
 Set up the development environment.
 
-```bash
-export ENV_NAME=BITS_env
+
+export ENV_NAME=bits
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
 pip install -e ."[all]"

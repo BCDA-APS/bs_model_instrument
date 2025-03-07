@@ -22,7 +22,7 @@ maintainers = [
 readme = "README.md"
 requires-python = ">=3.11"
 keywords = ['bluesky', 'queueserver']
-license = { file = "src/instrument/LICENSE" }
+license = { file = "LICENSE" }
 classifiers = [
     "Development Status :: 6 - Mature",
     "Environment :: Console",
