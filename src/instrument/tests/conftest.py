@@ -1,7 +1,10 @@
 from typing import Any
+
 import pytest
 
-from instrument.startup import make_devices, RE
+from instrument.startup import RE
+from instrument.startup import make_devices
+
 
 @pytest.fixture(scope="session")
 def runengine_with_devices() -> Any:
@@ -14,4 +17,4 @@ def runengine_with_devices() -> Any:
     Returns:
         Any: An instance of the RunEngine with devices configured.
     """
-    return RE(make_devices()) 
+    return RE(make_devices())
