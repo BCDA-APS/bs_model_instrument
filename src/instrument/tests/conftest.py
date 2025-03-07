@@ -22,7 +22,7 @@ def runengine_with_devices() -> Any:
     """
     Initialize the RunEngine with devices for testing.
 
-    This fixture calls RE with the output of make_devices() to mimic
+    This fixture calls RE with the `make_devices()` plan stub to mimic
     the behavior previously performed in the startup module.
 
     Returns:
