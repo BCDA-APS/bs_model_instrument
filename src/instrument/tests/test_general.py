@@ -20,7 +20,7 @@ from ..startup import specwriter
 
 def test_startup(runengine_with_devices: object) -> None:
     """
-    Test that standard startup works and the RunEngine is initialized with devices.
+    Test that standard startup works and the RunEngine has initialized the devices.
     """
     # The fixture ensures that runengine_with_devices is initialized.
     assert runengine_with_devices is not None
