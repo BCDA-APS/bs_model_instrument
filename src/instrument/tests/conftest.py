@@ -1,9 +1,20 @@
+"""
+Pytest fixtures for instrument tests.
+
+This module provides fixtures for initializing the RunEngine with devices,
+allowing tests to operate with device-dependent configurations without relying
+on the production startup logic.
+
+Fixtures:
+    runengine_with_devices: An initialized RunEngine with devices configured.
+"""
+
 from typing import Any
 
 import pytest
 
-from instrument.startup import RE
-from instrument.startup import make_devices
+from ..startup import RE
+from ..startup import make_devices
 
 
 @pytest.fixture(scope="session")
