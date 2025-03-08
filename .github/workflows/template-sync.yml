@@ -15,6 +15,7 @@ env:
 
 jobs:
   repo-sync:
+    if: ${{ github.repository != 'bcda-aps/bits' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
