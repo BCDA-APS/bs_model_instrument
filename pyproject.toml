@@ -22,7 +22,7 @@ maintainers = [
 readme = "README.md"
 requires-python = ">=3.11"
 keywords = ['bluesky', 'queueserver']
-license = { file = "src/instrument/LICENSE" }
+license = { file = "LICENSE" }
 classifiers = [
     "Development Status :: 6 - Mature",
     "Environment :: Console",
@@ -74,8 +74,8 @@ doc = [
 all = ["instrument[dev,doc]"]
 
 [project.urls]
-"Homepage" = "https://BCDA-APS.github.io/bs_model_instrument/"
-"Bug Tracker" = "https://github.com/BCDA-APS/bs_model_instrument/issues"
+"Homepage" = "https://BCDA-APS.github.io/BITS/"
+"Bug Tracker" = "https://github.com/BCDA-APS/BITS/issues"
 
 # [project.scripts]
 # instrument = "instrument.app:main"
