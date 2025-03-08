@@ -1,0 +1,35 @@
+name: template_sync
+
+# see: https://github.com/AndreasAugustin/actions-template-sync
+
+on:
+    # cronjob trigger
+    schedule:
+      # 12:10 AM GMT on the first day of every month
+    - cron: "10 0 1 * *"
+    # manual trigger
+    workflow_dispatch:
+
+env:
+  TEMPLATE_REPO: BCDA-APS/BITS
+
+jobs:
+  repo-sync:
+    if: ${{ github.repository != 'bcda-aps/bits' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v2
+        with:
+          source_repo_path: ${{ env.TEMPLATE_REPO }}
+          upstream_branch: main

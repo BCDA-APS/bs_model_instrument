@@ -62,9 +62,9 @@ console, a Jupyter notebook, the queueserver, or even a Python script:
 About ...
 ---------
 
-:home: https://BCDA-APS.github.io/bs_model_instrument/
-:bug tracker: https://github.com/BCDA-APS/bs_model_instrument/issues
-:source: https://github.com/BCDA-APS/bs_model_instrument
+:home: https://BCDA-APS.github.io/BITS/
+:bug tracker: https://github.com/BCDA-APS/BITS/issues
+:source: https://github.com/BCDA-APS/BITS
 :license: :ref:`license`
 :full version: |version|
 :published: |today|
