@@ -23,7 +23,7 @@ conda activate $ENV_NAME
 pip install -e ."[all]"
 ```
 
-## IPython console & Jupyter notebook
+## IPython console
 
 To start the bluesky instrument session in a ipython execute the next command in a terminal:
 
