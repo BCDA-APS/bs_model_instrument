@@ -1,0 +1,28 @@
+name: Init repo
+on: [push]
+
+jobs:
+  rename-project:
+    if: ${{ github.repository != 'bcda-aps/bits' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Run init_repo.sh
+        run: |
+          bash .github/workflows/init_repo.sh ${{ github.repository }}
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "✅ Ready to clone and code."
+          push_options: --force
+
+      - name: Create Tag 1.0.0
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git tag -a 1.0.0 -m "Release version 1.0.0"
+          git push origin 1.0.0
