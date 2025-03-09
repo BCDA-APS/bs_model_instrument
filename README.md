@@ -10,13 +10,13 @@ queueserver.
 Clone the repository.
 
 ```bash
-git clone git@github.com:BCDA-APS/bs_model_instrument.git
-cd bs_model_instrument
+git clone git@github.com:BCDA-APS/BITS.git
+cd BITS
 ```
 
 Set up the development environment.
 
-```bash
+
 export ENV_NAME=bits
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
