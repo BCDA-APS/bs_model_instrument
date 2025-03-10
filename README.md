@@ -16,7 +16,7 @@ cd BITS
 
 Set up the development environment.
 
-
+```bash
 export ENV_NAME=bits
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
