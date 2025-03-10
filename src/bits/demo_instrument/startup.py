@@ -16,7 +16,7 @@ from bits.core.best_effort_init import peaks  # noqa: F401
 from bits.core.catalog_init import cat  # noqa: F401
 from bits.core.run_engine_init import RE  # noqa: F401
 from bits.core.run_engine_init import sd  # noqa: F401
-from bits.plans import *  # noqa: F403
+from bits.demo_instrument.plans import *  # noqa: F403
 
 # Bluesky data acquisition setup
 from bits.utils.config_loaders import iconfig

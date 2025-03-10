@@ -221,9 +221,7 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.setuptools]
-package-dir = {"bits" = "src/bits",
-    "demo_instrument" = "src/demo_instrument",
-}
+package-dir = {"bits" = "src/bits"}
 
 [tool.setuptools.package-data]
 "*" = ["*.yml"]

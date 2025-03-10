@@ -16,9 +16,11 @@ from typing import Any
 
 try:
     import toml
-except ImportError as exc:
-    print("The 'toml' package is required to run this script. "
-          "Please install it via 'pip install toml'.")
+except ImportError:
+    print(
+        "The 'toml' package is required to run this script. "
+        "Please install it via 'pip install toml'."
+    )
     sys.exit(1)
 
 
@@ -33,7 +35,9 @@ def copy_instrument(template_dir: Path, destination_dir: Path) -> None:
     shutil.copytree(str(template_dir), str(destination_dir))
 
 
-def update_pyproject(pyproject_path: Path, instrument_name: str, instrument_path: Path) -> None:
+def update_pyproject(
+    pyproject_path: Path, instrument_name: str, instrument_path: Path
+) -> None:
     """
     Update the pyproject.toml file by adding a new instrument entry.
 
@@ -49,11 +53,15 @@ def update_pyproject(pyproject_path: Path, instrument_name: str, instrument_path
     if "tool" not in config or not isinstance(config["tool"], dict):
         config["tool"] = {}
 
-    if "instruments" not in config["tool"] or not isinstance(config["tool"]["instruments"], dict):
+    if "instruments" not in config["tool"] or not isinstance(
+        config["tool"]["instruments"], dict
+    ):
         config["tool"]["instruments"] = {}
 
     # Store the instrument path relative to the pyproject.toml location.
-    relative_path: str = str(instrument_path.resolve().relative_to(pyproject_path.parent.resolve()))
+    relative_path: str = str(
+        instrument_path.resolve().relative_to(pyproject_path.parent.resolve())
+    )
     config["tool"]["instruments"][instrument_name] = {"path": relative_path}
 
     with pyproject_path.open("w", encoding="utf-8") as file:
@@ -62,7 +70,8 @@ def update_pyproject(pyproject_path: Path, instrument_name: str, instrument_path
 
 def main() -> None:
     """
-    Main function to create a new instrument based on a template and update pyproject.toml.
+    Main function to create a new instrument based on a template and update
+    pyproject.toml.
     """
     parser = argparse.ArgumentParser(
         description="Create a new instrument from the 'bits_instrument' template."
@@ -70,19 +79,23 @@ def main() -> None:
     parser.add_argument(
         "name",
         type=str,
-        help="Name of the new instrument (this will be used as the new directory name)."
+        help="Name of the new instrument (this will be used as the new directory \
+        name).",
     )
     parser.add_argument(
         "--template",
         type=str,
         default="bits_instrument",
-        help="Path to the template instrument directory (default: bits_instrument)."
+        help="Path to the template instrument directory (default: bits_instrument).",
     )
     parser.add_argument(
         "--dest",
         type=str,
         default=".",
-        help="Destination directory where the new instrument folder will be created (default: current directory)."
+        help=(
+            "Destination directory where the new instrument folder will be "
+            "created (default: current directory)."
+        ),
     )
     args = parser.parse_args()
 
@@ -93,11 +106,13 @@ def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s: %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
     logging.info(
         "Creating new instrument '%s' from template '%s' to destination '%s'.",
-        args.name, template_path, new_instrument_dir
+        args.name,
+        template_path,
+        new_instrument_dir,
     )
 
     if not template_path.exists():
@@ -131,4 +146,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()
