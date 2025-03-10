@@ -12,15 +12,15 @@ import logging
 import bluesky
 from bluesky.utils import ProgressBarManager
 
-from ..utils.config_loaders import iconfig
-from ..utils.controls_setup import connect_scan_id_pv
-from ..utils.controls_setup import set_control_layer
-from ..utils.controls_setup import set_timeouts
-from ..utils.metadata import MD_PATH
-from ..utils.metadata import re_metadata
-from ..utils.stored_dict import StoredDict
-from .best_effort_init import bec
-from .catalog_init import cat
+from bits.utils.config_loaders import iconfig
+from bits.utils.controls_setup import connect_scan_id_pv
+from bits.utils.controls_setup import set_control_layer
+from bits.utils.controls_setup import set_timeouts
+from bits.utils.metadata import MD_PATH
+from bits.utils.metadata import re_metadata
+from bits.utils.stored_dict import StoredDict
+from bits.core.best_effort_init import bec
+from bits.core.catalog_init import cat
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
