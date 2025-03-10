@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-configs_path = pathlib.Path(__file__).parent.parent / "configs"
+configs_path = pathlib.Path(__file__).parent.parent / "demo_instrument" / "configs"
 main_namespace = sys.modules["__main__"]
 local_control_devices_file = iconfig["DEVICES_FILE"]
 aps_control_devices_file = iconfig["APS_DEVICES_FILE"]

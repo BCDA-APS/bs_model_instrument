@@ -32,7 +32,7 @@ def load_config_yaml(iconfig_yml=None) -> dict:
     iconfig_yml: str
         Name of the YAML file to be loaded.  The name can be
         absolute or relative to the current working directory.
-        Default: ``INSTRUMENT/configs/iconfig.yml``
+        Default: ``INSTRUMENT/demo_instrument/configs/iconfig.yml``
     """
 
     if iconfig_yml is None:
