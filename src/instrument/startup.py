@@ -31,10 +31,10 @@ if iconfig.get("USE_BLUESKY_MAGICS", False):
     register_bluesky_magics()
 
 # Configure the session with callbacks, devices, and plans.
-if iconfig.get("NEXUS_DATA_FILES") is not None:
+if iconfig.get("NEXUS_DATA_FILES", {}).get("IS_ON", False):
     from .callbacks.nexus_data_file_writer import nxwriter  # noqa: F401
 
-if iconfig.get("SPEC_DATA_FILES") is not None:
+if iconfig.get("SPEC_DATA_FILES", {}).get("IS_ON", False):
     from .callbacks.spec_data_file_writer import newSpecFile  # noqa: F401
     from .callbacks.spec_data_file_writer import spec_comment  # noqa: F401
     from .callbacks.spec_data_file_writer import specwriter  # noqa: F401

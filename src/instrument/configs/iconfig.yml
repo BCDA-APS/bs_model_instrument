@@ -44,11 +44,13 @@ BEC:
 ### Support for known output file formats.
 ### Uncomment to use.  If undefined, will not write that type of file.
 ### Each callback should apply its configuration from here.
-# NEXUS_DATA_FILES:
-#     FILE_EXTENSION: hdf
-#     WARN_MISSING_CONTENT: true
+NEXUS_DATA_FILES:
+    IS_ON: false
+    FILE_EXTENSION: hdf
+    WARN_MISSING_CONTENT: true
 
 SPEC_DATA_FILES:
+    IS_ON: true
     FILE_EXTENSION: dat
 
 ### APS Data Management
@@ -65,7 +67,7 @@ OPHYD:
     ### Control layer for ophyd to communicate with EPICS.
     ### Default: PyEpics
     ### Choices: "PyEpics" or "caproto"
-    # CONTROL_LAYER: caproto
+    CONTROL_LAYER: PyEpics
 
     ### default timeouts (seconds)
     TIMEOUTS:
@@ -74,4 +76,5 @@ OPHYD:
         PV_CONNECTION: *TIMEOUT
 
 # Control detail of exception traces in IPython (console and notebook).
+# Options are: Minimal, Plain, Verbose
 XMODE_DEBUG_LEVEL: Minimal
