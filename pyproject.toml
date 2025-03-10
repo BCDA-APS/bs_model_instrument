@@ -221,10 +221,12 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.setuptools]
-package-dir = {"instrument" = "src/instrument"}
+package-dir = {"bits" = "src/bits",
+    "demo_instrument" = "src/demo_instrument",
+}
 
 [tool.setuptools.package-data]
 "*" = ["*.yml"]
 
 [tool.setuptools_scm]
-write_to = "src/instrument/_version.py"
+write_to = "src/bits/_version.py"

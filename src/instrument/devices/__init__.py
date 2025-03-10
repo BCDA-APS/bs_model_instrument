@@ -1,1 +1,0 @@
-"""Ophyd-style devices."""
