@@ -15,7 +15,8 @@ Overview
 --------
 
 This document describes a method to synchronize the new instrument repo
-with the template repo. The method relies on a GitHub workflow
+with the template repo. The method relies on a GitHub
+`workflow <https://docs.github.com/en/actions/writing-workflows/about-workflows>`__
 to generate a new pull request whenever the template is updated. The
 workflow can be run on demand or as a periodic task (default is once a
 month). The workflow is installed in the new instrument's
@@ -25,15 +26,15 @@ When the workflow is run, it compares the new instrument's repo with the
 template repo. If differences are identified, the workflow creates a new
 branch in the new instrument's repo and then creates a new pull request
 to merge that branch with ``main``. Additional configuration is
-necessary to grant permission for the workflow to create a branch and PR.
+necessary to grant permission for the workflow to create a branch and
+PR.
 
-Permission is provided through a GitHub Personal Access Token (PAT). [#]_
-For this purpose, the PAT settings [#settings]_ should allow ``write`` permission
+Permission is provided through a GitHub Personal Access Token
+(`PAT <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens>`__).
+For this purpose, the PAT
+`settings <https://github.com/settings/tokens>`__ should allow ``write``
 (includes ``read``) permission for ``workflow``. It is possible to limit
 a PAT to a single GitHub repo (a good idea for this use case).
-
-.. [#] https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-.. [#settings] https://github.com/settings/tokens
 
 Example instrument repository
 +++++++++++++++++++++++++++++
