@@ -34,12 +34,12 @@ if iconfig.get("USE_BLUESKY_MAGICS", False):
 
 # Configure the session with callbacks, devices, and plans.
 if iconfig.get("NEXUS_DATA_FILES", {}).get("IS_ON", False):
-    from ..callbacks.nexus_data_file_writer import nxwriter  # noqa: F401
+    from bits.callbacks.nexus_data_file_writer import nxwriter  # noqa: F401
 
 if iconfig.get("SPEC_DATA_FILES", {}).get("IS_ON", False):
-    from ..callbacks.spec_data_file_writer import newSpecFile  # noqa: F401
-    from ..callbacks.spec_data_file_writer import spec_comment  # noqa: F401
-    from ..callbacks.spec_data_file_writer import specwriter  # noqa: F401
+    from bits.callbacks.spec_data_file_writer import newSpecFile  # noqa: F401
+    from bits.callbacks.spec_data_file_writer import spec_comment  # noqa: F401
+    from bits.callbacks.spec_data_file_writer import specwriter  # noqa: F401
 
 # These imports must come after the above setup.
 if running_in_queueserver():
@@ -56,4 +56,4 @@ else:
     from bluesky import plan_stubs as bps  # noqa: F401
     from bluesky import plans as bp  # noqa: F401
 
-    from ..utils.controls_setup import oregistry  # noqa: F401
+    from bits.utils.controls_setup import oregistry  # noqa: F401
