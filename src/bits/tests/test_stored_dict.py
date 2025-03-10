@@ -9,8 +9,8 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from ..utils.config_loaders import load_config_yaml
-from ..utils.stored_dict import StoredDict
+from bits.utils.config_loaders import load_config_yaml
+from bits.utils.stored_dict import StoredDict
 
 
 def luftpause(delay=0.05):

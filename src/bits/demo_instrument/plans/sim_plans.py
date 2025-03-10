@@ -15,7 +15,7 @@ import logging
 from bluesky import plan_stubs as bps
 from bluesky import plans as bp
 
-from ..utils.controls_setup import oregistry
+from bits.utils.controls_setup import oregistry 
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
