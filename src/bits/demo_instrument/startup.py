@@ -26,7 +26,6 @@ from bits.utils.make_devices_yaml import make_devices  # noqa: F401
 # User specific imports
 from .plans import *  # noqa: F403
 
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
