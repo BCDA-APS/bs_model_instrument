@@ -13,8 +13,8 @@ from typing import Any
 
 import pytest
 
-from ..startup import RE
-from ..startup import make_devices
+from bits_instrument.startup import RE
+from bits_instrument.startup import make_devices
 
 
 @pytest.fixture(scope="session")

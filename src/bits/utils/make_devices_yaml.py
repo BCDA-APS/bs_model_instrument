@@ -21,10 +21,10 @@ from apstools.plans import run_blocking_function
 from apstools.utils import dynamic_import
 from bluesky import plan_stubs as bps
 
-from .aps_functions import host_on_aps_subnet
-from .config_loaders import iconfig
-from .config_loaders import load_config_yaml
-from .controls_setup import oregistry  # noqa: F401
+from bits.utils.aps_functions import host_on_aps_subnet
+from bits.utils.config_loaders import iconfig
+from bits.utils.config_loaders import load_config_yaml
+from bits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
