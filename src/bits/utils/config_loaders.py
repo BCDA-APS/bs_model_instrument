@@ -17,7 +17,7 @@ import yaml
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 instrument_path = pathlib.Path(__file__).parent.parent
-DEFAULT_ICONFIG_YML_FILE = instrument_path / "configs" / "iconfig.yml"
+DEFAULT_ICONFIG_YML_FILE = instrument_path / "demo_instrument" / "configs" / "iconfig.yml"
 ICONFIG_MINIMUM_VERSION = "2.0.0"
 
 
