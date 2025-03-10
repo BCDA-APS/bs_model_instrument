@@ -25,7 +25,7 @@ from .utils.helper_functions import running_in_queueserver
 from .utils.make_devices_yaml import make_devices  # noqa: F401
 
 logger = logging.getLogger(__name__)
-logger.bsdev(__file__)
+
 
 if iconfig.get("USE_BLUESKY_MAGICS", False):
     register_bluesky_magics()
