@@ -24,8 +24,7 @@ logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-DEFAULT_FILE_EXTENSION = "dat"
-file_extension = iconfig.get("FILE_EXTENSION", DEFAULT_FILE_EXTENSION)
+file_extension = iconfig.get("NEXUS_DATA_FILES", {}).get("FILE_EXTENSION", "dat")
 
 
 def spec_comment(comment, doc=None):
@@ -77,7 +76,7 @@ specwriter = _specwriter
 # make the SPEC file in current working directory (assumes is writable)
 specwriter.newfile(specwriter.spec_filename)
 
-if "SPEC_DATA_FILES" in iconfig:
+if iconfig.get("SPEC_DATA_FILES", {}).get("IS_ON", False):
     RE.subscribe(specwriter.receiver)  # write data to SPEC files
     logger.info("SPEC data file: %s", specwriter.spec_filename.resolve())
 
