@@ -51,7 +51,7 @@ NEXUS_DATA_FILES:
     WARN_MISSING_CONTENT: true
 
 SPEC_DATA_FILES:
-    IS_ON: false
+    IS_ON: true
     FILE_EXTENSION: dat
 
 ### APS Data Management
