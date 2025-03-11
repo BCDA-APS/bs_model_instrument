@@ -60,7 +60,7 @@ def test_iconfig() -> None:
     """
     Test the instrument configuration.
     """
-    version: str = iconfig.get("ICONFIG_VERSION", "0.0.0")
+    version: str = iconfig.get("ICONFIG_VERSION", "0.0.0") #TODO: Will anyone ever have a wrong catalog version?
     assert version >= "2.0.0"
 
     cat_name: str = iconfig.get("DATABROKER_CATALOG")

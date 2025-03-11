@@ -34,11 +34,12 @@ RUN_ENGINE:
 USE_BLUESKY_MAGICS: true
 
 ### Best Effort Callback Configurations
-### Defaults: all true (except no plots in queueserver)
+### Defaults: all true 
+### except no plots in queueserver
 BEC:
     BASELINE: true
     HEADING: true
-    PLOTS: true
+    PLOTS: false
     TABLE: true
 
 ### Support for known output file formats.
@@ -50,7 +51,7 @@ NEXUS_DATA_FILES:
     WARN_MISSING_CONTENT: true
 
 SPEC_DATA_FILES:
-    IS_ON: true
+    IS_ON: false
     FILE_EXTENSION: dat
 
 ### APS Data Management
@@ -66,7 +67,7 @@ APS_DEVICES_FILE: devices_aps_only.yml
 OPHYD:
     ### Control layer for ophyd to communicate with EPICS.
     ### Default: PyEpics
-    ### Choices: "PyEpics" or "caproto"
+    ### Choices: "PyEpics" or "caproto" # caproto is not yet supported
     CONTROL_LAYER: PyEpics
 
     ### default timeouts (seconds)

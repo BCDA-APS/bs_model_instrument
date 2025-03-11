@@ -90,6 +90,8 @@ def set_control_layer(control_layer: str = DEFAULT_CONTROL_LAYER):
     """
 
     control_layer = ophyd_config.get("CONTROL_LAYER", control_layer)
+    print("\n\n\n\n")
+    print(control_layer)
     ophyd.set_cl(control_layer.lower())
 
     logger.info("using ophyd control layer: %r", ophyd.cl.name)
