@@ -76,7 +76,7 @@ specwriter = _specwriter
 # make the SPEC file in current working directory (assumes is writable)
 specwriter.newfile(specwriter.spec_filename)
 
-if iconfig.get("SPEC_DATA_FILES", {}).get("IS_ON", False):
+if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
     RE.subscribe(specwriter.receiver)  # write data to SPEC files
     logger.info("SPEC data file: %s", specwriter.spec_filename.resolve())
 
