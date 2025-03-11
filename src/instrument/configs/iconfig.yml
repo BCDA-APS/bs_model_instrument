@@ -34,7 +34,7 @@ RUN_ENGINE:
 USE_BLUESKY_MAGICS: true
 
 ### Best Effort Callback Configurations
-### Defaults: all true 
+### Defaults: all true
 ### except no plots in queueserver
 BEC:
     BASELINE: true
