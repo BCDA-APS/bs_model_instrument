@@ -22,6 +22,7 @@ def test_startup(runengine_with_devices: object) -> None:
     """
     Test that standard startup works and the RunEngine has initialized the devices.
     """
+    iconfig["SPEC_DATA_FILES"]["IS_ON"] = True
     # The fixture ensures that runengine_with_devices is initialized.
     assert runengine_with_devices is not None
     assert cat is not None
