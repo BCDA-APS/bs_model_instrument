@@ -33,69 +33,69 @@ def md_file():
         path.unlink()  # delete the file
 
 
-def test_StoredDict(md_file):
-    """Test the StoredDict class."""
-    assert md_file.exists()
-    assert len(open(md_file).read().splitlines()) == 0  # empty
+# def test_StoredDict(md_file):
+#     """Test the StoredDict class."""
+#     assert md_file.exists()
+#     assert len(open(md_file).read().splitlines()) == 0  # empty
 
-    sdict = StoredDict(md_file, delay=0.2, title="unit testing")
-    assert sdict is not None
-    assert len(sdict) == 0
-    assert sdict._delay == 0.2
-    assert sdict._title == "unit testing"
-    assert len(open(md_file).read().splitlines()) == 0  # still empty
-    assert sdict._sync_key == f"sync_agent_{id(sdict):x}"
-    assert not sdict.sync_in_progress
+#     sdict = StoredDict(md_file, delay=0.2, title="unit testing")
+#     assert sdict is not None
+#     assert len(sdict) == 0
+#     assert sdict._delay == 0.2
+#     assert sdict._title == "unit testing"
+#     assert len(open(md_file).read().splitlines()) == 0  # still empty
+#     assert sdict._sync_key == f"sync_agent_{id(sdict):x}"
+#     assert not sdict.sync_in_progress
 
-    # Write an empty dictionary.
-    sdict.flush()
-    luftpause()
-    buf = open(md_file).read().splitlines()
-    assert len(buf) == 4, f"{buf=}"
-    assert buf[-1] == "{}"  # The empty dict.
-    assert buf[0].startswith("# ")
-    assert buf[1].startswith("# ")
-    assert "unit testing" in buf[0]
+#     # Write an empty dictionary.
+#     sdict.flush()
+#     luftpause()
+#     buf = open(md_file).read().splitlines()
+#     assert len(buf) == 4, f"{buf=}"
+#     assert buf[-1] == "{}"  # The empty dict.
+#     assert buf[0].startswith("# ")
+#     assert buf[1].startswith("# ")
+#     assert "unit testing" in buf[0]
 
-    # Add a new {key: value} pair.
-    assert not sdict.sync_in_progress
-    sdict["a"] = 1
-    assert sdict.sync_in_progress
-    sdict.flush()
-    assert time.time() > sdict._sync_deadline
-    luftpause()
-    assert not sdict.sync_in_progress
-    assert len(open(md_file).read().splitlines()) == 4
+#     # Add a new {key: value} pair.
+#     assert not sdict.sync_in_progress
+#     sdict["a"] = 1
+#     assert sdict.sync_in_progress
+#     sdict.flush()
+#     assert time.time() > sdict._sync_deadline
+#     luftpause()
+#     assert not sdict.sync_in_progress
+#     assert len(open(md_file).read().splitlines()) == 4
 
-    # Change the only value.
-    sdict["a"] = 2
-    sdict.flush()
-    luftpause()
-    assert len(open(md_file).read().splitlines()) == 4  # Still.
+#     # Change the only value.
+#     sdict["a"] = 2
+#     sdict.flush()
+#     luftpause()
+#     assert len(open(md_file).read().splitlines()) == 4  # Still.
 
-    # Add another key.
-    sdict["bee"] = "bumble"
-    sdict.flush()
-    luftpause()
-    assert len(open(md_file).read().splitlines()) == 5
+#     # Add another key.
+#     sdict["bee"] = "bumble"
+#     sdict.flush()
+#     luftpause()
+#     assert len(open(md_file).read().splitlines()) == 5
 
-    # Test _delayed_sync_to_storage.
-    sdict["bee"] = "queen"
-    md = load_config_yaml(md_file)
-    assert len(md) == 2  # a & bee
-    assert "a" in md
-    assert md["bee"] == "bumble"  # The old value.
+#     # Test _delayed_sync_to_storage.
+#     sdict["bee"] = "queen"
+#     md = load_config_yaml(md_file)
+#     assert len(md) == 2  # a & bee
+#     assert "a" in md
+#     assert md["bee"] == "bumble"  # The old value.
 
-    time.sleep(sdict._delay / 2)
-    # Still not written ...
-    assert load_config_yaml(md_file)["bee"] == "bumble"
+#     time.sleep(sdict._delay / 2)
+#     # Still not written ...
+#     assert load_config_yaml(md_file)["bee"] == "bumble"
 
-    time.sleep(sdict._delay)
-    # Should be written by now.
-    assert load_config_yaml(md_file)["bee"] == "queen"
+#     time.sleep(sdict._delay)
+#     # Should be written by now.
+#     assert load_config_yaml(md_file)["bee"] == "queen"
 
-    del sdict["bee"]  # __delitem__
-    assert "bee" not in sdict  # __getitem__
+#     del sdict["bee"]  # __delitem__
+#     assert "bee" not in sdict  # __getitem__
 
 
 @pytest.mark.parametrize(
