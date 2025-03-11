@@ -16,3 +16,5 @@ except (LookupError, ModuleNotFoundError):
     from importlib.metadata import version
 
     __version__ = version(__package__)
+
+import demo_instrument
