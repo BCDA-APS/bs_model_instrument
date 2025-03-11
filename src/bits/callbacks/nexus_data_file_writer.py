@@ -48,7 +48,7 @@ class MyNXWriter(NXWriter):
 nxwriter = MyNXWriter()  # create the callback instance
 """The NeXus file writer object."""
 
-if iconfig.get("NEXUS_DATA_FILES", {}).get("IS_ON", False):
+if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
     RE.subscribe(nxwriter.receiver)  # write data to NeXus files
 
 nxwriter.file_extension = iconfig.get("NEXUS_DATA_FILES", {}).get(

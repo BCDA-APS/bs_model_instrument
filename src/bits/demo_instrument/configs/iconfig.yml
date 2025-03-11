@@ -46,12 +46,12 @@ BEC:
 ### Uncomment to use.  If undefined, will not write that type of file.
 ### Each callback should apply its configuration from here.
 NEXUS_DATA_FILES:
-    IS_ON: false
+    ENABLE: false
     FILE_EXTENSION: hdf
     WARN_MISSING_CONTENT: true
 
 SPEC_DATA_FILES:
-    IS_ON: true
+    ENABLE: true
     FILE_EXTENSION: dat
 
 ### APS Data Management
