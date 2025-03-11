@@ -67,7 +67,7 @@ APS_DEVICES_FILE: devices_aps_only.yml
 OPHYD:
     ### Control layer for ophyd to communicate with EPICS.
     ### Default: PyEpics
-    ### Choices: "PyEpics" or "caproto" # caproto is not yet supported
+    ### Choices: "PyEpics" or "caproto"
     CONTROL_LAYER: PyEpics
 
     ### default timeouts (seconds)
