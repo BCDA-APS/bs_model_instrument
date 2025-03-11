@@ -50,6 +50,7 @@ dependencies = [
     "pyRestTable",
     "pysumreg",
     "qtpy",
+    "caproto",
 ]
 
 [project.optional-dependencies]
