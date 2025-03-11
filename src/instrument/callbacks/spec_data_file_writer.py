@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-file_extension = iconfig.get("NEXUS_DATA_FILES", {}).get("FILE_EXTENSION", "dat")
+file_extension = iconfig.get("SPEC_DATA_FILES", {}).get("FILE_EXTENSION", "dat")
 
 
 def spec_comment(comment, doc=None):
