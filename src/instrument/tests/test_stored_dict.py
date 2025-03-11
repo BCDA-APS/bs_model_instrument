@@ -9,7 +9,6 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from ..utils.config_loaders import load_config_yaml
 from ..utils.stored_dict import StoredDict
 
 
