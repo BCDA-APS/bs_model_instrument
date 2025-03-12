@@ -76,7 +76,6 @@ def test_StoredDict(md_file):
     # Add another key.
     sdict["bee"] = "bumble"
     sdict.flush()
-    print(f"\n\nthis is the md_file: {md_file}\n\n")
     luftpause()
     assert len(open(md_file).read().splitlines()) == 5
 
