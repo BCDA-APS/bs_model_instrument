@@ -2,6 +2,8 @@
 
 """Model Bluesky Data Acquisition Instrument."""
 
+import demo_instrument  # noqa: F401
+
 from .utils.logging_setup import configure_logging
 
 configure_logging()
@@ -16,5 +18,3 @@ except (LookupError, ModuleNotFoundError):
     from importlib.metadata import version
 
     __version__ = version(__package__)
-
-import demo_instrument
