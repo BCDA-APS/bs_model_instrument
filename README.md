@@ -5,7 +5,7 @@ BITS: **B**luesky **I**nstrument **T**emplate**S**
 Template of a Bluesky Data Acquisition Instrument in console, notebook, &
 queueserver.
 
-## Clone this template repository.
+## Create repository from this template.
 
 
 https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
