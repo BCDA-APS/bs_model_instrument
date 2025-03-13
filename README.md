@@ -43,7 +43,7 @@ pip install -e ."[all]"
 ## Create a new instrument
 To create a new instrument run the following script specifying the name of your new bluesky instrument
 ```bash
-./create_new_instrument.sh new_instrument
+python3 -m bits.utils.create_new_instrument "{instrument_name}" "src/"
 ```
 
 ## IPython console Start
@@ -110,28 +110,6 @@ To run the gui client for the queueserver you can use the next command inside th
 queue-monitor &
 ```
 
-### Shell script explained
-
-A [shell script](./qserver/qs_host.sh) is used to start the QS host process. Below
-are all the command options, and what they do.
-
-```bash
-(bstest) $ ./qserver/qs_host.sh help
-Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
-
-    COMMANDS
-        console   attach to process console if process is running in screen
-        checkup   check that process is running, restart if not
-        restart   restart process
-        run       run process in console (not screen)
-        start     start process
-        status    report if process is running
-        stop      stop process
-
-    OPTIONAL TERMS
-        NAME      name of process (default: bluesky_queueserver-)
-```
-
 Alternatively, run the QS host's startup command directly within the `./qserver/`
 subdirectory.
 
@@ -140,13 +118,6 @@ cd ./qserver
 start-re-manager --config=./qs-config.yml
 ```
 
-## Testing
-
-Use this command to run the test suite locally:
-
-```bash
-pytest -vvv --lf ./src
-```
 
 ## Documentation
 
@@ -185,13 +156,6 @@ Documentation can be added in these formats:
 and [`.ipynb`](https://jupyter.org/) (Jupyter notebook). For more information,
 see the [Sphinx](https://www.sphinx-doc.org/) documentation.
 
-## Warnings
-
-### Bluesky Queueserver
-
-The QS host process writes files into the `qserver/` directory. This directory can be
-relocated. However, it should not be moved into the instrument package since
-that might be installed into a read-only directory.
 
 ## How-To Guides
 ### How to use the template
