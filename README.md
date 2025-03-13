@@ -1,44 +1,31 @@
 # BITS: Template Package for Bluesky Instruments
 
-BITS: **B**luesky **I**nstrument **T**emplate**S**
+BITS: **B**luesky **I**nstrument **T**emplate **S**tructure
 
-Template of a Bluesky Data Acquisition Instrument in console, notebook, &
-queueserver.
+Template for creating a Bluesky Data Acquisition Instrument to be used through a console, notebook, &
+queueserver UI.
 
 ## Create repository from this template.
-
-
-
-https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
 
 Creating a repository from a template
 On GitHub, navigate to the main page of the repository.
 
-Above the file list, click Use this template.
+Above the file list, click **Use this template**.
 
-Select Create a new repository.
+Afterwards select **Create a new repository**.
 
 ![Screenshot of the "Use this template" button and the dropdown menu expanded to show the "Open in a codespace" option.
 ](docs/resources/use-this-template-button.webp)
 
-Alternatively, you can open the template in a codespace and publish your work to a new repository later. For more information, see Creating a codespace from a template.
+Alternatively, you can open the template in a codespace and publish your work to a new repository later. For more information, see [Creating a codespace from a template](https://docs.github.com/en/codespaces/developing-in-a-codespace/creating-a-codespace-from-a-template).
 
 Use the Owner dropdown menu to select the account you want to own the repository.
 
-Screenshot of the owner menu for a new GitHub repository. The menu shows two options, octocat and github.
+![Screenshot of the owner menu for a new GitHub repository. The menu shows two options, octocat and github.](docs/resources/create-repository-owner.webp)
+\
+\
+\
 Type a name for your repository, and an optional description.
-
-![Image 2](docs/resources/create-repo-from-template.webp)
-
-
-Screenshot of a the first step in creating a repository. The "Repository name" field contains the text "hello-world" and is outlined in orange.
-Choose a repository visibility. For more information, see About repositories.
-
-![Image 3](docs/resources/create-repository-owner.webp)
-
-Optionally, to include the directory structure and files from all branches in the template, and not just the default branch, select Include all branches.
-
-Optionally, if the personal account or organization in which you're creating uses any GitHub Apps from GitHub Marketplace, select any apps you'd like to use in the repository.
 
 Click Create repository from template.
 
@@ -53,9 +40,12 @@ pip install -e ."[all]"
 ```
 
 
-## Edit your instrument
-
-
+## Create a new instrument
+To create a new instrument run the following script specifying the name of your new bluesky instrument
+```bash
+python3 -m bits.utils.create_new_instrument "{instrument_name}" "src/"
+pip install -e ."[all]"
+``` 
 
 ## IPython console Start
 
@@ -121,28 +111,6 @@ To run the gui client for the queueserver you can use the next command inside th
 queue-monitor &
 ```
 
-### Shell script explained
-
-A [shell script](./qserver/qs_host.sh) is used to start the QS host process. Below
-are all the command options, and what they do.
-
-```bash
-(bstest) $ ./qserver/qs_host.sh help
-Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
-
-    COMMANDS
-        console   attach to process console if process is running in screen
-        checkup   check that process is running, restart if not
-        restart   restart process
-        run       run process in console (not screen)
-        start     start process
-        status    report if process is running
-        stop      stop process
-
-    OPTIONAL TERMS
-        NAME      name of process (default: bluesky_queueserver-)
-```
-
 Alternatively, run the QS host's startup command directly within the `./qserver/`
 subdirectory.
 
@@ -151,13 +119,6 @@ cd ./qserver
 start-re-manager --config=./qs-config.yml
 ```
 
-## Testing
-
-Use this command to run the test suite locally:
-
-```bash
-pytest -vvv --lf ./src
-```
 
 ## Documentation
 
@@ -196,13 +157,6 @@ Documentation can be added in these formats:
 and [`.ipynb`](https://jupyter.org/) (Jupyter notebook). For more information,
 see the [Sphinx](https://www.sphinx-doc.org/) documentation.
 
-## Warnings
-
-### Bluesky Queueserver
-
-The QS host process writes files into the `qserver/` directory. This directory can be
-relocated. However, it should not be moved into the instrument package since
-that might be installed into a read-only directory.
 
 ## How-To Guides
 ### How to use the template
