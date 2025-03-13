@@ -16,7 +16,6 @@ from .core.best_effort_init import peaks  # noqa: F401
 from .core.catalog_init import cat  # noqa: F401
 from .core.run_engine_init import RE  # noqa: F401
 from .core.run_engine_init import sd  # noqa: F401
-from .devices import *  # noqa: F403
 from .plans import *  # noqa: F403
 
 # Bluesky data acquisition setup
@@ -32,10 +31,10 @@ if iconfig.get("USE_BLUESKY_MAGICS", False):
     register_bluesky_magics()
 
 # Configure the session with callbacks, devices, and plans.
-if iconfig.get("NEXUS_DATA_FILES") is not None:
+if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
     from .callbacks.nexus_data_file_writer import nxwriter  # noqa: F401
 
-if iconfig.get("SPEC_DATA_FILES") is not None:
+if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
     from .callbacks.spec_data_file_writer import newSpecFile  # noqa: F401
     from .callbacks.spec_data_file_writer import spec_comment  # noqa: F401
     from .callbacks.spec_data_file_writer import specwriter  # noqa: F401

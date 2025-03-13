@@ -27,27 +27,31 @@ RUN_ENGINE:
 
     ### The progress bar is nice to see,
     ### except when it clutters the output in Jupyter notebooks.
-    ### Default: True
+    ### Default: False
     USE_PROGRESS_BAR: false
 
 # Command-line tools, such as %wa, %ct, ...
-USE_BLUESKY_MAGICS: True
+USE_BLUESKY_MAGICS: true
 
 ### Best Effort Callback Configurations
-### Defaults: all true (except no plots in queueserver)
-# BEC:
-#     BASELINE: false
-#     HEADING: false
-#     PLOTS: false
-#     TABLE: false
+### Defaults: all true
+### except no plots in queueserver
+BEC:
+    BASELINE: true
+    HEADING: true
+    PLOTS: false
+    TABLE: true
 
 ### Support for known output file formats.
 ### Uncomment to use.  If undefined, will not write that type of file.
 ### Each callback should apply its configuration from here.
-# NEXUS_DATA_FILES:
-#     FILE_EXTENSION: hdf
-#     WARN_MISSING_CONTENT: true
+NEXUS_DATA_FILES:
+    ENABLE: false
+    FILE_EXTENSION: hdf
+    WARN_MISSING_CONTENT: true
+
 SPEC_DATA_FILES:
+    ENABLE: true
     FILE_EXTENSION: dat
 
 ### APS Data Management
@@ -64,7 +68,7 @@ OPHYD:
     ### Control layer for ophyd to communicate with EPICS.
     ### Default: PyEpics
     ### Choices: "PyEpics" or "caproto"
-    # CONTROL_LAYER: caproto
+    CONTROL_LAYER: PyEpics
 
     ### default timeouts (seconds)
     TIMEOUTS:
@@ -73,4 +77,5 @@ OPHYD:
         PV_CONNECTION: *TIMEOUT
 
 # Control detail of exception traces in IPython (console and notebook).
+# Options are: Minimal, Plain, Verbose
 XMODE_DEBUG_LEVEL: Minimal

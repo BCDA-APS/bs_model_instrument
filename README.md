@@ -17,13 +17,14 @@ cd BITS
 Set up the development environment.
 
 ```bash
-export ENV_NAME=bits
+export ENV_NAME=BITS_env
+
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
 pip install -e ."[all]"
 ```
 
-## IPython console
+## IPython console Start
 
 To start the bluesky instrument session in a ipython execute the next command in a terminal:
 
@@ -31,23 +32,17 @@ To start the bluesky instrument session in a ipython execute the next command in
 ipython
 ```
 
-Inside the ipython console execute:
-
-```py
-from instrument.startup import *
-```
-
-## Jupyter notebook
-
+## Jupyter Notebook Start
 Start JupyterLab, a Jupyter notebook server, or a notebook, VSCode.
 
-Start the data acquisition:
+## Starting the BITS Package
 
 ```py
 from instrument.startup import *
+RE(make_devices())  # create all the ophyd-style control devices
 ```
 
-## Sim Plan Demo
+## Run Sim Plan Demo
 
 To run some simulated plans that ensure the installation worked as expected
 please run the next commands inside an ipython session or a jupyter notebook
