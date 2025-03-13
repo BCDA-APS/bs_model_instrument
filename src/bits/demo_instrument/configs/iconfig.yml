@@ -18,7 +18,7 @@ RUN_ENGINE:
 
     ### EPICS PV to use for the `scan_id`.
     ### Default: `RE.md["scan_id"]` (not using an EPICS PV)
-    # SCAN_ID_PV: f"{IOC}bluesky_scan_id"
+    # SCAN_ID_PV: "IOC:bluesky_scan_id"
 
     ### Where to "autosave" the RE.md dictionary.
     ### Defaults:
