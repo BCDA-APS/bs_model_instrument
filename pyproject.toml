@@ -40,6 +40,7 @@ dependencies = [
     "bluesky-queueserver",
     "bluesky-widgets",
     "bluesky",
+    "caproto",
     "databroker ==1.2.5",
     "guarneri",
     "ipython",
