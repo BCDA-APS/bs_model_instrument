@@ -17,8 +17,8 @@ import pathlib
 import apstools.callbacks
 import apstools.utils
 
-from ..core.run_engine_init import RE
-from ..utils.config_loaders import iconfig
+from bits.core.run_engine_init import RE
+from bits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

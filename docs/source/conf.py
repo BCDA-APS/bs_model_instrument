@@ -6,12 +6,12 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import instrument
+import bits
 
-project = "instrument"
+project = "BITS"
 copyright = "2023-2025, APS BCDA"
 author = "APS BCDA"
-version = instrument.__version__
+version = bits.__version__
 release = version.split("+")[0]
 if "+" in version:
     release += "..."

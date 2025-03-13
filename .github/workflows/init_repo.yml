@@ -1,6 +1,9 @@
 name: Init repo
 on: [push]
 
+permissions:
+  contents: write  # Enables pushing commits back to repository
+
 jobs:
   rename-project:
     if: ${{ github.repository != 'bcda-aps/bits' }}
@@ -11,18 +14,23 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . --no-deps
+          pip install toml pyyaml
       - name: Run init_repo.sh
         run: |
+          set -vxeuo pipefail
           bash .github/workflows/init_repo.sh ${{ github.repository }}
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "✅ Ready to clone and code."
           push_options: --force
-
-      - name: Create Tag 1.0.0
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git tag -a 1.0.0 -m "Release version 1.0.0"
-          git push origin 1.0.0
+          tagging_message: 'v1.0.0'
