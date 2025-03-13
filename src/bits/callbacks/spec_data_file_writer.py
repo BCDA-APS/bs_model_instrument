@@ -17,15 +17,14 @@ import pathlib
 import apstools.callbacks
 import apstools.utils
 
-from ..core.run_engine_init import RE
-from ..utils.config_loaders import iconfig
+from bits.core.run_engine_init import RE
+from bits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-DEFAULT_FILE_EXTENSION = "dat"
-file_extension = iconfig.get("FILE_EXTENSION", DEFAULT_FILE_EXTENSION)
+file_extension = iconfig.get("NEXUS_DATA_FILES", {}).get("FILE_EXTENSION", "dat")
 
 
 def spec_comment(comment, doc=None):
@@ -77,7 +76,7 @@ specwriter = _specwriter
 # make the SPEC file in current working directory (assumes is writable)
 specwriter.newfile(specwriter.spec_filename)
 
-if "SPEC_DATA_FILES" in iconfig:
+if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
     RE.subscribe(specwriter.receiver)  # write data to SPEC files
     logger.info("SPEC data file: %s", specwriter.spec_filename.resolve())
 

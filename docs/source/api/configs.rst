@@ -14,7 +14,7 @@ section.
 
 Various constants and terms used to configure the instrument package.
 
-.. literalinclude:: ../../../src/instrument/configs/iconfig.yml
+.. literalinclude:: ../../../src/bits/demo_instrument/configs/iconfig.yml
     :language: yaml
     :linenos:
 
@@ -27,7 +27,7 @@ Declarations of the ophyd (and ophyd-like) devices and signals used by the
 instrument package.  Configuration is used by the guarneri package to create the
 objects.
 
-.. literalinclude:: ../../../src/instrument/configs/devices.yml
+.. literalinclude:: ../../../src/bits/demo_instrument/configs/devices.yml
     :language: yaml
     :linenos:
 
@@ -39,6 +39,6 @@ objects.
 Declarations of the ophyd (and ophyd-like) devices and signals
 only available when Bluesky is used at the APS.
 
-.. literalinclude:: ../../../src/instrument/configs/devices_aps_only.yml
+.. literalinclude:: ../../../src/bits/demo_instrument/configs/devices_aps_only.yml
     :language: yaml
     :linenos:

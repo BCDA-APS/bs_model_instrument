@@ -14,9 +14,9 @@ Write scan(s) to a NeXus/HDF5 file.
 
 import logging
 
-from ..core.run_engine_init import RE
-from ..utils.aps_functions import host_on_aps_subnet
-from ..utils.config_loaders import iconfig
+from bits.core.run_engine_init import RE
+from bits.utils.aps_functions import host_on_aps_subnet
+from bits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -48,9 +48,13 @@ class MyNXWriter(NXWriter):
 nxwriter = MyNXWriter()  # create the callback instance
 """The NeXus file writer object."""
 
-if "NEXUS_DATA_FILES" in iconfig:
+if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
     RE.subscribe(nxwriter.receiver)  # write data to NeXus files
 
-nxwriter.file_extension = iconfig.get("FILE_EXTENSION", "hdf")
-warn_missing = iconfig.get("WARN_MISSING", False)
+nxwriter.file_extension = iconfig.get("NEXUS_DATA_FILES", {}).get(
+    "FILE_EXTENSION", "hdf"
+)
+print("\n\n\n")
+print(nxwriter.file_extension)
+warn_missing = iconfig.get("NEXUS_DATA_FILES", {}).get("WARN_MISSING", False)
 nxwriter.warn_on_missing_content = warn_missing

@@ -11,12 +11,7 @@ import shutil
 import sys
 from pathlib import Path
 from typing import Any
-
-try:
-    import toml
-except ImportError:
-    print("Missing 'toml' package. Install with: pip install toml")
-    sys.exit(1)
+import toml
 
 
 def copy_instrument(template_dir: Path, destination_dir: Path) -> None:

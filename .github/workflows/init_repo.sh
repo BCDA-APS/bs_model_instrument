@@ -6,13 +6,15 @@ echo $full_name
 
 repo=$(echo $full_name | awk -F '/' '{print $2}')
 
+# Sanitize the repo name to be a valid Python package name
+sanitized_repo=$(echo "$repo" | sed 's/[^a-zA-Z0-9_-]/_/g')
+
 original_repo="BITS"
 
-
-echo $repo
+echo $sanitized_repo
 echo $original_repo
 
-sed -i "s/$original_repo/$repo/g" README.md
+sed -i "s/$original_repo/$sanitized_repo/g" README.md
 
 # Call the create_new_instrument function
 python3 -m bits.utils.create_new_instrument "$sanitized_repo_instrument" "src/."
