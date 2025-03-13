@@ -44,7 +44,8 @@ pip install -e ."[all]"
 To create a new instrument run the following script specifying the name of your new bluesky instrument
 ```bash
 python3 -m bits.utils.create_new_instrument "{instrument_name}" "src/"
-```
+pip install -e ."[all]"
+``` 
 
 ## IPython console Start
 
