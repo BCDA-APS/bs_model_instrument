@@ -2,7 +2,8 @@
 
 """Model Bluesky Data Acquisition Instrument."""
 
-from .utils.logging_setup import configure_logging
+import bits.demo_instrument  # noqa: F401
+from bits.utils.logging_setup import configure_logging
 
 configure_logging()
 
