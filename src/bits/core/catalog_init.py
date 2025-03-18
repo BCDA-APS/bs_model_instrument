@@ -10,7 +10,6 @@ import logging
 
 import databroker
 
-# from bits.utils.config_loaders import iconfig
 from bits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)

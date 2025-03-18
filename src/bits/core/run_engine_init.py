@@ -14,8 +14,6 @@ from bluesky.utils import ProgressBarManager
 
 from bits.core.best_effort_init import bec
 from bits.core.catalog_init import cat
-
-# from bits.utils.config_loaders import iconfig
 from bits.utils.config_loaders import iconfig
 from bits.utils.controls_setup import connect_scan_id_pv
 from bits.utils.controls_setup import set_control_layer
