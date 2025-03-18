@@ -14,9 +14,6 @@ import pathlib
 
 import yaml
 
-
-from bits.utils.context_aware import iconfig
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 instrument_path = pathlib.Path(__file__).parent.parent
