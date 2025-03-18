@@ -14,6 +14,8 @@ import pathlib
 
 import yaml
 
+from context_aware import iconfig 
+
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 instrument_path = pathlib.Path(__file__).parent.parent
@@ -49,7 +51,6 @@ class IConfigFileVersionError(ValueError):
     """Configuration file version too old."""
 
 
-iconfig = load_config_yaml(DEFAULT_ICONFIG_YML_FILE)
 
 # Validate the iconfig file has the minimum version.
 _version = iconfig.get("ICONFIG_VERSION")
