@@ -14,7 +14,7 @@ import pathlib
 
 import yaml
 
-from context_aware import iconfig 
+from bits.utils.context_aware import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -47,17 +47,18 @@ def load_config_yaml(iconfig_yml=None) -> dict:
     return iconfig
 
 
-class IConfigFileVersionError(ValueError):
-    """Configuration file version too old."""
+# class IConfigFileVersionError(ValueError):
+#     """Configuration file version too old."""
 
 
 
-# Validate the iconfig file has the minimum version.
-_version = iconfig.get("ICONFIG_VERSION")
-if _version is None or _version < ICONFIG_MINIMUM_VERSION:
-    raise IConfigFileVersionError(
-        "Configuration file version too old."
-        f" Found {_version!r}."
-        f" Expected minimum {ICONFIG_MINIMUM_VERSION!r}."
-        f" Configuration file '{DEFAULT_ICONFIG_YML_FILE}'."
-    )
+# # Validate the iconfig file has the minimum version.
+# _version = iconfig.get("ICONFIG_VERSION")
+# print(f"\n\n\niconfig version: {_version}\n\n\n")
+# if _version is None or _version < ICONFIG_MINIMUM_VERSION:
+#     raise IConfigFileVersionError(
+#         "Configuration file version too old."
+#         f" Found {_version!r}."
+#         f" Expected minimum {ICONFIG_MINIMUM_VERSION!r}."
+#         f" Configuration file '{DEFAULT_ICONFIG_YML_FILE}'."
+#     )
