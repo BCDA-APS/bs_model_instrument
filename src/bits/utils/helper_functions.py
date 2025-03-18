@@ -104,7 +104,7 @@ def mpl_setup() -> None:
             try:
                 mpl.use("qtAgg")
                 plt.ion()
-                logger.info("Using qtAgg backend for matplotlib.")
+                logger.bsdev("Using qtAgg backend for matplotlib.")
             except Exception as exc:
                 logger.error(
                     "qtAgg backend is not available, falling back to Agg backend. \
