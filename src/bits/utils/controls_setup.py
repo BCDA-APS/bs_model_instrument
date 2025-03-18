@@ -16,7 +16,8 @@ import ophyd
 from ophyd.signal import EpicsSignalBase
 from ophydregistry import Registry
 
-from .config_loaders import iconfig
+# from .config_loaders import iconfig
+from bits.utils.context_aware import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

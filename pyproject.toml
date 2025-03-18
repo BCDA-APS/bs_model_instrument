@@ -1,230 +1,108 @@
 [build-system]
-requires = ["setuptools>=64.0", "setuptools_scm[toml]>=8.0"]
+requires = [ "setuptools>=64.0", "setuptools_scm[toml]>=8.0",]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "bits"
+dynamic = [ "version",]
+description = "Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver."
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = [ "bluesky", "queueserver",]
+classifiers = [ "Development Status :: 6 - Mature", "Environment :: Console", "Intended Audience :: Developers", "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication", "License :: Freely Distributable", "License :: Public Domain", "Programming Language :: Python", "Programming Language :: Python :: 3", "Topic :: Utilities",]
+dependencies = [ "apstools >= 1.7.2", "bluesky-queueserver-api", "bluesky-queueserver", "bluesky-widgets", "bluesky", "caproto", "databroker ==1.2.5", "guarneri", "ipython", "jupyterlab", "ophyd-registry", "ophyd", "PyQt5>5.15", "pyRestTable", "pysumreg", "qtpy", "toml",]
+[[project.authors]]
+name = "Eric Codrea"
+email = "ecodrea@anl.gov"
+
+[[project.authors]]
+name = "Pete Jemian"
+email = "prjemian+instrument@gmail.com"
+
+[[project.authors]]
+name = "Rafael Vescovi"
+email = "rvescovi@anl.gov"
+
+[[project.maintainers]]
+name = "Eric Codrea"
+email = "ecodrea@anl.gov"
+
+[[project.maintainers]]
+name = "Pete Jemian"
+email = "prjemian+instrument@gmail.com"
+
+[[project.maintainers]]
+name = "Rafael Vescovi"
+email = "rvescovi@anl.gov"
 
 [tool.copyright]
 copyright = "2014-2025, APS"
 
-[project]
-name = "bits"
-dynamic = ["version"]
-description = "Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver."
-authors = [
-    { name = "Eric Codrea", email = "ecodrea@anl.gov" },
-    { name = "Pete Jemian", email = "prjemian+instrument@gmail.com" },
-    { name = "Rafael Vescovi", email = "rvescovi@anl.gov" },
-]
-maintainers = [
-    { name = "Eric Codrea", email = "ecodrea@anl.gov" },
-    { name = "Pete Jemian", email = "prjemian+instrument@gmail.com" },
-    { name = "Rafael Vescovi", email = "rvescovi@anl.gov" },
-]
-readme = "README.md"
-requires-python = ">=3.11"
-keywords = ['bluesky', 'queueserver']
-license = { file = "LICENSE" }
-classifiers = [
-    "Development Status :: 6 - Mature",
-    "Environment :: Console",
-    "Intended Audience :: Developers",
-    "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
-    "License :: Freely Distributable",
-    "License :: Public Domain",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Topic :: Utilities",
-]
-dependencies = [
-    "apstools >= 1.7.2",
-    "bluesky-queueserver-api",
-    "bluesky-queueserver",
-    "bluesky-widgets",
-    "bluesky",
-    "caproto",
-    "databroker ==1.2.5",
-    "guarneri",
-    "ipython",
-    "jupyterlab",
-    "ophyd-registry",
-    "ophyd",
-    "PyQt5>5.15",
-    "pyRestTable",
-    "pysumreg",
-    "qtpy",
-    "toml",
-]
-
-[project.optional-dependencies]
-dev = ["build", "isort", "mypy", "pre-commit", "pytest", "ruff"]
-
-# doc: conda install conda-forge::pandoc
-doc = [
-    "babel",
-    "ipykernel",
-    "jinja2",
-    "markupsafe",
-    "myst_parser",
-    "nbsphinx",
-    "pydata-sphinx-theme",
-    "pygments-ipython-console",
-    "pygments",
-    "sphinx-design",
-    "sphinx-tabs",
-    "sphinx",
-]
-
-all = ["bits[dev,doc]"]
-
-[project.urls]
-"Homepage" = "https://BCDA-APS.github.io/BITS/"
-"Bug Tracker" = "https://github.com/BCDA-APS/BITS/issues"
-
-
 [tool.black]
 line-length = 115
-target-version = ['py311']
-include = '\.pyi?$'
-exclude = '''
-
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | \.pytest_cache
-    | _build
-    | build
-    | dist
-    | docs
-  )/
-)
-'''
-
+target-version = [ "py311",]
+include = "\\.pyi?$"
+exclude = "(\n  /(\n      \\.eggs         # exclude a few common directories in the\n    | \\.git          # root of the project\n    | \\.hg\n    | \\.mypy_cache\n    | \\.tox\n    | \\.venv\n    | \\.pytest_cache\n    | _build\n    | build\n    | dist\n    | docs\n  )/\n)\n"
 
 [tool.flake8]
 max-line-length = 115
-extend-ignore = [
-    "E203", # See https://github.com/PyCQA/pycodestyle/issues/373
-    "E402", # module level import not at top of file (for cansas.py)
-    "E501",
-    "F401", # imported but unused
-    "F405", # symbol may be undefined, or defined from star imports
-    "F722", # allow Annotated[typ, some_func("some string")]
-    "F811", # support typing.overload decorator
-    "W503",
-    "W504",
-]
+extend-ignore = [ "E203", "E402", "E501", "F401", "F405", "F722", "F811", "W503", "W504",]
 
 [tool.isort]
 force_single_line = true
-# multi_line_output = 1
 line_length = 88
 include_trailing_comma = true
 
-[tool.pytest.ini_options]
-# https://docs.pytest.org/en/stable/customize.html
-addopts = ["--import-mode=importlib", "-x"]
-junit_family = "xunit1"
-filterwarnings = [
-    "ignore::DeprecationWarning",
-    "ignore::PendingDeprecationWarning",
-]
-
 [tool.ruff]
-# https://docs.astral.sh/ruff/configuration/
-
-# Exclude a variety of commonly ignored directories.
-exclude = [
-    ".eggs",
-    ".git",
-    ".git-rewrite",
-    ".mypy_cache",
-    ".pytype",
-    ".ruff_cache",
-    ".tox",
-    ".venv",
-    "__pypackages__",
-    "_build",
-    "build",
-    "dist",
-    "venv",
-    ".venv",
-    "docs",
-]
-
-# Same as Black.
+exclude = [ ".eggs", ".git", ".git-rewrite", ".mypy_cache", ".pytype", ".ruff_cache", ".tox", ".venv", "__pypackages__", "_build", "build", "dist", "venv", ".venv", "docs",]
 line-length = 88
 indent-width = 4
-
-# Assume Python 3.11
 target-version = "py311"
-
-[tool.ruff.lint]
-# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
-select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    # "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    # "SIM",
-    # isort
-    "I",
-    # Warning
-    "W",
-    # pydocstyle
-    "D100",
-    "D101",
-    "D102",
-    "D103",
-    "D104",
-    "D105",
-    "D106",
-    "D107",
-    # ruff
-    # "RUF"
-]
-
-# Allow fix for all enabled rules (when `--fix`) is provided.
-fixable = ["ALL"]
-unfixable = []
-
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-[tool.ruff.lint.per-file-ignores]
-"*.ipynb" = [
-    "F405", # symbol may be undefined, or defined from star imports
-]
-
-[tool.ruff.lint.isort]
-force-single-line = true # Enforces single-line imports
-
-[tool.ruff.format]
-# Like Black, use double quotes for strings.
-quote-style = "double"
-
-# Like Black, indent with spaces, rather than tabs.
-indent-style = "space"
-
-# Like Black, respect magic trailing commas.
-skip-magic-trailing-comma = false
-
-# Like Black, automatically detect the appropriate line ending.
-line-ending = "auto"
-
-[tool.setuptools]
-package-dir = {"bits" = "src/bits"}
-
-[tool.setuptools.package-data]
-"*" = ["*.yml"]
 
 [tool.setuptools_scm]
 write_to = "src/bits/_version.py"
+
+[project.license]
+file = "LICENSE"
+
+[project.optional-dependencies]
+dev = [ "build", "isort", "mypy", "pre-commit", "pytest", "ruff",]
+doc = [ "babel", "ipykernel", "jinja2", "markupsafe", "myst_parser", "nbsphinx", "pydata-sphinx-theme", "pygments-ipython-console", "pygments", "sphinx-design", "sphinx-tabs", "sphinx",]
+all = [ "bits[dev,doc]",]
+
+[project.urls]
+Homepage = "https://BCDA-APS.github.io/BITS/"
+"Bug Tracker" = "https://github.com/BCDA-APS/BITS/issues"
+
+[tool.pytest.ini_options]
+addopts = [ "--import-mode=importlib", "-x",]
+junit_family = "xunit1"
+filterwarnings = [ "ignore::DeprecationWarning", "ignore::PendingDeprecationWarning",]
+
+[tool.ruff.lint]
+select = [ "E", "F", "B", "I", "W", "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107",]
+fixable = [ "ALL",]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.setuptools.package-dir]
+bits = "src/bits"
+eric_instrument = "src/eric_instrument"
+
+[tool.setuptools.package-data]
+"*" = [ "*.yml",]
+
+[tool.instruments.eric_instrument]
+path = "src/eric_instrument"
+
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = [ "F405",]
+
+[tool.ruff.lint.isort]
+force-single-line = true

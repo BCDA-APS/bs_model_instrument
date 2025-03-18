@@ -4,3 +4,5 @@ README.md
 Dockerfile
 SECURITY.md
 src/new_instrument
+
+src/eric_instrument

@@ -29,7 +29,9 @@ import pysumreg
 import spec2nexus
 
 import bits
-from bits.utils.config_loaders import iconfig
+
+# from bits.utils.config_loaders import iconfig
+from bits.utils.context_aware import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

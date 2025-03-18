@@ -1,0 +1,6 @@
+# Guarneri-style device YAML configuration
+
+# Objects only available at APS
+
+apstools.devices.ApsMachineParametersDevice:
+  - name: aps
