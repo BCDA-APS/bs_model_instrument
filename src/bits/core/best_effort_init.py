@@ -3,36 +3,51 @@ BestEffortCallback: simple real-time visualizations, provides ``bec``.
 ======================================================================
 
 .. autosummary::
-    ~bec
-    ~peaks
+    ~init_bec_peaks
 """
 
 import logging
 
 from bluesky.callbacks.best_effort import BestEffortCallback
 
-from bits.utils.config_loaders import iconfig
 from bits.utils.helper_functions import running_in_queueserver
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
-bec = BestEffortCallback()
-"""BestEffortCallback object, creates live tables and plots."""
 
-bec_config = iconfig.get("BEC", {})
+def init_bec_peaks(iconfig):
+    """
+    Create and configure a BestEffortCallback object based on the provided iconfig.
 
-if not bec_config.get("BASELINE", True):
-    bec.disable_baseline()
+    Parameters:
+        iconfig (dict): Configuration dictionary.
 
-if not bec_config.get("HEADING", True):
-    bec.disable_heading()
+    Returns:
+        tuple: A tuple containing the configured BestEffortCallback object (bec)
+               and its peaks dictionary.
+    """
+    if not isinstance(iconfig, dict):
+        raise ValueError("iconfig must be a dictionary.")
 
-if not bec_config.get("PLOTS", True) or running_in_queueserver():
-    bec.disable_plots()
+    bec = BestEffortCallback()
+    """BestEffortCallback object, creates live tables and plots."""
 
-if not bec_config.get("TABLE", True):
-    bec.disable_table()
+    bec_config = iconfig.get("BEC", {})
 
-peaks = bec.peaks
-"""Dictionary with statistical analysis of LivePlots."""
+    if not bec_config.get("BASELINE", True):
+        bec.disable_baseline()
+
+    if not bec_config.get("HEADING", True):
+        bec.disable_heading()
+
+    if not bec_config.get("PLOTS", True) or running_in_queueserver():
+        bec.disable_plots()
+
+    if not bec_config.get("TABLE", True):
+        bec.disable_table()
+
+    peaks = bec.peaks
+    """Dictionary with statistical analysis of LivePlots."""
+
+    return bec, peaks

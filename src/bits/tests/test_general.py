@@ -11,7 +11,7 @@ from bits.demo_instrument.plans.sim_plans import sim_print_plan
 from bits.demo_instrument.plans.sim_plans import sim_rel_scan_plan
 from bits.demo_instrument.startup import bec
 from bits.demo_instrument.startup import cat
-from bits.demo_instrument.startup import iconfig
+#from bits.demo_instrument.startup import iconfig
 from bits.demo_instrument.startup import peaks
 from bits.demo_instrument.startup import running_in_queueserver
 from bits.demo_instrument.startup import sd
