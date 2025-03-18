@@ -228,3 +228,6 @@ package-dir = {"bits" = "src/bits"}
 
 [tool.setuptools_scm]
 write_to = "src/bits/_version.py"
+
+[project.scripts]
+create-bits = "bits.utils.create_new_instrument:main"
