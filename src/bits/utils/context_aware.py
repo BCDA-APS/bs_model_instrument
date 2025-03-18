@@ -24,9 +24,17 @@ class ConfigError(Exception):
 class StartupConfig:
     """Configuration provider following the configs-subdirectory convention."""
 
-    CONFIG_FILENAMES = ["iconfig.yml", "config.yml", "iconfig.yaml", "config.yaml"]
+    CONFIG_FILENAMES = [
+        "iconfig.yml",
+        "config.yml",
+        "iconfig.yaml",
+        "config.yaml",
+        "config.toml",
+        "ifconfig.toml",
+    ]
 
     def __init__(self):
+        """Initialize the configuration."""
         self._config = None
 
     def get(self, key: str, default: Any = None) -> Any:
@@ -38,7 +46,7 @@ class StartupConfig:
         try:
             return self.config[key]
         except KeyError:
-            raise KeyError(f"Missing required config key: '{key}'")
+            raise KeyError(f"Missing required config key: '{key}'") from None
 
     def __contains__(self, key: str) -> bool:
         """Support for 'in' operator."""
@@ -62,7 +70,7 @@ class StartupConfig:
         return dict(self.config)
 
     @property
-    @lru_cache(maxsize=1)
+    @lru_cache(maxsize=1)  # noqa B019
     def startup_path(self) -> Optional[pathlib.Path]:
         """Find the startup.py that's being executed."""
         # First check main module
@@ -81,7 +89,7 @@ class StartupConfig:
         return self.startup_path.parent / "configs"
 
     @property
-    @lru_cache(maxsize=1)
+    @lru_cache(maxsize=1)  # noqa B019
     def config_file(self) -> Optional[pathlib.Path]:
         """Find the active config file."""
         if not self.configs_dir or not self.configs_dir.exists():

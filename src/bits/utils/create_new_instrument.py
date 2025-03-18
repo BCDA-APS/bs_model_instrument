@@ -96,7 +96,8 @@ def main() -> None:
     new_instrument_dir: Path = destination_parent / args.name
 
     print(
-        f"Creating instrument '{args.name}' from '{template_path}' into '{new_instrument_dir}'."
+        f"Creating instrument '{args.name}' from '{template_path}' into \
+            '{new_instrument_dir}'."
     )
 
     if not template_path.exists():
