@@ -14,6 +14,9 @@ import pathlib
 
 import yaml
 
+
+from bits.utils.context_aware import iconfig
+
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 instrument_path = pathlib.Path(__file__).parent.parent
@@ -41,8 +44,8 @@ def load_config_yaml(iconfig_yml=None) -> dict:
         path = pathlib.Path(iconfig_yml)
     if not path.exists():
         raise FileExistsError(f"Configuration file '{path}' does not exist.")
-    iconfig = yaml.load(open(path, "r").read(), yaml.Loader)
-    return iconfig
+    config = yaml.load(open(path, "r").read(), yaml.Loader)
+    return config
 
 
 # class IConfigFileVersionError(ValueError):
