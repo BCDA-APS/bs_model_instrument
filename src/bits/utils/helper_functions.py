@@ -18,7 +18,7 @@ from bluesky.magics import BlueskyMagics
 from bluesky_queueserver import is_re_worker_active
 from IPython import get_ipython
 
-from .config_loaders import iconfig
+from bits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -103,7 +103,7 @@ def mpl_setup() -> None:
             try:
                 mpl.use("qtAgg")
                 plt.ion()
-                logger.info("Using qtAgg backend for matplotlib.")
+                logger.bsdev("Using qtAgg backend for matplotlib.")
             except Exception as exc:
                 logger.error(
                     "qtAgg backend is not available, falling back to Agg backend. \
