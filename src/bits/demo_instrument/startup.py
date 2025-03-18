@@ -17,7 +17,7 @@ from bits.core.catalog_init import cat  # noqa: F401
 from bits.core.run_engine_init import RE  # noqa: F401
 from bits.core.run_engine_init import sd  # noqa: F401
 from bits.utils.aps_functions import aps_dm_setup
-from bits.utils.context_aware import iconfig
+from bits.utils.config_loaders import iconfig
 
 # Bluesky data acquisition setup
 # from bits.utils.config_loaders import iconfig

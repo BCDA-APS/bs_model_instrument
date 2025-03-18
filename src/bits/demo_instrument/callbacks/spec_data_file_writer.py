@@ -18,9 +18,7 @@ import apstools.callbacks
 import apstools.utils
 
 from bits.core.run_engine_init import RE
-
-# from bits.utils.context_aware import iconfig
-from bits.utils.context_aware import iconfig
+from bits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
