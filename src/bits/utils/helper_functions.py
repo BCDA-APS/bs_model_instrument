@@ -18,8 +18,6 @@ from bluesky.magics import BlueskyMagics
 from bluesky_queueserver import is_re_worker_active
 from IPython import get_ipython
 
-from .config_loaders import iconfig
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
@@ -51,16 +49,18 @@ def running_in_queueserver() -> bool:
         return False
 
 
-def debug_python() -> None:
+def debug_python(xmode_level: str = "Minimal") -> None:
     """
     Enable detailed debugging for Python exceptions in the IPython environment.
 
     This function adjusts the xmode settings for exception tracebacks based on the
-      configuration.
+      provided xmode_level argument.
+
+    Args:
+        xmode_level (str): The level of detail for exception tracebacks. Defaults to "Minimal".
     """
     ipython = get_ipython()
     if ipython is not None:
-        xmode_level: str = iconfig.get("XMODE_DEBUG_LEVEL", "Minimal")
         ipython.run_line_magic("xmode", xmode_level)
         print("\nEnd of IPython settings\n")
         logger.bsdev("xmode exception level: '%s'", xmode_level)

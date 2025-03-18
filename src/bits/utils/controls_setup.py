@@ -16,16 +16,12 @@ import ophyd
 from ophyd.signal import EpicsSignalBase
 from ophydregistry import Registry
 
-from .config_loaders import iconfig
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
-re_config = iconfig.get("RUN_ENGINE", {})
 
 DEFAULT_CONTROL_LAYER = "PyEpics"
 DEFAULT_TIMEOUT = 60  # default used next...
-ophyd_config = iconfig.get("OPHYD", {})
 
 
 def epics_scan_id_source(_md):
@@ -48,13 +44,13 @@ def epics_scan_id_source(_md):
     return new_scan_id
 
 
-def connect_scan_id_pv(RE, pv: str = None):
+def connect_scan_id_pv(RE, pv: str = None, scan_id_pv: str = None):
     """
     Define a PV to use for the RunEngine's `scan_id`.
     """
     from ophyd import EpicsSignal
 
-    pv = pv or re_config.get("SCAN_ID_PV")
+    pv = pv or scan_id_pv
     if pv is None:
         return
 
@@ -89,22 +85,20 @@ def set_control_layer(control_layer: str = DEFAULT_CONTROL_LAYER):
     in the ophyd documentation.
     """
 
-    control_layer = ophyd_config.get("CONTROL_LAYER", control_layer)
     ophyd.set_cl(control_layer.lower())
 
     logger.info("using ophyd control layer: %r", ophyd.cl.name)
 
 
-def set_timeouts():
+def set_timeouts(timeouts):
     """Set default timeout for all EpicsSignal connections & communications."""
     if not EpicsSignalBase._EpicsSignalBase__any_instantiated:
         # Only BEFORE any EpicsSignalBase (or subclass) are created!
-        timeouts = ophyd_config.get("TIMEOUTS", {})
         EpicsSignalBase.set_defaults(
             auto_monitor=True,
             timeout=timeouts.get("PV_READ", DEFAULT_TIMEOUT),
             write_timeout=timeouts.get("PV_WRITE", DEFAULT_TIMEOUT),
-            connection_timeout=iconfig.get("PV_CONNECTION", DEFAULT_TIMEOUT),
+            connection_timeout=timeouts.get("PV_CONNECTION", DEFAULT_TIMEOUT),
         )
 
 

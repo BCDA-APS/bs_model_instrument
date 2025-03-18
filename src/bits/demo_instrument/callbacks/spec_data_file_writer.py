@@ -17,14 +17,8 @@ import pathlib
 import apstools.callbacks
 import apstools.utils
 
-from bits.core.run_engine_init import RE
-from bits.utils.config_loaders import iconfig
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
-
-
-file_extension = iconfig.get("SPEC_DATA_FILES", {}).get("FILE_EXTENSION", "dat")
 
 
 def spec_comment(comment, doc=None):
@@ -32,7 +26,7 @@ def spec_comment(comment, doc=None):
     apstools.callbacks.spec_comment(comment, doc, specwriter)
 
 
-def newSpecFile(title, scan_id=None, RE=None):
+def newSpecFile(title, scan_id=None, RE=None, iconfig=None):
     """
     User choice of the SPEC file name.
 
@@ -46,6 +40,7 @@ def newSpecFile(title, scan_id=None, RE=None):
     if RE is not None:
         kwargs["RE"] = RE
 
+    file_extension = iconfig.get("SPEC_DATA_FILES", {}).get("FILE_EXTENSION", "dat")
     mmdd = str(datetime.datetime.now()).split()[0][5:].replace("-", "_")
     clean = apstools.utils.cleanupText(title)
     fname = pathlib.Path(f"{mmdd}_{clean}.{file_extension}")

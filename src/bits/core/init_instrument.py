@@ -1,5 +1,5 @@
-from typing import Any, Optional
-
+from typing import Any
+from typing import Optional
 
 # Module-level variable to store the instrument configuration loaded from iconfig
 _instrument_config: Optional[Any] = None
@@ -24,7 +24,9 @@ def init_instrument() -> None:
     try:
         from bits.config import iconfig  # Import iconfig from the configuration module
     except ImportError as e:
-        raise ImportError("Failed to import iconfig from bits.config. Ensure that the configuration module is available.") from e
+        raise ImportError(
+            "Failed to import iconfig from bits.config. Ensure that the configuration module is available."
+        ) from e
     _instrument_config = iconfig.load_config()
 
 
@@ -39,5 +41,7 @@ def get_instrument_config() -> Any:
         RuntimeError: If the configuration has not been initialized.
     """
     if _instrument_config is None:
-        raise RuntimeError("Instrument configuration has not been initialized. Call init_instrument() first.")
-    return _instrument_config 
+        raise RuntimeError(
+            "Instrument configuration has not been initialized. Call init_instrument() first."
+        )
+    return _instrument_config

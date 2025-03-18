@@ -14,9 +14,7 @@ Write scan(s) to a NeXus/HDF5 file.
 
 import logging
 
-from bits.core.run_engine_init import RE
 from bits.utils.aps_functions import host_on_aps_subnet
-from bits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -30,6 +28,9 @@ else:
 
 class MyNXWriter(NXWriter):
     """Patch to get sample title from metadata, if available."""
+
+    def __init__(self, *args, **kwargs):
+        self.iconfig = kwargs.pop("iconfig", None)
 
     def get_sample_title(self):
         """

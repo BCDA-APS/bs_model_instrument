@@ -28,9 +28,9 @@ def copy_instrument(template_dir: Path, destination_dir: Path) -> None:
     shutil.copytree(str(template_dir), str(destination_dir))
 
 
-def update_pyproject(pyproject_path: Path, 
-                     instrument_name: str, 
-                     instrument_path: Path) -> None:
+def update_pyproject(
+    pyproject_path: Path, instrument_name: str, instrument_path: Path
+) -> None:
     """
     Update pyproject.toml with the new instrument.
 
@@ -82,15 +82,9 @@ def main() -> None:
         description="Create an instrument from a fixed template."
     )
     parser.add_argument(
-        "name",
-        type=str,
-        help="New instrument name; must be a valid package name."
+        "name", type=str, help="New instrument name; must be a valid package name."
     )
-    parser.add_argument(
-        "dest",
-        type=str,
-        help="Destination directory."
-    )
+    parser.add_argument("dest", type=str, help="Destination directory.")
     args = parser.parse_args()
 
     if re.fullmatch(r"[a-z][_a-z0-9]*", args.name) is None:
@@ -101,7 +95,9 @@ def main() -> None:
     destination_parent: Path = Path(args.dest).resolve()
     new_instrument_dir: Path = destination_parent / args.name
 
-    print(f"Creating instrument '{args.name}' from '{template_path}' into '{new_instrument_dir}'.")
+    print(
+        f"Creating instrument '{args.name}' from '{template_path}' into '{new_instrument_dir}'."
+    )
 
     if not template_path.exists():
         print(f"Error: Template '{template_path}' does not exist.", file=sys.stderr)

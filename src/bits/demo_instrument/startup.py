@@ -10,15 +10,14 @@ Includes:
 """
 
 import logging
+from pathlib import Path
 
-from bits.core.best_effort_init import bec  # noqa: F401
-from bits.core.best_effort_init import peaks  # noqa: F401
-from bits.core.catalog_init import cat  # noqa: F401
-from bits.core.run_engine_init import RE  # noqa: F401
-from bits.core.run_engine_init import sd  # noqa: F401
+from bits.core.best_effort_init import init_bec_peaks
+from bits.core.catalog_init import init_catalog  # noqa: F401
+from bits.core.run_engine_init import init_RE  # noqa: F401
+from bits.utils.config_loaders import load_config_yaml
 
 # Bluesky data acquisition setup
-from bits.utils.config_loaders import iconfig
 from bits.utils.helper_functions import register_bluesky_magics
 from bits.utils.helper_functions import running_in_queueserver
 from bits.utils.make_devices_yaml import make_devices  # noqa: F401
@@ -29,17 +28,26 @@ from .plans import *  # noqa: F403
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
+instrument_path = Path(__file__).parent
+iconfig_path = instrument_path / "configs" / "iconfig.yml"
+iconfig = load_config_yaml(iconfig_path)
+print("Starting Instrument with iconfig:", iconfig_path)
+
+bec, peaks = init_bec_peaks(iconfig)
+cat = init_catalog(iconfig)
+RE, sd = init_RE(iconfig, bec_instance=bec, cat_instance=cat)
+
 if iconfig.get("USE_BLUESKY_MAGICS", False):
     register_bluesky_magics()
 
-# Configure the session with callbacks, devices, and plans.
-if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
-    from .callbacks.nexus_data_file_writer import nxwriter  # noqa: F401
+# # Configure the session with callbacks, devices, and plans.
+# if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
+#     from .callbacks.nexus_data_file_writer import nxwriter  # noqa: F401
 
-if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
-    from .callbacks.spec_data_file_writer import newSpecFile  # noqa: F401
-    from .callbacks.spec_data_file_writer import spec_comment  # noqa: F401
-    from .callbacks.spec_data_file_writer import specwriter  # noqa: F401
+# if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
+#     from .callbacks.spec_data_file_writer import newSpecFile  # noqa: F401
+#     from .callbacks.spec_data_file_writer import spec_comment  # noqa: F401
+#     from .callbacks.spec_data_file_writer import specwriter  # noqa: F401
 
 # These imports must come after the above setup.
 if running_in_queueserver():

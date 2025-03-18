@@ -22,7 +22,6 @@ from apstools.utils import dynamic_import
 from bluesky import plan_stubs as bps
 
 from bits.utils.aps_functions import host_on_aps_subnet
-from bits.utils.config_loaders import iconfig
 from bits.utils.config_loaders import load_config_yaml
 from bits.utils.controls_setup import oregistry  # noqa: F401
 
@@ -30,13 +29,10 @@ logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-configs_path = pathlib.Path(__file__).parent.parent / "demo_instrument" / "configs"
-main_namespace = sys.modules["__main__"]
-local_control_devices_file = iconfig["DEVICES_FILE"]
-aps_control_devices_file = iconfig["APS_DEVICES_FILE"]
 
 
-def make_devices(*, pause: float = 1):
+
+def make_devices(*, iconfig=None, pause: float = 1):
     """
     (plan stub) Create the ophyd-style controls for this instrument.
 
@@ -52,15 +48,22 @@ def make_devices(*, pause: float = 1):
         Wait 'pause' seconds (default: 1) for slow objects to connect.
 
     """
-    logger.debug("(Re)Loading local control objects.")
-    yield from run_blocking_function(
-        _loader, configs_path / local_control_devices_file, main=True
-    )
 
-    if host_on_aps_subnet():
+    logger.debug("(Re)Loading local control objects.")
+
+    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH"))
+    configs_path = instrument_path / "configs"
+
+    for device_file in iconfig.get("DEVICE_FILES", []):
+        logger.debug("Loading %r.", device_file)
         yield from run_blocking_function(
-            _loader, configs_path / aps_control_devices_file, main=True
-        )
+            _loader, configs_path / device_file, main=False)
+
+    aps_control_devices_file = iconfig.get("APS_DEVICES_FILE", None)
+    if aps_control_devices_file and host_on_aps_subnet():
+            yield from run_blocking_function(
+                _loader, configs_path / aps_control_devices_file, main=True
+            )
 
     if pause > 0:
         logger.debug(
@@ -90,6 +93,7 @@ def _loader(yaml_device_file, main=True):
     logger.debug("Devices loaded in %.3f s.", time.time() - t0)
 
     if main:
+        main_namespace = sys.modules["__main__"]
         for label in oregistry.device_names:
             # add to __main__ namespace
             setattr(main_namespace, label, oregistry[label])
