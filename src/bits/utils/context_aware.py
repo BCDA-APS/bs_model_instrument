@@ -1,15 +1,16 @@
 """
 Smart configuration system that detects which instrument's startup.py initiated the import.
-Updated for the actual directory structure.
+Enhanced with path resolution for related files.
 """
 
 import inspect
 import logging
 import os
+import pathlib
 import sys
 import yaml
 from functools import lru_cache
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union, List
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +21,7 @@ class ContextConfig:
     def __init__(self):
         self._cache = {}  # Cache configs by instrument
         self._active_instrument = None
+        self._config_path = None
         self._detect_active_instrument()
 
     def get(self, key: str, default: Any = None) -> Any:
@@ -48,6 +50,24 @@ class ContextConfig:
     def to_dict(self):
         """Convert config to a regular dictionary for serialization."""
         return dict(self._get_instrument_config())
+
+    @property
+    def instrument_path(self) -> Optional[str]:
+        """Return the path to the active instrument directory."""
+        return self._active_instrument
+
+    @property
+    def configs_path(self) -> Optional[pathlib.Path]:
+        """Return the path to the configs directory for the active instrument."""
+        if not self._active_instrument:
+            return None
+        return pathlib.Path(self._active_instrument) / "configs"
+
+    def resolve_path(self, filename: str) -> Optional[pathlib.Path]:
+        """Resolve a filename relative to the active instrument's configs directory."""
+        if not self.configs_path:
+            return None
+        return self.configs_path / filename
 
     def _detect_active_instrument(self):
         """Determine which instrument's startup.py initiated this process."""
@@ -157,6 +177,7 @@ class ContextConfig:
                 logger.debug(f"Loading instrument config from: {path}")
                 try:
                     with open(path) as f:
+                        self._config_path = path
                         return yaml.safe_load(f) or {}
                 except Exception as e:
                     logger.warning(f"Error loading config from {path}: {e}")
@@ -214,6 +235,23 @@ def get_iconfig():
     """
     # Returns a regular dict that can be serialized
     return _iconfig.to_dict()
+
+
+# Function to get the path to the configs directory
+def get_configs_path() -> Optional[pathlib.Path]:
+    """Get the path to the configs directory of the active instrument."""
+    return _iconfig.configs_path
+
+
+# Function to resolve a file path relative to the configs directory
+def resolve_path(filename: str) -> pathlib.Path:
+    """Resolve a filename relative to the active instrument's configs directory."""
+    path = _iconfig.resolve_path(filename)
+    if not path:
+        raise ValueError(
+            f"Could not resolve path for {filename}, no active instrument detected"
+        )
+    return path
 
 
 # Internal instance that shouldn't be directly exposed if serialization is needed

@@ -23,19 +23,25 @@ from bluesky import plan_stubs as bps
 
 from bits.utils.aps_functions import host_on_aps_subnet
 from bits.utils.config_loaders import load_config_yaml
+from bits.utils.context_aware import get_configs_path
 
 # from bits.utils.config_loaders import iconfig
 from bits.utils.context_aware import iconfig
+from bits.utils.context_aware import resolve_path
 from bits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
+# Get the configs path for the active instrument
+configs_path = get_configs_path()
 
-configs_path = pathlib.Path(__file__).parent.parent / "demo_instrument" / "configs"
+# Get the main module (same as before)
 main_namespace = sys.modules["__main__"]
-local_control_devices_file = iconfig["DEVICES_FILE"]
-aps_control_devices_file = iconfig["APS_DEVICES_FILE"]
+
+# Resolve device files relative to the configs directory
+local_control_devices_file = resolve_path(iconfig["DEVICES_FILE"])
+aps_control_devices_file = resolve_path(iconfig["APS_DEVICES_FILE"])
 
 
 def make_devices(*, pause: float = 1):
