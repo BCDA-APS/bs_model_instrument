@@ -23,8 +23,6 @@ from bluesky import plan_stubs as bps
 
 from bits.utils.aps_functions import host_on_aps_subnet
 from bits.utils.config_loaders import load_config_yaml
-from bits.utils.context_aware import iconfig
-from bits.utils.context_aware import resolve_path
 from bits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
@@ -52,10 +50,11 @@ def make_devices(*, iconfig=None, pause: float = 1):
 
     logger.debug("(Re)Loading local control objects.")
 
-    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH"))
+    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
     configs_path = instrument_path / "configs"
 
     for device_file in iconfig.get("DEVICE_FILES", []):
+        print( _loader, configs_path / device_file)
         logger.debug("Loading %r.", device_file)
         yield from run_blocking_function(
             _loader, configs_path / device_file, main=False)
