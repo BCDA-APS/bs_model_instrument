@@ -51,8 +51,8 @@ if MD_PATH is not None:
         )
         logger.warning("%s('%s') error:%s", handler_name, MD_PATH, error)
 
-RE.md.update(re_metadata(cat))  # programmatic metadata
-RE.md.update(re_config.get("DEFAULT_METADATA", {}))
+# RE.md.update(re_metadata(cat))  # programmatic metadata
+# RE.md.update(re_config.get("DEFAULT_METADATA", {}))
 
 sd = bluesky.SupplementalData()
 """Baselines & monitors for ``RE``."""
