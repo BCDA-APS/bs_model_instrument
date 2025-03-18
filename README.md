@@ -5,6 +5,11 @@ BITS: **B**luesky **I**nstrument **T**emplate**S**
 Template of a Bluesky Data Acquisition Instrument in console, notebook, &
 queueserver.
 
+| PyPI | Coverage |
+| --- | --- |
+[![PyPi](https://img.shields.io/pypi/v/apsbits.svg)](https://pypi.python.org/pypi/apsbits) | [![Coverage Status](https://coveralls.io/repos/github/BCDA-APS/BITS/badge.svg)](https://coveralls.io/github/BCDA-APS/BITS) |
+
+
 ## Installation
 
 Clone the repository.
