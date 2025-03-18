@@ -1,6 +1,6 @@
 """
-Smart configuration system that detects which instrument's startup.py initiated the import.
-Enhanced with path resolution for related files.
+Super simple configuration system that always looks in the 'configs' subdirectory
+of wherever startup.py is located.
 """
 
 import inspect
@@ -9,24 +9,22 @@ import os
 import pathlib
 import sys
 import yaml
-from functools import lru_cache
-from typing import Any, Dict, Optional, Union, List
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
 
-class ContextConfig:
-    """Configuration provider that's aware of which instrument is being used."""
+class StartupConfig:
+    """Configuration provider that always uses the configs subdirectory of startup.py location."""
 
     def __init__(self):
-        self._cache = {}  # Cache configs by instrument
-        self._active_instrument = None
+        self._config = None
+        self._startup_dir = None
         self._config_path = None
-        self._detect_active_instrument()
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Get a configuration value for the active instrument."""
-        config = self._get_instrument_config()
+        """Get a configuration value."""
+        config = self._get_config()
         return config.get(key, default)
 
     def __getitem__(self, key):
@@ -41,229 +39,151 @@ class ContextConfig:
         return self.get(key) is not None
 
     def __repr__(self):
-        """Make object safely representable as a string."""
-        instrument = "unknown"
-        if self._active_instrument:
-            instrument = os.path.basename(self._active_instrument)
-        return f"<ContextConfig: {instrument}>"
+        """String representation."""
+        startup_dir = self._get_startup_dir()
+        if startup_dir:
+            return f"<StartupConfig: {os.path.basename(startup_dir)}>"
+        return "<StartupConfig: not initialized>"
 
     def to_dict(self):
         """Convert config to a regular dictionary for serialization."""
-        return dict(self._get_instrument_config())
+        return dict(self._get_config())
 
     @property
-    def instrument_path(self) -> Optional[str]:
-        """Return the path to the active instrument directory."""
-        return self._active_instrument
+    def startup_dir(self) -> Optional[str]:
+        """Return the directory containing startup.py."""
+        return self._get_startup_dir()
 
     @property
     def configs_path(self) -> Optional[pathlib.Path]:
-        """Return the path to the configs directory for the active instrument."""
-        if not self._active_instrument:
+        """Return the path to the configs directory."""
+        startup_dir = self._get_startup_dir()
+        if not startup_dir:
             return None
-        return pathlib.Path(self._active_instrument) / "configs"
+
+        # Always use the configs subdirectory
+        configs_dir = os.path.join(startup_dir, "configs")
+        return pathlib.Path(configs_dir)
 
     def resolve_path(self, filename: str) -> Optional[pathlib.Path]:
-        """Resolve a filename relative to the active instrument's configs directory."""
+        """Resolve a filename relative to the configs directory."""
         if not self.configs_path:
             return None
         return self.configs_path / filename
 
-    def _detect_active_instrument(self):
-        """Determine which instrument's startup.py initiated this process."""
-        # Look at the main script that was run
-        main_module = self._get_main_module()
+    def _get_startup_dir(self) -> Optional[str]:
+        """Get the directory containing the startup.py that initiated this process."""
+        if self._startup_dir:
+            return self._startup_dir
+
+        # First check the main module
+        main_module = sys.modules.get("__main__")
         if main_module and hasattr(main_module, "__file__"):
-            main_path = os.path.abspath(main_module.__file__)
+            main_file = os.path.abspath(main_module.__file__)
+            if os.path.basename(main_file) == "startup.py":
+                self._startup_dir = os.path.dirname(main_file)
+                logger.debug(f"Found startup.py in main module: {self._startup_dir}")
+                return self._startup_dir
 
-            # Check if this is a startup.py file
-            if os.path.basename(main_path) == "startup.py":
-                instrument_dir = os.path.dirname(main_path)
-                instrument_name = os.path.basename(instrument_dir)
-
-                logger.debug(
-                    f"Detected potential instrument from startup.py: {instrument_name}"
-                )
-                if self._is_instrument_dir(instrument_dir):
-                    self._active_instrument = instrument_dir
-                    return
-
-        # Fallback: look at the call stack for instrument imports
-        self._active_instrument = self._find_instrument_in_stack()
-
-        # If we still don't have an instrument, try the current working directory
-        if not self._active_instrument:
-            cwd = os.getcwd()
-            if self._is_instrument_dir(cwd):
-                logger.debug(f"Using current directory as instrument: {cwd}")
-                self._active_instrument = cwd
-
-    def _is_instrument_dir(self, directory):
-        """Check if a directory is an instrument directory."""
-        # Check for presence of configs/iconfig.yml
-        config_path = os.path.join(directory, "configs", "iconfig.yml")
-        return os.path.exists(config_path)
-
-    def _get_main_module(self):
-        """Get the main module that was executed."""
-        return sys.modules.get("__main__")
-
-    def _find_instrument_in_stack(self):
-        """Search the call stack for references to instrument modules."""
+        # Then look through the call stack for a startup.py
         stack = inspect.stack()
-        project_root = self._find_project_root(os.getcwd())
-
-        if not project_root:
-            return None
-
-        src_dir = os.path.join(project_root, "src")
-
         for frame_info in stack:
             module = inspect.getmodule(frame_info.frame)
-            if module and hasattr(module, "__file__") and hasattr(module, "__name__"):
-                module_path = os.path.abspath(module.__file__)
+            if module and hasattr(module, "__file__"):
+                module_file = os.path.abspath(module.__file__)
+                if os.path.basename(module_file) == "startup.py":
+                    self._startup_dir = os.path.dirname(module_file)
+                    logger.debug(f"Found startup.py in call stack: {self._startup_dir}")
+                    return self._startup_dir
 
-                # Check if this module is in an instrument directory
-                if src_dir in module_path:
-                    # Extract the part after src/
-                    relative_path = os.path.relpath(module_path, src_dir)
-                    parts = relative_path.split(os.sep)
+                # Check if the module was imported from a startup.py
+                module_dir = os.path.dirname(module_file)
+                startup_path = os.path.join(module_dir, "startup.py")
+                if os.path.exists(startup_path):
+                    self._startup_dir = module_dir
+                    logger.debug(
+                        f"Found directory with startup.py: {self._startup_dir}"
+                    )
+                    return self._startup_dir
 
-                    if len(parts) >= 1:
-                        potential_instrument = parts[0]
-                        instrument_dir = os.path.join(src_dir, potential_instrument)
-
-                        if self._is_instrument_dir(instrument_dir):
-                            logger.debug(
-                                f"Found instrument in stack: {potential_instrument}"
-                            )
-                            return instrument_dir
-
+        # If we get here, we couldn't find a startup.py
+        logger.warning("Could not find startup.py in call stack or main module")
         return None
 
-    def _get_instrument_config(self) -> Dict:
-        """Get configuration for the active instrument."""
-        if not self._active_instrument:
-            self._detect_active_instrument()
+    def _get_config(self) -> Dict:
+        """Load the configuration file."""
+        if self._config is not None:
+            return self._config
 
-        # Return cached config if available
-        if self._active_instrument in self._cache:
-            return self._cache[self._active_instrument]
+        # Find the startup directory
+        startup_dir = self._get_startup_dir()
+        if not startup_dir:
+            logger.warning("No startup.py found, using empty config")
+            self._config = {}
+            return self._config
 
-        # Load config for the active instrument
-        config = self._load_config_for_instrument(self._active_instrument)
-        self._cache[self._active_instrument] = config
-        return config
+        # Always look in the configs subdirectory
+        configs_dir = os.path.join(startup_dir, "configs")
+        if not os.path.isdir(configs_dir):
+            logger.warning(f"No configs directory found at {configs_dir}")
+            self._config = {}
+            return self._config
 
-    def _load_config_for_instrument(self, instrument_path: str) -> Dict:
-        """Load configuration file for the given instrument."""
-        if not instrument_path:
-            logger.warning("No instrument detected, using empty config")
-            return {}
+        # Try various config file names in the configs directory
+        config_files = ["iconfig.yml", "config.yml", "iconfig.yaml", "config.yaml"]
 
-        # Try common config locations within the instrument directory
-        config_paths = [
-            os.path.join(instrument_path, "configs", "iconfig.yml"),
-            os.path.join(instrument_path, "configs", "config.yml"),
-            os.path.join(instrument_path, "configs", "iconfig.yaml"),
-            os.path.join(instrument_path, "configs", "config.yaml"),
-            os.path.join(instrument_path, "iconfig.yml"),
-            os.path.join(instrument_path, "config.yml"),
-        ]
-
-        # Try each path
-        for path in config_paths:
+        # Try each filename
+        for filename in config_files:
+            path = os.path.join(configs_dir, filename)
             if os.path.exists(path):
-                logger.debug(f"Loading instrument config from: {path}")
                 try:
                     with open(path) as f:
-                        self._config_path = path
-                        return yaml.safe_load(f) or {}
+                        self._config = yaml.safe_load(f) or {}
+                    self._config_path = path
+                    logger.debug(f"Loaded config from {path}")
+                    return self._config
                 except Exception as e:
                     logger.warning(f"Error loading config from {path}: {e}")
 
-        # No config found for this instrument
-        logger.warning(f"No config found for instrument at {instrument_path}")
-        return {}
-
-    def set_instrument(self, instrument_name: str) -> None:
-        """Manually set which instrument configuration to use."""
-        # Find the instrument path
-        project_root = self._find_project_root(os.getcwd())
-        if not project_root:
-            logger.warning(
-                f"Cannot set instrument {instrument_name}: project root not found"
-            )
-            return
-
-        src_dir = os.path.join(project_root, "src")
-        instrument_path = os.path.join(src_dir, instrument_name)
-
-        if not os.path.exists(instrument_path):
-            logger.warning(f"Instrument directory not found: {instrument_path}")
-            return
-
-        # Set active instrument and clear cache
-        self._active_instrument = instrument_path
-        if instrument_path in self._cache:
-            del self._cache[instrument_path]
-
-    def _find_project_root(self, start_path: str) -> Optional[str]:
-        """Find the project root directory from a starting path."""
-        current = start_path
-
-        # Project root indicators
-        indicators = ["pyproject.toml", "setup.py", ".git"]
-
-        # Walk up directory tree
-        while True:
-            for indicator in indicators:
-                if os.path.exists(os.path.join(current, indicator)):
-                    return current
-
-            parent = os.path.dirname(current)
-            if parent == current:  # Reached root
-                return None
-
-            current = parent
+        # If we get here, no config file was found
+        logger.warning(f"No config file found in {configs_dir}")
+        self._config = {}
+        return self._config
 
 
 # Create a function to get config that will be safe to use in metadata
 def get_iconfig():
-    """Get the config instance in a way that's safe for JSON serialization.
-    Use this instead of directly importing iconfig if you're storing in metadata.
-    """
-    # Returns a regular dict that can be serialized
+    """Get the config instance in a way that's safe for JSON serialization."""
     return _iconfig.to_dict()
 
 
 # Function to get the path to the configs directory
 def get_configs_path() -> Optional[pathlib.Path]:
-    """Get the path to the configs directory of the active instrument."""
+    """Get the path to the configs directory."""
     return _iconfig.configs_path
 
 
 # Function to resolve a file path relative to the configs directory
 def resolve_path(filename: str) -> pathlib.Path:
-    """Resolve a filename relative to the active instrument's configs directory."""
+    """Resolve a filename relative to the configs directory."""
     path = _iconfig.resolve_path(filename)
     if not path:
         raise ValueError(
-            f"Could not resolve path for {filename}, no active instrument detected"
+            f"Could not resolve path for {filename}, no startup.py detected"
         )
     return path
 
 
 # Internal instance that shouldn't be directly exposed if serialization is needed
-_iconfig = ContextConfig()
+_iconfig = StartupConfig()
 
 # For normal usage that doesn't involve JSON serialization
 iconfig = _iconfig
 
 
 # For debugging purposes
-def which_instrument():
-    """Return the name of the active instrument."""
-    if _iconfig._active_instrument:
-        return os.path.basename(_iconfig._active_instrument)
-    return "No instrument detected"
+def which_startup():
+    """Return the directory containing startup.py."""
+    if _iconfig.startup_dir:
+        return os.path.basename(_iconfig.startup_dir)
+    return "No startup.py detected"
