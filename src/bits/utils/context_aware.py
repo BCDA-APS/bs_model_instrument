@@ -1,189 +1,179 @@
 """
-Super simple configuration system that always looks in the 'configs' subdirectory
+Minimalist configuration system following the 'configs convention'.
+
+Core principle: Configuration always lives in the 'configs' subdirectory
 of wherever startup.py is located.
 """
 
 import inspect
-import logging
-import os
 import pathlib
-import sys
-import yaml
-from typing import Any, Dict, Optional
+from functools import lru_cache
+from typing import Any
+from typing import Dict
+from typing import Optional
 
-logger = logging.getLogger(__name__)
+import yaml
+
+
+class ConfigError(Exception):
+    """Base exception for configuration errors."""
+
+    pass
 
 
 class StartupConfig:
-    """Configuration provider that always uses the configs subdirectory of startup.py location."""
+    """Configuration provider following the configs-subdirectory convention."""
+
+    CONFIG_FILENAMES = ["iconfig.yml", "config.yml", "iconfig.yaml", "config.yaml"]
 
     def __init__(self):
         self._config = None
-        self._startup_dir = None
-        self._config_path = None
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Get a configuration value."""
-        config = self._get_config()
-        return config.get(key, default)
+        """Get a configuration value with an optional default."""
+        return self.config.get(key, default)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Any:
         """Dictionary-style access to configuration."""
-        value = self.get(key)
-        if value is None:
-            raise KeyError(key)
-        return value
+        try:
+            return self.config[key]
+        except KeyError:
+            raise KeyError(f"Missing required config key: '{key}'")
 
-    def __contains__(self, key):
+    def __contains__(self, key: str) -> bool:
         """Support for 'in' operator."""
-        return self.get(key) is not None
+        return key in self.config
 
-    def __repr__(self):
-        """String representation."""
-        startup_dir = self._get_startup_dir()
-        if startup_dir:
-            return f"<StartupConfig: {os.path.basename(startup_dir)}>"
-        return "<StartupConfig: not initialized>"
+    def __repr__(self) -> str:
+        """Create a helpful string representation."""
+        startup_name = self.startup_path.parent.name if self.startup_path else "unknown"
+        config_file = self.config_file.name if self.config_file else "none"
+        return f"<Config: {startup_name}/configs/{config_file}>"
 
-    def to_dict(self):
+    @property
+    def config(self) -> Dict:
+        """Get the configuration dictionary, loading it if necessary."""
+        if self._config is None:
+            self._config = self._load_config()
+        return self._config
+
+    def to_dict(self) -> Dict:
         """Convert config to a regular dictionary for serialization."""
-        return dict(self._get_config())
+        return dict(self.config)
 
     @property
-    def startup_dir(self) -> Optional[str]:
-        """Return the directory containing startup.py."""
-        return self._get_startup_dir()
+    @lru_cache(maxsize=1)
+    def startup_path(self) -> Optional[pathlib.Path]:
+        """Find the startup.py that's being executed."""
+        # First check main module
+        startup = self._find_startup_in_main()
+        if startup:
+            return startup
+
+        # Then check call stack
+        return self._find_startup_in_stack()
 
     @property
-    def configs_path(self) -> Optional[pathlib.Path]:
-        """Return the path to the configs directory."""
-        startup_dir = self._get_startup_dir()
-        if not startup_dir:
+    def configs_dir(self) -> Optional[pathlib.Path]:
+        """Get the configs directory path."""
+        if not self.startup_path:
+            return None
+        return self.startup_path.parent / "configs"
+
+    @property
+    @lru_cache(maxsize=1)
+    def config_file(self) -> Optional[pathlib.Path]:
+        """Find the active config file."""
+        if not self.configs_dir or not self.configs_dir.exists():
             return None
 
-        # Always use the configs subdirectory
-        configs_dir = os.path.join(startup_dir, "configs")
-        return pathlib.Path(configs_dir)
+        # Try each filename in order
+        for filename in self.CONFIG_FILENAMES:
+            path = self.configs_dir / filename
+            if path.exists():
+                return path
+
+        return None
 
     def resolve_path(self, filename: str) -> Optional[pathlib.Path]:
         """Resolve a filename relative to the configs directory."""
-        if not self.configs_path:
+        if not self.configs_dir:
             return None
-        return self.configs_path / filename
+        return self.configs_dir / filename
 
-    def _get_startup_dir(self) -> Optional[str]:
-        """Get the directory containing the startup.py that initiated this process."""
-        if self._startup_dir:
-            return self._startup_dir
+    def _find_startup_in_main(self) -> Optional[pathlib.Path]:
+        """Check if the main module is startup.py."""
+        import sys
 
-        # First check the main module
         main_module = sys.modules.get("__main__")
         if main_module and hasattr(main_module, "__file__"):
-            main_file = os.path.abspath(main_module.__file__)
-            if os.path.basename(main_file) == "startup.py":
-                self._startup_dir = os.path.dirname(main_file)
-                logger.debug(f"Found startup.py in main module: {self._startup_dir}")
-                return self._startup_dir
-
-        # Then look through the call stack for a startup.py
-        stack = inspect.stack()
-        for frame_info in stack:
-            module = inspect.getmodule(frame_info.frame)
-            if module and hasattr(module, "__file__"):
-                module_file = os.path.abspath(module.__file__)
-                if os.path.basename(module_file) == "startup.py":
-                    self._startup_dir = os.path.dirname(module_file)
-                    logger.debug(f"Found startup.py in call stack: {self._startup_dir}")
-                    return self._startup_dir
-
-                # Check if the module was imported from a startup.py
-                module_dir = os.path.dirname(module_file)
-                startup_path = os.path.join(module_dir, "startup.py")
-                if os.path.exists(startup_path):
-                    self._startup_dir = module_dir
-                    logger.debug(
-                        f"Found directory with startup.py: {self._startup_dir}"
-                    )
-                    return self._startup_dir
-
-        # If we get here, we couldn't find a startup.py
-        logger.warning("Could not find startup.py in call stack or main module")
+            path = pathlib.Path(main_module.__file__).resolve()
+            if path.name == "startup.py":
+                return path
         return None
 
-    def _get_config(self) -> Dict:
+    def _find_startup_in_stack(self) -> Optional[pathlib.Path]:
+        """Search the call stack for a startup.py file."""
+        for frame_info in inspect.stack():
+            module = inspect.getmodule(frame_info.frame)
+            if not module or not hasattr(module, "__file__"):
+                continue
+
+            path = pathlib.Path(module.__file__).resolve()
+
+            # Direct match if this is startup.py
+            if path.name == "startup.py":
+                return path
+
+            # Check if there's a startup.py in the same directory
+            startup_path = path.parent / "startup.py"
+            if startup_path.exists():
+                return startup_path
+
+        return None
+
+    def _load_config(self) -> Dict:
         """Load the configuration file."""
-        if self._config is not None:
-            return self._config
+        if not self.config_file:
+            return {}
 
-        # Find the startup directory
-        startup_dir = self._get_startup_dir()
-        if not startup_dir:
-            logger.warning("No startup.py found, using empty config")
-            self._config = {}
-            return self._config
-
-        # Always look in the configs subdirectory
-        configs_dir = os.path.join(startup_dir, "configs")
-        if not os.path.isdir(configs_dir):
-            logger.warning(f"No configs directory found at {configs_dir}")
-            self._config = {}
-            return self._config
-
-        # Try various config file names in the configs directory
-        config_files = ["iconfig.yml", "config.yml", "iconfig.yaml", "config.yaml"]
-
-        # Try each filename
-        for filename in config_files:
-            path = os.path.join(configs_dir, filename)
-            if os.path.exists(path):
-                try:
-                    with open(path) as f:
-                        self._config = yaml.safe_load(f) or {}
-                    self._config_path = path
-                    logger.debug(f"Loaded config from {path}")
-                    return self._config
-                except Exception as e:
-                    logger.warning(f"Error loading config from {path}: {e}")
-
-        # If we get here, no config file was found
-        logger.warning(f"No config file found in {configs_dir}")
-        self._config = {}
-        return self._config
+        try:
+            with open(self.config_file) as f:
+                return yaml.safe_load(f) or {}
+        except Exception:
+            return {}
 
 
-# Create a function to get config that will be safe to use in metadata
-def get_iconfig():
-    """Get the config instance in a way that's safe for JSON serialization."""
-    return _iconfig.to_dict()
+# Create a single instance
+_config = StartupConfig()
+
+# Public API - Simple and clean
 
 
-# Function to get the path to the configs directory
-def get_configs_path() -> Optional[pathlib.Path]:
-    """Get the path to the configs directory."""
-    return _iconfig.configs_path
+def get(key: str, default: Any = None) -> Any:
+    """Get a configuration value with an optional default."""
+    return _config.get(key, default)
 
 
-# Function to resolve a file path relative to the configs directory
+def get_dict() -> Dict:
+    """Get the entire configuration as a dictionary (for serialization)."""
+    return _config.to_dict()
+
+
 def resolve_path(filename: str) -> pathlib.Path:
     """Resolve a filename relative to the configs directory."""
-    path = _iconfig.resolve_path(filename)
+    path = _config.resolve_path(filename)
     if not path:
-        raise ValueError(
-            f"Could not resolve path for {filename}, no startup.py detected"
-        )
+        raise ConfigError(f"Cannot resolve '{filename}': No startup.py found")
     return path
 
 
-# Internal instance that shouldn't be directly exposed if serialization is needed
-_iconfig = StartupConfig()
+def get_configs_dir() -> pathlib.Path:
+    """Get the path to the configs directory."""
+    if not _config.configs_dir:
+        raise ConfigError("No configs directory found (No startup.py detected)")
+    return _config.configs_dir
 
-# For normal usage that doesn't involve JSON serialization
-iconfig = _iconfig
 
-
-# For debugging purposes
-def which_startup():
-    """Return the directory containing startup.py."""
-    if _iconfig.startup_dir:
-        return os.path.basename(_iconfig.startup_dir)
-    return "No startup.py detected"
+# For backward compatibility
+iconfig = _config
