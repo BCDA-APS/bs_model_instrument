@@ -32,6 +32,7 @@ DEFAULT_CONFIG = {
 
 # Global configuration instance
 _iconfig: Dict[str, Any] = DEFAULT_CONFIG.copy()
+_test_config: Dict[str, Any] = {}
 
 
 def load_config(config_path: Path) -> None:
@@ -48,25 +49,13 @@ def load_config(config_path: Path) -> None:
         return
 
     try:
-        with open(config_path, 'r') as f:
-            loaded_config = yaml.safe_load(f)
-            
-        # Validate version
-        version = loaded_config.get("ICONFIG_VERSION")
-        if not version or version < DEFAULT_CONFIG["ICONFIG_VERSION"]:
-            logger.warning(
-                f"Configuration version {version} is older than minimum required "
-                f"version {DEFAULT_CONFIG['ICONFIG_VERSION']}. Using defaults."
-            )
-            return
-
-        # Update the global configuration
-        _iconfig.update(loaded_config)
-        logger.info(f"Successfully loaded configuration from: {config_path}")
-        
+        with open(config_path) as f:
+            config = yaml.safe_load(f)
+            if config is None:
+                config = {}
+            _iconfig.update(config)
     except Exception as e:
         logger.error(f"Error loading configuration: {e}")
-        logger.warning("Using default configuration.")
 
 
 def get_config() -> Dict[str, Any]:
@@ -76,19 +65,34 @@ def get_config() -> Dict[str, Any]:
     Returns:
         The current configuration dictionary.
     """
-    return _iconfig.copy()
+    return _test_config if _test_config else _iconfig
 
 
 def update_config(updates: Dict[str, Any]) -> None:
     """
-    Update the configuration with new values.
+    Update the current configuration.
 
     Args:
         updates: Dictionary of configuration updates.
     """
-    global _iconfig
     _iconfig.update(updates)
-    logger.info("Configuration updated")
+
+
+def set_test_config(config: Dict[str, Any]) -> None:
+    """
+    Set a test configuration.
+
+    Args:
+        config: Dictionary of test configuration.
+    """
+    global _test_config
+    _test_config = config
+
+
+def reset_test_config() -> None:
+    """Reset the test configuration."""
+    global _test_config
+    _test_config = {}
 
 
 # Initialize with default configuration

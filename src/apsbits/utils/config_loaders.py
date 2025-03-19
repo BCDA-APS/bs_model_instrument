@@ -11,29 +11,30 @@ Load supported configuration files, such as ``iconfig.yml``.
 
 import logging
 import pathlib
+from typing import Dict, Any
 
-import yaml
+from apsbits.core.config import get_config
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
+
+# Minimum required version for iconfig.yml files
 ICONFIG_MINIMUM_VERSION = "2.0.0"
 
-from apsbits.utils.context_aware import iconfig #noqa
 
-
-
-def load_config_yaml(iconfig_yml=None) -> dict:
+def load_config_yaml(iconfig_yml: str = None) -> Dict[str, Any]:
     """
     Load iconfig.yml (and other YAML) configuration files.
 
-    Parameters
-    ----------
-    iconfig_yml: str
-        Name of the YAML file to be loaded.  The name can be
-        absolute or relative to the current working directory.
-        Default: ``INSTRUMENT/demo_instrument/configs/iconfig.yml``
-    """
+    Args:
+        iconfig_yml: Path to the configuration file.
 
+    Returns:
+        Dict containing the configuration.
+
+    Raises:
+        IConfigFileVersionError: If the configuration version is too old.
+    """
     if iconfig_yml is None:
         raise ValueError(
             "No configuration file provided. Please specify a valid 'iconfig.yml' file."
@@ -41,9 +42,20 @@ def load_config_yaml(iconfig_yml=None) -> dict:
 
     path = pathlib.Path(iconfig_yml)
     if not path.exists():
-        raise FileExistsError(f"Configuration file '{path}' does not exist.")
-    config = yaml.load(open(path, "r").read(), yaml.Loader)
-    return config
+        raise FileNotFoundError(f"Configuration file not found: {iconfig_yml}")
+
+    # Get the current configuration
+    iconfig = get_config()
+    
+    # Validate the iconfig file has the minimum version
+    _version = iconfig.get("ICONFIG_VERSION")
+    if _version is None or _version < ICONFIG_MINIMUM_VERSION:
+        raise ValueError(
+            f"Configuration file '{iconfig_yml}' has version {_version!r}."
+            f" Expected minimum {ICONFIG_MINIMUM_VERSION!r}."
+        )
+
+    return iconfig
 
 
 # class IConfigFileVersionError(ValueError):

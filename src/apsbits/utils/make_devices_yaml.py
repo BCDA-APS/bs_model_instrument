@@ -1,133 +1,71 @@
 """
-Make devices from YAML files
-=============================
+Load device definitions from YAML files.
 
-Construct ophyd-style devices from simple specifications in YAML files.
-
-.. autosummary::
-    :nosignatures:
-
-    ~make_devices
-    ~Instrument
+This module provides functionality to load device definitions from YAML files
+and register them with the ophyd registry.
 """
 
 import logging
-import pathlib
-import sys
-import time
+from pathlib import Path
+from typing import Dict, Any, Optional, Generator
 
-import guarneri
-from apstools.plans import run_blocking_function
-from apstools.utils import dynamic_import
-from bluesky import plan_stubs as bps
-
-from apsbits.utils.aps_functions import host_on_aps_subnet
-from apsbits.utils.config_loaders import load_config_yaml
-from apsbits.utils.context_aware import iconfig
-from apsbits.utils.context_aware import resolve_path
-from apsbits.utils.controls_setup import oregistry  # noqa: F401
+from bluesky.utils import Msg
+from apsbits.core.config import get_config
+from apsbits.utils.controls_setup import oregistry
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
-# Get the main module (same as before)
-main_namespace = sys.modules["__main__"]
-
-# Resolve device files directly using resolve_path, with default values
-local_control_devices_file = resolve_path(iconfig.get("DEVICES_FILE", ""))
-aps_control_devices_file = resolve_path(iconfig.get("APS_DEVICES_FILE", ""))
-
-# Check if files exist
-if local_control_devices_file and not local_control_devices_file.exists():
-    logger.warning(f"Local devices file does not exist: {local_control_devices_file}")
-if aps_control_devices_file and not aps_control_devices_file.exists():
-    logger.warning(f"APS devices file does not exist: {aps_control_devices_file}")
 
 
-def make_devices(*, pause: float = 1):
+def make_devices() -> Generator[Msg, None, None]:
     """
-    (plan stub) Create the ophyd-style controls for this instrument.
+    Load device definitions from YAML files and register them with the ophyd registry.
 
-    Feel free to modify this plan to suit the needs of your instrument.
+    This is a Bluesky plan that loads device definitions. Since this is just loading
+    device definitions and not collecting data, it doesn't create a run.
 
-    EXAMPLE::
-
-        RE(make_devices())
-
-    PARAMETERS
-
-    pause : float
-        Wait 'pause' seconds (default: 1) for slow objects to connect.
-
+    Returns:
+        A generator that yields Bluesky messages.
     """
-    logger.debug("(Re)Loading local control objects.")
-    yield from run_blocking_function(_loader, local_control_devices_file, main=True)
+    iconfig = get_config()
+    
+    # Load local control devices
+    local_control_devices_file = Path(iconfig.get("DEVICES_FILE", "")).resolve()
+    if local_control_devices_file.exists():
+        logger.info("Loading local control devices from: %s", local_control_devices_file)
+        _load_devices(local_control_devices_file)
 
-    if host_on_aps_subnet():
-        yield from run_blocking_function(_loader, aps_control_devices_file, main=True)
+    # Load APS control devices
+    aps_control_devices_file = Path(iconfig.get("APS_DEVICES_FILE", "")).resolve()
+    if aps_control_devices_file.exists():
+        logger.info("Loading APS control devices from: %s", aps_control_devices_file)
+        _load_devices(aps_control_devices_file)
 
-    if pause > 0:
-        logger.debug(
-            "Waiting %s seconds for slow objects to connect.",
-            pause,
-        )
-        yield from bps.sleep(pause)
-
-    # Configure any of the controls here, or in plan stubs
+    # Yield a null message to make this a valid plan
+    yield Msg('null')
 
 
-def _loader(yaml_device_file, main=True):
+def _load_devices(devices_file: Path) -> None:
     """
-    Load our ophyd-style controls as described in a YAML file.
+    Load device definitions from a YAML file.
 
-    PARAMETERS
-
-    yaml_device_file : str or pathlib.Path
-        YAML file describing ophyd-style controls to be created.
-    main : bool
-        If ``True`` add these devices to the ``__main__`` namespace.
-
+    Args:
+        devices_file: Path to the devices YAML file.
     """
-    logger.debug("Devices file %r.", str(yaml_device_file))
-    t0 = time.time()
-    _instr.load(yaml_device_file)
-    logger.debug("Devices loaded in %.3f s.", time.time() - t0)
+    import yaml
 
-    if main:
-        for label in oregistry.device_names:
-            # add to __main__ namespace
-            setattr(main_namespace, label, oregistry[label])
+    try:
+        with open(devices_file, "r") as f:
+            devices = yaml.safe_load(f)
 
+        for name, device_config in devices.items():
+            if name not in oregistry:
+                logger.info("Registering device: %s", name)
+                oregistry[name] = device_config
+            else:
+                logger.warning("Device already registered: %s", name)
 
-class Instrument(guarneri.Instrument):
-    """Custom YAML loader for guarneri."""
-
-    def parse_yaml_file(self, config_file: pathlib.Path | str) -> list[dict]:
-        """Read device configurations from YAML format file."""
-        if isinstance(config_file, str):
-            config_file = pathlib.Path(config_file)
-
-        def parser(creator, specs):
-            if creator not in self.device_classes:
-                self.device_classes[creator] = dynamic_import(creator)
-            entries = [
-                {
-                    "device_class": creator,
-                    "args": (),  # ALL specs are kwargs!
-                    "kwargs": table,
-                }
-                for table in specs
-            ]
-            return entries
-
-        devices = [
-            device
-            # parse the file
-            for k, v in load_config_yaml(config_file).items()
-            # each support type (class, factory, function, ...)
-            for device in parser(k, v)
-        ]
-        return devices
-
-
-_instr = Instrument({}, registry=oregistry)  # singleton
+    except Exception as e:
+        logger.error("Error loading devices from %s: %s", devices_file, e)
+        raise

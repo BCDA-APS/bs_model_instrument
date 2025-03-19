@@ -11,6 +11,7 @@ import pytest
 
 from apsbits.utils.config_loaders import load_config_yaml
 from apsbits.utils.stored_dict import StoredDict
+from apsbits.core.config import set_test_config, reset_test_config
 
 
 def luftpause(delay=0.05):
@@ -27,10 +28,19 @@ def md_file():
         delete=False,
     )
     path = pathlib.Path(tfile.name)
+    tfile.close()  # Close the file to ensure it's empty
     yield pathlib.Path(tfile.name)
 
     if path.exists():
         path.unlink()  # delete the file
+
+
+@pytest.fixture(autouse=True)
+def setup_test_config():
+    """Set up a test configuration."""
+    set_test_config({})
+    yield
+    reset_test_config()
 
 
 def test_StoredDict(md_file):
@@ -40,7 +50,7 @@ def test_StoredDict(md_file):
 
     sdict = StoredDict(md_file, delay=0.2, title="unit testing")
     assert sdict is not None
-    assert len(sdict) == 0
+    assert len(sdict) == 0  # Should be empty since we're using a new file
     assert sdict._delay == 0.2
     assert sdict._title == "unit testing"
     assert len(open(md_file).read().splitlines()) == 0  # still empty
