@@ -24,6 +24,10 @@ except ImportError:
 def copy_instrument(template_dir: Path, destination_dir: Path) -> None:
     """
     Copy template directory to the destination.
+
+    :param template_dir: Path to the template directory.
+    :param destination_dir: Path to the new instrument directory.
+    :return: None
     """
     shutil.copytree(str(template_dir), str(destination_dir))
 
@@ -35,6 +39,11 @@ def update_pyproject(
     Update pyproject.toml with the new instrument.
 
     Adds the instrument to [tool.instruments] and also to [tool.setuptools.package-dir].
+
+    :param pyproject_path: Path to the pyproject.toml file.
+    :param instrument_name: The name of the instrument.
+    :param instrument_path: The path to the instrument directory.
+    :return: None
     """
     with pyproject_path.open("r", encoding="utf-8") as file:
         config: dict[str, Any] = toml.load(file)
@@ -60,6 +69,9 @@ def update_pyproject(
 def update_templatesyncignore(relative_path: str) -> None:
     """
     Append the instrument path to the .templatesyncignore file.
+
+    :param relative_path: The relative path to append.
+    :return: None
     """
     tsync_file: Path = Path(".templatesyncignore").resolve()
     lines: list[str] = []
@@ -76,7 +88,9 @@ def update_templatesyncignore(relative_path: str) -> None:
 
 def main() -> None:
     """
-    Parse args and create the instrument.
+    Parse arguments and create the instrument.
+
+    :return: None
     """
     parser = argparse.ArgumentParser(
         description="Create an instrument from a fixed template."
@@ -91,13 +105,15 @@ def main() -> None:
         print(f"Error: Invalid instrument name '{args.name}'.", file=sys.stderr)
         sys.exit(1)
 
-    template_path: Path = Path("src/bits/demo_instrument").resolve()
+    # Resolve the template path from the installed apsbits package.
+    # __file__ is located at apsbits/utils/create_new_instrument.py, so moving two levels up
+    # points to the root of the apsbits package where demo_instrument is expected to be.
+    template_path: Path = (Path(__file__).resolve().parent.parent / "demo_instrument").resolve()
     destination_parent: Path = Path(args.dest).resolve()
     new_instrument_dir: Path = destination_parent / args.name
 
     print(
-        f"Creating instrument '{args.name}' from '{template_path}' into \
-            '{new_instrument_dir}'."
+        f"Creating instrument '{args.name}' from '{template_path}' into '{new_instrument_dir}'."
     )
 
     if not template_path.exists():
