@@ -14,7 +14,7 @@ import databroker
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
-TEMPORARY_CATALOG_NAME = "temp"
+TEMPORARY_CATALOG_NAME = "temporalcat"
 
 
 def init_catalog(iconfig):

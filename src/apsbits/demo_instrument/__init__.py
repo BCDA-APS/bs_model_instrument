@@ -1,26 +1,31 @@
 """
-Custom folder to store all beamline specific implementations
+Demo instrument package.
+
+This package provides a demo instrument implementation for testing and development.
 """
 
 import logging
-from apsbits.utils.context_aware import StartupConfig
-from apsbits.utils.logging_setup import configure_logging
 from pathlib import Path
 
-# Configure logging using apsbits configuration
-configure_logging()
+from apsbits.core.config import load_config, get_config
 
-# Get the instrument path and config path for reference
+logger = logging.getLogger(__name__)
+logger.bsdev(__file__)
+
+# Get the path to the instrument package
 instrument_path = Path(__file__).parent
+
+# Load configuration
 iconfig_path = instrument_path / "configs" / "iconfig.yml"
+load_config(iconfig_path)
+iconfig = get_config()
 
-# Initialize the configuration with explicit path
-startup_config = StartupConfig(config_path=iconfig_path)
-iconfig = startup_config.to_dict()
-# Access configuration values using the startup_config instance
-# Example: startup_config.get('some_key', default_value)
-# Or: startup_config['required_key']
+logger.info("Starting Instrument with iconfig: %s", iconfig_path)
 
-print("Starting Instrument with iconfig:", iconfig_path)
+# Import the rest of the package
+from . import startup
+from . import plans
+from . import callbacks
+from . import configs
 
 
