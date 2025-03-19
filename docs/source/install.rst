@@ -35,7 +35,7 @@ by this ``instrument`` package for routine data acquisition.
 .. code-block:: bash
     :linenos:
 
-    export INSTALL_ENVIRONMENT_NAME=bits
+    export INSTALL_ENVIRONMENT_NAME=apsbits
     conda create -y -n "${INSTALL_ENVIRONMENT_NAME}" python pyqt=5 pyepics
     conda activate "${INSTALL_ENVIRONMENT_NAME}"
     pip install -e .

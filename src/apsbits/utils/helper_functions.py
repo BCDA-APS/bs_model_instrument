@@ -18,6 +18,8 @@ from bluesky.magics import BlueskyMagics
 from bluesky_queueserver import is_re_worker_active
 from IPython import get_ipython
 
+from apsbits.utils.config_loaders import iconfig
+
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 

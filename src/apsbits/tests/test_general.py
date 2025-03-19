@@ -6,16 +6,16 @@ Here is just enough testing to get a CI workflow started. More are possible.
 
 import pytest
 
-from bits.demo_instrument.plans.sim_plans import sim_count_plan
-from bits.demo_instrument.plans.sim_plans import sim_print_plan
-from bits.demo_instrument.plans.sim_plans import sim_rel_scan_plan
-from bits.demo_instrument.startup import bec
-from bits.demo_instrument.startup import cat
-#from bits.demo_instrument.startup import iconfig
-from bits.demo_instrument.startup import peaks
-from bits.demo_instrument.startup import running_in_queueserver
-from bits.demo_instrument.startup import sd
-from bits.demo_instrument.startup import specwriter
+from apsbits.demo_instrument.plans.sim_plans import sim_count_plan
+from apsbits.demo_instrument.plans.sim_plans import sim_print_plan
+from apsbits.demo_instrument.plans.sim_plans import sim_rel_scan_plan
+from apsbits.demo_instrument.startup import bec
+from apsbits.demo_instrument.startup import cat
+from apsbits.demo_instrument.startup import iconfig
+from apsbits.demo_instrument.startup import peaks
+from apsbits.demo_instrument.startup import running_in_queueserver
+from apsbits.demo_instrument.startup import sd
+from apsbits.demo_instrument.startup import specwriter
 
 
 def test_startup(runengine_with_devices: object) -> None:

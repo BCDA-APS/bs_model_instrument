@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 copyright = "2014-2025, APS"
 
 [project]
-name = "bits"
+name = "apsbits"
 dynamic = ["version"]
 description = "Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver."
 authors = [
@@ -73,7 +73,7 @@ doc = [
     "sphinx",
 ]
 
-all = ["bits[dev,doc]"]
+all = ["apsbits[dev,doc]"]
 
 [project.urls]
 "Homepage" = "https://BCDA-APS.github.io/BITS/"
@@ -221,13 +221,16 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.setuptools]
-package-dir = {"bits" = "src/bits"}
+package-dir = {"apsbits" = "src/apsbits"}
 
 [tool.setuptools.package-data]
 "*" = ["*.yml"]
 
 [tool.setuptools_scm]
-write_to = "src/bits/_version.py"
+write_to = "src/apsbits/_version.py"
+
+[project.scripts]
+create-bits = "apsbits.utils.create_new_instrument:main"
 
 [project.scripts]
 create-bits = "bits.utils.create_new_instrument:main"

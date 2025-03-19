@@ -1,4 +1,8 @@
-# BITS: Template Package for Bluesky Instruments
+# APSBITS: Template Package for Bluesky Instruments
+
+| PyPI | Coverage |
+| --- | --- |
+[![PyPi](https://img.shields.io/pypi/v/apsbits.svg)](https://pypi.python.org/pypi/apsbits) | [![Coverage Status](https://coveralls.io/repos/github/bcda-aps/bits/badge.svg)](https://coveralls.io/github/bcda-aps/bits) |
 
 BITS: **B**luesky **I**nstrument **T**emplate**S**
 
@@ -49,7 +53,7 @@ export ENV_NAME=BITS_env
 
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
-pip install -e ."[all]"
+pip install apsbits
 ```
 
 

@@ -21,14 +21,21 @@ from apstools.plans import run_blocking_function
 from apstools.utils import dynamic_import
 from bluesky import plan_stubs as bps
 
-from bits.utils.aps_functions import host_on_aps_subnet
-from bits.utils.config_loaders import load_config_yaml
-from bits.utils.controls_setup import oregistry  # noqa: F401
+from apsbits.utils.aps_functions import host_on_aps_subnet
+from apsbits.utils.config_loaders import load_config_yaml
+from apsbits.utils.context_aware import iconfig
+from apsbits.utils.context_aware import resolve_path
+from apsbits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
+# Get the main module (same as before)
+main_namespace = sys.modules["__main__"]
 
+# Resolve device files directly using resolve_path
+local_control_devices_file = resolve_path(iconfig["DEVICES_FILE"])
+aps_control_devices_file = resolve_path(iconfig["APS_DEVICES_FILE"])
 
 
 def make_devices(*, iconfig=None, pause: float = 1):
@@ -47,23 +54,11 @@ def make_devices(*, iconfig=None, pause: float = 1):
         Wait 'pause' seconds (default: 1) for slow objects to connect.
 
     """
-
     logger.debug("(Re)Loading local control objects.")
+    yield from run_blocking_function(_loader, local_control_devices_file, main=True)
 
-    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
-    configs_path = instrument_path / "configs"
-
-    for device_file in iconfig.get("DEVICE_FILES", []):
-        print( _loader, configs_path / device_file)
-        logger.debug("Loading %r.", device_file)
-        yield from run_blocking_function(
-            _loader, configs_path / device_file, main=False)
-
-    aps_control_devices_file = iconfig.get("APS_DEVICES_FILE", None)
-    if aps_control_devices_file and host_on_aps_subnet():
-            yield from run_blocking_function(
-                _loader, configs_path / aps_control_devices_file, main=True
-            )
+    if host_on_aps_subnet():
+        yield from run_blocking_function(_loader, aps_control_devices_file, main=True)
 
     if pause > 0:
         logger.debug(
