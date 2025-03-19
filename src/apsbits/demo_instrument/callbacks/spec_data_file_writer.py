@@ -17,12 +17,10 @@ import pathlib
 import apstools.callbacks
 import apstools.utils
 
-<<<<<<<< HEAD:src/bits/demo_instrument/callbacks/spec_data_file_writer.py
-========
+
 from apsbits.core.run_engine_init import RE
 from apsbits.utils.config_loaders import iconfig
 
->>>>>>>> main:src/apsbits/demo_instrument/callbacks/spec_data_file_writer.py
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 

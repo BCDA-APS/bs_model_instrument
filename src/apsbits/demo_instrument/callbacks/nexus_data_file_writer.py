@@ -14,13 +14,9 @@ Write scan(s) to a NeXus/HDF5 file.
 
 import logging
 
-<<<<<<<< HEAD:src/bits/demo_instrument/callbacks/nexus_data_file_writer.py
-from bits.utils.aps_functions import host_on_aps_subnet
-========
 from apsbits.core.run_engine_init import RE
 from apsbits.utils.aps_functions import host_on_aps_subnet
 from apsbits.utils.config_loaders import iconfig
->>>>>>>> main:src/apsbits/demo_instrument/callbacks/nexus_data_file_writer.py
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
