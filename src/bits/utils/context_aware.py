@@ -30,7 +30,7 @@ class StartupConfig:
         "iconfig.yaml",
         "config.yaml",
         "config.toml",
-        "ifconfig.toml",
+        "iconfig.toml",
     ]
 
     def __init__(self):

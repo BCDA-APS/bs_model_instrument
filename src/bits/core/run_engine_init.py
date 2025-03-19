@@ -11,17 +11,19 @@ import logging
 import bluesky
 from bluesky.utils import ProgressBarManager
 
+from bits.utils.context_aware import iconfig
 from bits.utils.controls_setup import connect_scan_id_pv
 from bits.utils.controls_setup import set_control_layer
 from bits.utils.controls_setup import set_timeouts
 from bits.utils.metadata import get_md_path
+from bits.utils.metadata import re_metadata  # noqa: F401
 from bits.utils.stored_dict import StoredDict
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-def init_RE(iconfig, bec_instance=None, cat_instance=None):
+def init_RE(bec_instance=None, cat_instance=None):
     """
     Initialize and configure a bluesky RunEngine (RE) instance.
 
@@ -85,8 +87,8 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
             )
             logger.warning("%s('%s') error:%s", handler_name, MD_PATH, error)
 
-# RE.md.update(re_metadata(cat))  # programmatic metadata
-# RE.md.update(re_config.get("DEFAULT_METADATA", {}))
+    # RE.md.update(re_metadata(cat))  # programmatic metadata
+    # RE.md.update(re_config.get("DEFAULT_METADATA", {}))
 
     sd = bluesky.SupplementalData()
     """Baselines & monitors for ``RE``."""
@@ -97,11 +99,12 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
         RE.subscribe(bec_instance)
     RE.preprocessors.append(sd)
 
-    set_control_layer()
+    set_control_layer(control_layer=iconfig.get("OPHYD", {}).get("CONTROL_LAYER", {}))
     # MUST happen before ANY EpicsSignalBase (or subclass) is created.
     set_timeouts(timeouts=iconfig.get("OPHYD", {}).get("TIMEOUTS", {}))
     connect_scan_id_pv(
-        RE
+        RE,
+        scan_id_pv = iconfig.get("RUN_ENGINE", {}).get("SCAN_ID_PV"),
     )  # need to add the variables I removed from iconfig here as args
 
     if re_config.get("USE_PROGRESS_BAR", True):

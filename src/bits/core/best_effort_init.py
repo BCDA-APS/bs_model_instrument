@@ -10,13 +10,14 @@ import logging
 
 from bluesky.callbacks.best_effort import BestEffortCallback
 
+from bits.utils.context_aware import iconfig
 from bits.utils.helper_functions import running_in_queueserver
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-def init_bec_peaks(iconfig):
+def init_bec_peaks():
     """
     Create and configure a BestEffortCallback object based on the provided iconfig.
 
@@ -27,8 +28,6 @@ def init_bec_peaks(iconfig):
         tuple: A tuple containing the configured BestEffortCallback object (bec)
                and its peaks dictionary.
     """
-    if not isinstance(iconfig, dict):
-        raise ValueError("iconfig must be a dictionary.")
 
     bec = BestEffortCallback()
     """BestEffortCallback object, creates live tables and plots."""
