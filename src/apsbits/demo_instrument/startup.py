@@ -10,6 +10,7 @@ Includes:
 """
 
 import logging
+from apsbits.demo_instrument import iconfig
 
 from apsbits.core.best_effort_init import bec  # noqa: F401
 from apsbits.core.best_effort_init import peaks  # noqa: F401
@@ -19,7 +20,6 @@ from apsbits.core.run_engine_init import sd  # noqa: F401
 from apsbits.utils.aps_functions import aps_dm_setup
 
 # Bluesky data acquisition setup
-# from apsbits.utils.config_loaders import iconfig
 from apsbits.utils.helper_functions import register_bluesky_magics
 from apsbits.utils.helper_functions import running_in_queueserver
 from apsbits.utils.make_devices_yaml import make_devices  # noqa: F401
