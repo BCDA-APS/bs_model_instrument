@@ -7,7 +7,7 @@ from this template repository.  A GitHub Actions Workflow [#]_ (``template-sync.
 is provided to identify changes in the template repository and create a pull
 request for them in the new repository.
 
-.. [#] https://github.com/BCDA-APS/APSBITS
+.. [#] https://github.com/BCDA-APS/BITS
 .. [#] https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository
 .. [#] https://docs.github.com/en/actions/writing-workflows/about-workflows
 
@@ -44,9 +44,9 @@ For the purpose of demonstration, these docs have used these repositories:
 =========== ======================
 purpose     repo
 =========== ======================
-template    `BCDA-APS/APSBITS <https://github.com/BCDA-APS/APSBITS>`__
-instrument  `BCDA-APS/16bmb_bluesky <https://github.com/BCDA-APS/16bmb_bluesky>`__
-instrument  `prjemian/prj_APSBITS <https://github.com/prjemian/prj_APSBITS>`__
+template    `aps-bcda/bits <https://github.com/aps-bcda/bits>`__
+instrument  `aps-bcda/16bmb_bluesky <https://github.com/aps-bcda/16bmb_bluesky>`__
+instrument  `prjemian/prj_bits <https://github.com/prjemian/prj_bits>`__
 =========== ======================
 
 The workflow file

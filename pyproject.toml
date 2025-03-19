@@ -76,8 +76,8 @@ doc = [
 all = ["apsbits[dev,doc]"]
 
 [project.urls]
-"Homepage" = "https://BCDA-APS.github.io/APSBITS/"
-"Bug Tracker" = "https://github.com/BCDA-APS/APSBITS/issues"
+"Homepage" = "https://BCDA-APS.github.io/BITS/"
+"Bug Tracker" = "https://github.com/BCDA-APS/BITS/issues"
 
 
 [tool.black]

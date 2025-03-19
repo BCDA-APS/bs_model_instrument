@@ -11,11 +11,11 @@ on:
     workflow_dispatch:
 
 env:
-  TEMPLATE_REPO: BCDA-APS/APSBITS
+  TEMPLATE_REPO: BCDA-APS/BITS
 
 jobs:
   repo-sync:
-    if: ${{ github.repository != 'bcda-aps/apsbits' }}
+    if: ${{ github.repository != 'bcda-aps/bits' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
