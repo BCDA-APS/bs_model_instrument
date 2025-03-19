@@ -18,7 +18,7 @@ logger.bsdev(__file__)
 TEMPORARY_CATALOG_NAME = "temp"
 
 
-def init_catalog(iconfig):
+def init_catalog():
     """
     Initialize the Databroker catalog using the provided iconfig.
 
@@ -34,7 +34,7 @@ def init_catalog(iconfig):
     except KeyError:
         _cat = databroker.temp().v2
 
-    logger.info("Databroker catalog: %s", _cat.name)
+    logger.info("Databroker catalog name: %s", _cat.name)
     return _cat
 
 
