@@ -33,9 +33,15 @@ logger.bsdev(__file__)
 # Get the main module (same as before)
 main_namespace = sys.modules["__main__"]
 
-# Resolve device files directly using resolve_path
-local_control_devices_file = resolve_path(iconfig["DEVICES_FILE"])
-aps_control_devices_file = resolve_path(iconfig["APS_DEVICES_FILE"])
+# Resolve device files directly using resolve_path, with default values
+local_control_devices_file = resolve_path(iconfig.get("DEVICES_FILE", ""))
+aps_control_devices_file = resolve_path(iconfig.get("APS_DEVICES_FILE", ""))
+
+# Check if files exist
+if local_control_devices_file and not local_control_devices_file.exists():
+    logger.warning(f"Local devices file does not exist: {local_control_devices_file}")
+if aps_control_devices_file and not aps_control_devices_file.exists():
+    logger.warning(f"APS devices file does not exist: {aps_control_devices_file}")
 
 
 def make_devices(*, iconfig=None, pause: float = 1):

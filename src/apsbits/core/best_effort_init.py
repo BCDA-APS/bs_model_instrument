@@ -10,6 +10,7 @@ import logging
 
 from bluesky.callbacks.best_effort import BestEffortCallback
 
+from apsbits.utils.config_loaders import iconfig
 from apsbits.utils.helper_functions import running_in_queueserver
 
 logger = logging.getLogger(__name__)
@@ -51,3 +52,7 @@ def init_bec_peaks(iconfig):
     """Dictionary with statistical analysis of LivePlots."""
 
     return bec, peaks
+
+
+# Initialize bec and peaks at the module level with the iconfig
+bec, peaks = init_bec_peaks(iconfig)

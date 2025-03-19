@@ -45,7 +45,8 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
             for subscribing to the RunEngine. Defaults to `cat`.
 
     Returns:
-        bluesky.RunEngine: The configured RunEngine instance.
+        tuple: A tuple containing the configured RunEngine instance and the
+               SupplementalData instance.
 
     Raises:
         Exception: If there is an error creating the metadata storage handler.
