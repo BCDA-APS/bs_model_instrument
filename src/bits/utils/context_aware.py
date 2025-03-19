@@ -8,10 +8,7 @@ of wherever startup.py is located.
 import inspect
 import pathlib
 from functools import lru_cache
-from typing import Any
-from typing import Dict
-from typing import Optional
-
+from typing import Any, Dict, Optional
 import yaml
 
 
@@ -24,17 +21,9 @@ class ConfigError(Exception):
 class StartupConfig:
     """Configuration provider following the configs-subdirectory convention."""
 
-    CONFIG_FILENAMES = [
-        "iconfig.yml",
-        "config.yml",
-        "iconfig.yaml",
-        "config.yaml",
-        "config.toml",
-        "iconfig.toml",
-    ]
+    CONFIG_FILENAMES = ["iconfig.yml", "config.yml", "iconfig.yaml", "config.yaml"]
 
     def __init__(self):
-        """Initialize the configuration."""
         self._config = None
 
     def get(self, key: str, default: Any = None) -> Any:
@@ -46,7 +35,7 @@ class StartupConfig:
         try:
             return self.config[key]
         except KeyError:
-            raise KeyError(f"Missing required config key: '{key}'") from None
+            raise KeyError(f"Missing required config key: '{key}'")
 
     def __contains__(self, key: str) -> bool:
         """Support for 'in' operator."""
@@ -70,7 +59,7 @@ class StartupConfig:
         return dict(self.config)
 
     @property
-    @lru_cache(maxsize=1)  # noqa B019
+    @lru_cache(maxsize=1)
     def startup_path(self) -> Optional[pathlib.Path]:
         """Find the startup.py that's being executed."""
         # First check main module
@@ -89,7 +78,7 @@ class StartupConfig:
         return self.startup_path.parent / "configs"
 
     @property
-    @lru_cache(maxsize=1)  # noqa B019
+    @lru_cache(maxsize=1)
     def config_file(self) -> Optional[pathlib.Path]:
         """Find the active config file."""
         if not self.configs_dir or not self.configs_dir.exists():
@@ -183,5 +172,34 @@ def get_configs_dir() -> pathlib.Path:
     return _config.configs_dir
 
 
+def get_config_file() -> Optional[pathlib.Path]:
+    """Return the path to the active configuration file."""
+    return _config.config_file
+
+
+def get_startup_path() -> Optional[pathlib.Path]:
+    """Return the path to the active startup.py file."""
+    return _config.startup_path
+
+
 # For backward compatibility
 iconfig = _config
+
+
+# Helper function to print current configuration paths
+def print_config_info():
+    """Print information about the active configuration paths."""
+    if _config.startup_path:
+        print(f"Startup file:    {_config.startup_path}")
+    else:
+        print("No startup.py file detected")
+
+    if _config.configs_dir:
+        print(f"Configs dir:     {_config.configs_dir}")
+    else:
+        print("No configs directory detected")
+
+    if _config.config_file:
+        print(f"Config file:     {_config.config_file}")
+    else:
+        print("No config file found")

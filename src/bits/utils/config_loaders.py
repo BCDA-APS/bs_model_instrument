@@ -17,9 +17,6 @@ from typing import Any
 
 import yaml
 
-
-from bits.utils.context_aware import iconfig
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 ICONFIG_MINIMUM_VERSION = "2.0.0"

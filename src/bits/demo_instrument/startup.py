@@ -17,6 +17,7 @@ from bits.core.run_engine_init import init_RE  # noqa: F401
 
 # Bluesky data acquisition setup
 from bits.utils.context_aware import iconfig
+from bits.utils.context_aware import print_config_info
 from bits.utils.helper_functions import register_bluesky_magics
 from bits.utils.helper_functions import running_in_queueserver
 from bits.utils.make_devices_yaml import make_devices  # noqa: F401
@@ -26,6 +27,10 @@ from .plans import *  # noqa: F403
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
+
+
+# Print all configuration paths
+print_config_info()
 
 
 bec, peaks = init_bec_peaks()
