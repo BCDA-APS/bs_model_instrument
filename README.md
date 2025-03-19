@@ -1,4 +1,4 @@
-# BITS: Template Package for Bluesky Instruments
+# APSBITS: Template Package for Bluesky Instruments
 
 | PyPI | Coverage |
 | --- | --- |

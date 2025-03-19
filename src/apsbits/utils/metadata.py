@@ -28,8 +28,8 @@ import pyRestTable
 import pysumreg
 import spec2nexus
 
-import bits
-from bits.utils.config_loaders import iconfig
+import apsbits
+from apsbits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -53,7 +53,7 @@ VERSIONS = dict(
     python=sys.version.split(" ")[0],
     pysumreg=pysumreg.__version__,
     spec2nexus=spec2nexus.__version__,
-    bits=bits.__version__,
+    apsbits=apsbits.__version__,
 )
 RE_CONFIG = iconfig.get("RUN_ENGINE", {})
 

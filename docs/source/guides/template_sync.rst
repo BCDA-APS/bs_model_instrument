@@ -1,13 +1,13 @@
 How to Update from Template Repo
 ================================
 
-The ``BITS`` repository[#]_ is a template [#]_ for Bluesky instrument packages
+The ``APSBITS`` repository[#]_ is a template [#]_ for Bluesky instrument packages
 at the Advanced Photon Source. A beamline creates a new instrument repository
 from this template repository.  A GitHub Actions Workflow [#]_ (``template-sync.yml``)
 is provided to identify changes in the template repository and create a pull
 request for them in the new repository.
 
-.. [#] https://github.com/BCDA-APS/BITS
+.. [#] https://github.com/BCDA-APS/APSBITS
 .. [#] https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository
 .. [#] https://docs.github.com/en/actions/writing-workflows/about-workflows
 
@@ -44,9 +44,9 @@ For the purpose of demonstration, these docs have used these repositories:
 =========== ======================
 purpose     repo
 =========== ======================
-template    `BCDA-APS/BITS <https://github.com/BCDA-APS/BITS>`__
+template    `BCDA-APS/APSBITS <https://github.com/BCDA-APS/APSBITS>`__
 instrument  `BCDA-APS/16bmb_bluesky <https://github.com/BCDA-APS/16bmb_bluesky>`__
-instrument  `prjemian/prj_BITS <https://github.com/prjemian/prj_BITS>`__
+instrument  `prjemian/prj_APSBITS <https://github.com/prjemian/prj_APSBITS>`__
 =========== ======================
 
 The workflow file
@@ -67,7 +67,7 @@ The token **Note** does not matter here. We'll only use its value.
 term       choice
 ========== =============================
 style      ``classic``
-Note       ``pat_bits_sync_16bmb``
+Note       ``pat_apsbits_sync_16bmb``
 Expiration  *your choice*
 Scope      Check ``workflow`` box
 Repo       Fine-grained (new) tokens allow to specify which repo.
