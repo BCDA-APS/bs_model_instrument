@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-def aps_dm_setup(dm_setup_file):
+def aps_dm_setup(dm_setup_file_path):
     """
     APS Data Management setup
     =========================
@@ -29,8 +29,8 @@ def aps_dm_setup(dm_setup_file):
     This setup must be done before any of the DM package libraries are called.
 
     """
-    if dm_setup_file is not None:
-        bash_script = pathlib.Path(dm_setup_file)
+    if dm_setup_file_path is not None:
+        bash_script = pathlib.Path(dm_setup_file_path)
         if bash_script.exists():
             logger.info("APS DM environment file: %s", str(bash_script))
             # parse environment variables from bash script

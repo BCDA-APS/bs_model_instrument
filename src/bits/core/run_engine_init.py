@@ -19,7 +19,6 @@ from bits.utils.controls_setup import connect_scan_id_pv
 from bits.utils.controls_setup import set_control_layer
 from bits.utils.controls_setup import set_timeouts
 from bits.utils.metadata import MD_PATH
-from bits.utils.metadata import re_metadata
 from bits.utils.stored_dict import StoredDict
 
 logger = logging.getLogger(__name__)
@@ -51,8 +50,8 @@ if MD_PATH is not None:
         )
         logger.warning("%s('%s') error:%s", handler_name, MD_PATH, error)
 
-RE.md.update(re_metadata(cat))  # programmatic metadata
-RE.md.update(re_config.get("DEFAULT_METADATA", {}))
+# RE.md.update(re_metadata(cat))  # programmatic metadata
+# RE.md.update(re_config.get("DEFAULT_METADATA", {}))
 
 sd = bluesky.SupplementalData()
 """Baselines & monitors for ``RE``."""

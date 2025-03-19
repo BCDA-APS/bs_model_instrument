@@ -78,4 +78,4 @@ OPHYD:
 
 # Control detail of exception traces in IPython (console and notebook).
 # Options are: Minimal, Plain, Verbose
-XMODE_DEBUG_LEVEL: Minimal
+XMODE_DEBUG_LEVEL: Plain
