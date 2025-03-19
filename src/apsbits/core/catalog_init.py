@@ -39,4 +39,4 @@ def init_catalog():
 
 
 # Initialize cat at the module level with the iconfig
-cat = init_catalog(iconfig)
+cat = init_catalog()

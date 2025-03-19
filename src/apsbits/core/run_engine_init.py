@@ -99,7 +99,7 @@ def init_RE(bec_instance=None, cat_instance=None):
         RE.subscribe(bec_instance)
     RE.preprocessors.append(sd)
 
-    set_control_layer(control_layer=iconfig.get("OPHYD", {}).get("CONTROL_LAYER", {}))
+    set_control_layer(control_layer=iconfig.get("OPHYD", {}).get("CONTROL_LAYER", 'PyEpics'))
     # MUST happen before ANY EpicsSignalBase (or subclass) is created.
     set_timeouts(timeouts=iconfig.get("OPHYD", {}).get("TIMEOUTS", {}))
     connect_scan_id_pv(
@@ -114,4 +114,4 @@ def init_RE(bec_instance=None, cat_instance=None):
 
     return RE, sd
 
-RE, sd = init_RE(iconfig=iconfig)
+RE, sd = init_RE()

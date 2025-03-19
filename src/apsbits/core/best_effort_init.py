@@ -53,4 +53,4 @@ def init_bec_peaks():
 
 
 # Initialize bec and peaks at the module level with the iconfig
-bec, peaks = init_bec_peaks(iconfig)
+bec, peaks = init_bec_peaks()

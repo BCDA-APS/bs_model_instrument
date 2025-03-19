@@ -18,7 +18,7 @@ from bluesky.magics import BlueskyMagics
 from bluesky_queueserver import is_re_worker_active
 from IPython import get_ipython
 
-from bits.utils.context_aware import iconfig
+from apsbits.utils.context_aware import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -51,7 +51,7 @@ def running_in_queueserver() -> bool:
         return False
 
 
-def debug_python(xmode_level: str = "Minimal") -> None:
+def debug_python(xmode_level: str = "Plain") -> None:
     """
     Enable detailed debugging for Python exceptions in the IPython environment.
 
@@ -64,7 +64,7 @@ def debug_python(xmode_level: str = "Minimal") -> None:
     """
     ipython = get_ipython()
     if ipython is not None:
-        xmode_level: str = iconfig.get("XMODE_DEBUG_LEVEL", "Minimal")
+        xmode_level: str = iconfig.get("XMODE_DEBUG_LEVEL", "Plain")
         ipython.run_line_magic("xmode", xmode_level)
         print("\nEnd of IPython settings\n")
         logger.bsdev("xmode exception level: '%s'", xmode_level)

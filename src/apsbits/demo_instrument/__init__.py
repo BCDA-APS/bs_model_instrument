@@ -24,3 +24,4 @@ startup_config = StartupConfig(config_path=iconfig_path)
 print("Starting Instrument with iconfig:", iconfig_path)
 
 
+from apsbits.utils.config_loaders import iconfig
