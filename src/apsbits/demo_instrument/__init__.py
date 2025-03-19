@@ -2,8 +2,13 @@
 Custom folder to store all beamline specific implementations
 """
 
+import logging
 from apsbits.utils.context_aware import StartupConfig
+from apsbits.utils.logging_setup import configure_logging
 from pathlib import Path
+
+# Configure logging using apsbits configuration
+configure_logging()
 
 # Get the instrument path and config path for reference
 instrument_path = Path(__file__).parent

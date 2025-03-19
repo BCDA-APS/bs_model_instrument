@@ -6,6 +6,7 @@ of wherever startup.py is located.
 """
 
 import inspect
+import logging
 import pathlib
 from functools import lru_cache
 from typing import Any
@@ -13,6 +14,10 @@ from typing import Dict
 from typing import Optional
 
 import yaml
+
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 
 class ConfigError(Exception):
@@ -42,6 +47,7 @@ class StartupConfig:
         """
         self._config = None
         self._config_path = config_path
+        logger.info("Initializing StartupConfig")
 
     def get(self, key: str, default: Any = None) -> Any:
         """Get a configuration value with an optional default."""
@@ -154,12 +160,17 @@ class StartupConfig:
     def _load_config(self) -> Dict:
         """Load the configuration file."""
         if not self.config_file:
+            logger.warning("No configuration file found")
             return {}
 
         try:
+            logger.info(f"Loading configuration from: {self.config_file}")
             with open(self.config_file) as f:
-                return yaml.safe_load(f) or {}
-        except Exception:
+                config = yaml.safe_load(f) or {}
+            logger.info(f"Successfully loaded configuration from: {self.config_file}")
+            return config
+        except Exception as e:
+            logger.error(f"Error loading configuration from {self.config_file}: {str(e)}")
             return {}
 
 
