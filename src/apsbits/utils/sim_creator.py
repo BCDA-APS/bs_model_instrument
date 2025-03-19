@@ -20,6 +20,7 @@ Device factories are used to:
 import logging
 
 from apstools.utils import dynamic_import
+
 from apsbits.utils.controls_setup import oregistry
 
 logger = logging.getLogger(__name__)

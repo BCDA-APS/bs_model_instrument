@@ -49,4 +49,3 @@ def init_bec_peaks(iconfig):
     """Dictionary with statistical analysis of LivePlots."""
 
     return bec, peaks
-

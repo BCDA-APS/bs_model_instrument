@@ -4,8 +4,9 @@ Test that instrument can be started.
 Here is just enough testing to get a CI workflow started. More are possible.
 """
 
-import pytest
 import time
+
+import pytest
 
 from apsbits.core.config import get_config
 from apsbits.demo_instrument.plans.sim_plans import sim_count_plan
@@ -69,7 +70,7 @@ def test_iconfig() -> None:
     Test the instrument configuration.
     """
     iconfig = get_config()
-    
+
     version: str = iconfig.get(
         "ICONFIG_VERSION", "0.0.0"
     )  # TODO: Will anyone ever have a wrong catalog version?

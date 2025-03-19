@@ -1,61 +1,117 @@
 """
-Load configuration files
-========================
+Configuration management for the instrument.
 
-Load supported configuration files, such as ``iconfig.yml``.
-
-.. autosummary::
-    ~load_config_yaml
-    ~IConfigFileVersionError
+This module serves as the single source of truth for instrument configuration.
+It loads and validates the configuration from the iconfig.yml file and provides
+access to the configuration throughout the application.
 """
 
 import logging
-import pathlib
-from typing import Dict, Any
+from pathlib import Path
+from typing import Any
+from typing import Dict
+from typing import Optional
 
-from apsbits.core.config import get_config
+import tomli  # type: ignore
+import yaml
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
-# Minimum required version for iconfig.yml files
-ICONFIG_MINIMUM_VERSION = "2.0.0"
+# Global configuration instance
+_iconfig: Dict[str, Any] = {}
 
 
-def load_config_yaml(iconfig_yml: str = None) -> Dict[str, Any]:
+def load_config(config_path: Optional[Path] = None) -> Dict[str, Any]:
     """
-    Load iconfig.yml (and other YAML) configuration files.
+    Load configuration from a YAML or TOML file.
 
     Args:
-        iconfig_yml: Path to the configuration file.
+        config_path: Path to the configuration file.
 
     Returns:
-        Dict containing the configuration.
+        The loaded configuration dictionary.
 
     Raises:
-        IConfigFileVersionError: If the configuration version is too old.
+        ValueError: If config_path is None or if the file extension is not supported.
+        FileNotFoundError: If the configuration file does not exist.
     """
-    if iconfig_yml is None:
-        raise ValueError(
-            "No configuration file provided. Please specify a valid 'iconfig.yml' file."
-        )
+    global _iconfig
 
-    path = pathlib.Path(iconfig_yml)
-    if not path.exists():
-        raise FileNotFoundError(f"Configuration file not found: {iconfig_yml}")
+    if config_path is None:
+        raise ValueError("config_path must be provided")
 
-    # Get the current configuration
-    iconfig = get_config()
-    
-    # Validate the iconfig file has the minimum version
-    _version = iconfig.get("ICONFIG_VERSION")
-    if _version is None or _version < ICONFIG_MINIMUM_VERSION:
-        raise ValueError(
-            f"Configuration file '{iconfig_yml}' has version {_version!r}."
-            f" Expected minimum {ICONFIG_MINIMUM_VERSION!r}."
-        )
+    if not config_path.exists():
+        raise FileNotFoundError(f"Configuration file not found at {config_path}")
 
-    return iconfig
+    try:
+        with open(config_path, "rb") as f:
+            if config_path.suffix.lower() == ".yml":
+                config = yaml.safe_load(f)
+            elif config_path.suffix.lower() == ".toml":
+                config = tomli.load(f)
+            else:
+                raise ValueError(
+                    f"Unsupported configuration file format: {config_path.suffix}"
+                )
+
+            if config is None:
+                config = {}
+            _iconfig.update(config)
+            return _iconfig
+    except Exception as e:
+        logger.error(f"Error loading configuration: {e}")
+        raise
+
+
+def get_config() -> Dict[str, Any]:
+    """
+    Get the current configuration.
+
+    Returns:
+        The current configuration dictionary.
+    """
+    return _iconfig
+
+
+def update_config(updates: Dict[str, Any]) -> None:
+    """
+    Update the current configuration.
+
+    Args:
+        updates: Dictionary of configuration updates.
+    """
+    _iconfig.update(updates)
+
+
+def load_config_yaml(config_path: Optional[Path] = None) -> Dict[str, Any]:
+    """
+    Load configuration from a YAML file.
+
+    Args:
+        config_path: Path to the configuration file.
+
+    Returns:
+        The loaded configuration dictionary.
+
+    Raises:
+        FileNotFoundError: If the configuration file does not exist.
+    """
+    if config_path is None:
+        raise ValueError("config_path must be provided")
+
+    if not config_path.exists():
+        raise FileNotFoundError(f"Configuration file not found at {config_path}")
+
+    try:
+        with open(config_path) as f:
+            config = yaml.safe_load(f)
+            if config is None:
+                config = {}
+            return config
+    except Exception as e:
+        logger.error(f"Error loading configuration: {e}")
+        raise
 
 
 # class IConfigFileVersionError(ValueError):

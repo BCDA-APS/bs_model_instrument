@@ -98,12 +98,14 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
         RE.subscribe(bec_instance)
     RE.preprocessors.append(sd)
 
-    set_control_layer(control_layer=iconfig.get("OPHYD", {}).get("CONTROL_LAYER", 'PyEpics'))
+    set_control_layer(
+        control_layer=iconfig.get("OPHYD", {}).get("CONTROL_LAYER", "PyEpics")
+    )
     # MUST happen before ANY EpicsSignalBase (or subclass) is created.
     set_timeouts(timeouts=iconfig.get("OPHYD", {}).get("TIMEOUTS", {}))
     connect_scan_id_pv(
         RE,
-        scan_id_pv = iconfig.get("RUN_ENGINE", {}).get("SCAN_ID_PV"),
+        scan_id_pv=iconfig.get("RUN_ENGINE", {}).get("SCAN_ID_PV"),
     )  # need to add the variables I removed from iconfig here as args
 
     if re_config.get("USE_PROGRESS_BAR", True):

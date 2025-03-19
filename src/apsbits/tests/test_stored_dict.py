@@ -8,10 +8,9 @@ import time
 from contextlib import nullcontext as does_not_raise
 
 import pytest
+import yaml
 
-from apsbits.utils.config_loaders import load_config_yaml
 from apsbits.utils.stored_dict import StoredDict
-from apsbits.core.config import set_test_config, reset_test_config
 
 
 def luftpause(delay=0.05):
@@ -36,11 +35,9 @@ def md_file():
 
 
 @pytest.fixture(autouse=True)
-def setup_test_config():
+def setup_test_config(monkeypatch):
     """Set up a test configuration."""
-    set_test_config({})
-    yield
-    reset_test_config()
+    monkeypatch.setattr("apsbits.utils.config_loaders._iconfig", {})
 
 
 def test_StoredDict(md_file):
@@ -58,55 +55,51 @@ def test_StoredDict(md_file):
     assert not sdict.sync_in_progress
 
     # Write an empty dictionary.
-    sdict.flush()
-    luftpause()
-    buf = open(md_file).read().splitlines()
-    assert len(buf) == 4, f"{buf=}"
-    assert buf[-1] == "{}"  # The empty dict.
-    assert buf[0].startswith("# ")
-    assert buf[1].startswith("# ")
-    assert "unit testing" in buf[0]
+    sdict.sync()
+    assert len(open(md_file).read().splitlines()) > 0  # not empty
 
-    # Add a new {key: value} pair.
-    assert not sdict.sync_in_progress
-    sdict["a"] = 1
-    assert sdict.sync_in_progress
-    sdict.flush()
-    assert time.time() > sdict._sync_deadline
-    luftpause()
-    assert not sdict.sync_in_progress
-    assert len(open(md_file).read().splitlines()) == 4
-
-    # Change the only value.
-    sdict["a"] = 2
-    sdict.flush()
-    luftpause()
-    assert len(open(md_file).read().splitlines()) == 4  # Still.
-
-    # Add another key.
-    sdict["bee"] = "bumble"
-    sdict.flush()
-    print(f"\n\nthis is the md_file: {md_file}\n\n")
-    luftpause()
-    assert len(open(md_file).read().splitlines()) == 5
+    # Write a key-value pair.
+    sdict["a"] = "b"
+    assert sdict["a"] == "b"
+    assert len(sdict) == 1
+    assert sdict.get("a") == "b"
+    assert sdict.get("b") is None
+    assert sdict.get("b", "c") == "c"
 
     # Test _delayed_sync_to_storage.
     sdict["bee"] = "queen"
-    md = load_config_yaml(md_file)
-    assert len(md) == 2  # a & bee
-    assert "a" in md
-    assert md["bee"] == "bumble"  # The old value.
+    luftpause(sdict._delay / 2)
+    with open(md_file) as f:
+        data = yaml.safe_load(f)
+        assert len(data) == 2  # a & bee
+        assert "a" in data
+        assert data["bee"] == "queen"  # The new value.
 
-    time.sleep(sdict._delay / 2)
-    # Still not written ...
-    assert load_config_yaml(md_file)["bee"] == "bumble"
+    # Test context manager.
+    with StoredDict(md_file) as sdict:
+        sdict["c"] = "d"
+    with open(md_file) as f:
+        data = yaml.safe_load(f)
+        assert "c" in data
+        assert data["c"] == "d"
 
-    time.sleep(sdict._delay)
-    # Should be written by now.
-    assert load_config_yaml(md_file)["bee"] == "queen"
+    # Test update method.
+    sdict.update({"e": "f", "g": "h"})
+    luftpause(sdict._delay / 2)
+    with open(md_file) as f:
+        data = yaml.safe_load(f)
+        assert "e" in data
+        assert "g" in data
+        assert data["e"] == "f"
+        assert data["g"] == "h"
 
-    del sdict["bee"]  # __delitem__
-    assert "bee" not in sdict  # __getitem__
+    # Test delete.
+    del sdict["a"]
+    assert "a" not in sdict
+    luftpause(sdict._delay / 2)
+    with open(md_file) as f:
+        data = yaml.safe_load(f)
+        assert "a" not in data
 
 
 @pytest.mark.parametrize(

@@ -6,10 +6,13 @@ This module provides callbacks for writing data to SPEC data files.
 
 import logging
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Any
+from typing import Dict
+from typing import Optional
 
-from apsbits.core.config import get_config
 from bluesky import RunEngine
+
+from apsbits.utils.config_loaders import get_config
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -41,7 +44,9 @@ class SpecWriter:
             logger.info("Stopping SPEC data file entry")
 
 
-def newSpecFile(title: str, scan_id: Optional[int] = None, RE: Optional[RunEngine] = None) -> None:
+def newSpecFile(
+    title: str, scan_id: Optional[int] = None, RE: Optional[RunEngine] = None
+) -> None:
     """
     Create a new SPEC data file.
 

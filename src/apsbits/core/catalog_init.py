@@ -10,7 +10,6 @@ import logging
 
 import databroker
 
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
@@ -35,4 +34,3 @@ def init_catalog(iconfig):
 
     logger.info("Databroker catalog name: %s", _cat.name)
     return _cat
-

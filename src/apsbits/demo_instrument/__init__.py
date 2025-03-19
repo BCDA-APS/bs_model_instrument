@@ -7,7 +7,8 @@ This package provides a demo instrument implementation for testing and developme
 import logging
 from pathlib import Path
 
-from apsbits.core.config import load_config, get_config
+from apsbits.utils.config_loaders import get_config
+from apsbits.utils.config_loaders import load_config
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -21,11 +22,3 @@ load_config(iconfig_path)
 iconfig = get_config()
 
 logger.info("Starting Instrument with iconfig: %s", iconfig_path)
-
-# Import the rest of the package
-from . import startup
-from . import plans
-from . import callbacks
-from . import configs
-
-

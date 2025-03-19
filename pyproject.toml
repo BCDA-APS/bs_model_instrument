@@ -51,7 +51,7 @@ dependencies = [
     "pyRestTable",
     "pysumreg",
     "qtpy",
-    "toml",
+    "tomli",
 ]
 
 [project.optional-dependencies]

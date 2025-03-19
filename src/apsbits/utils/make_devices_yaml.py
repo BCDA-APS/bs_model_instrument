@@ -7,15 +7,15 @@ and register them with the ophyd registry.
 
 import logging
 from pathlib import Path
-from typing import Dict, Any, Optional, Generator
+from typing import Generator
 
 from bluesky.utils import Msg
-from apsbits.core.config import get_config
+
+from apsbits.utils.config_loaders import get_config
 from apsbits.utils.controls_setup import oregistry
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
-
 
 
 def make_devices() -> Generator[Msg, None, None]:
@@ -29,11 +29,13 @@ def make_devices() -> Generator[Msg, None, None]:
         A generator that yields Bluesky messages.
     """
     iconfig = get_config()
-    
+
     # Load local control devices
     local_control_devices_file = Path(iconfig.get("DEVICES_FILE", "")).resolve()
     if local_control_devices_file.exists():
-        logger.info("Loading local control devices from: %s", local_control_devices_file)
+        logger.info(
+            "Loading local control devices from: %s", local_control_devices_file
+        )
         _load_devices(local_control_devices_file)
 
     # Load APS control devices
@@ -43,7 +45,7 @@ def make_devices() -> Generator[Msg, None, None]:
         _load_devices(aps_control_devices_file)
 
     # Yield a null message to make this a valid plan
-    yield Msg('null')
+    yield Msg("null")
 
 
 def _load_devices(devices_file: Path) -> None:

@@ -12,15 +12,13 @@ Generic utility helper functions
 
 import logging
 import os
-from typing import Optional
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from bluesky.magics import BlueskyMagics
-from bluesky_queueserver import is_re_worker_active
 from IPython import get_ipython
 
-from apsbits.core.config import get_config
+from apsbits.utils.config_loaders import get_config
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
