@@ -11,8 +11,8 @@ import logging
 
 from bluesky.callbacks.best_effort import BestEffortCallback
 
-from bits.utils.config_loaders import iconfig
-from bits.utils.helper_functions import running_in_queueserver
+from apsbits.utils.config_loaders import iconfig
+from apsbits.utils.helper_functions import running_in_queueserver
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

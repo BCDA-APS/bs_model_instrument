@@ -2,11 +2,11 @@
 
 """Model Bluesky Data Acquisition Instrument."""
 
-from bits.utils.logging_setup import configure_logging
+from apsbits.utils.logging_setup import configure_logging
 
 configure_logging()
 
-__package__ = "bits"
+__package__ = "apsbits"
 try:
     from setuptools_scm import get_version
 
