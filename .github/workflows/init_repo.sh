@@ -21,3 +21,5 @@ python3 -m apsbits.utils.create_new_instrument "${sanitized_repo}_instrument" "s
 
 rm -rf .github/workflows/init_repo.sh
 rm -rf .github/workflows/init_repo.yml
+rm -rf .github/workflows/pypi.yml
+# rm -rf .github/workflows/test.yml
