@@ -17,7 +17,6 @@ from apsbits.core.catalog_init import cat  # noqa: F401
 from apsbits.core.run_engine_init import RE  # noqa: F401
 from apsbits.core.run_engine_init import sd  # noqa: F401
 from apsbits.utils.aps_functions import aps_dm_setup
-from apsbits.utils.config_loaders import iconfig
 
 # Bluesky data acquisition setup
 # from apsbits.utils.config_loaders import iconfig

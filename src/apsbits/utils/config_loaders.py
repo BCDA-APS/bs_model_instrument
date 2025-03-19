@@ -18,6 +18,9 @@ logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 ICONFIG_MINIMUM_VERSION = "2.0.0"
 
+from apsbits.utils.context_aware import iconfig #noqa
+
+
 
 def load_config_yaml(iconfig_yml=None) -> dict:
     """

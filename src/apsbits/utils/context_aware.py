@@ -33,9 +33,15 @@ class StartupConfig:
         "ifconfig.toml",
     ]
 
-    def __init__(self):
-        """Initialize the configuration."""
+    def __init__(self, config_path: Optional[pathlib.Path] = None):
+        """Initialize the configuration.
+        
+        Args:
+            config_path: Optional path to the configuration file. If not provided,
+                        will attempt to find it automatically.
+        """
         self._config = None
+        self._config_path = config_path
 
     def get(self, key: str, default: Any = None) -> Any:
         """Get a configuration value with an optional default."""
@@ -73,6 +79,8 @@ class StartupConfig:
     @lru_cache(maxsize=1)  # noqa B019
     def startup_path(self) -> Optional[pathlib.Path]:
         """Find the startup.py that's being executed."""
+        if self._config_path:
+            return self._config_path.parent.parent
         # First check main module
         startup = self._find_startup_in_main()
         if startup:
@@ -84,6 +92,8 @@ class StartupConfig:
     @property
     def configs_dir(self) -> Optional[pathlib.Path]:
         """Get the configs directory path."""
+        if self._config_path:
+            return self._config_path.parent
         if not self.startup_path:
             return None
         return self.startup_path.parent / "configs"
@@ -92,6 +102,8 @@ class StartupConfig:
     @lru_cache(maxsize=1)  # noqa B019
     def config_file(self) -> Optional[pathlib.Path]:
         """Find the active config file."""
+        if self._config_path:
+            return self._config_path
         if not self.configs_dir or not self.configs_dir.exists():
             return None
 
@@ -100,7 +112,6 @@ class StartupConfig:
             path = self.configs_dir / filename
             if path.exists():
                 return path
-
         return None
 
     def resolve_path(self, filename: str) -> Optional[pathlib.Path]:
@@ -184,4 +195,4 @@ def get_configs_dir() -> pathlib.Path:
 
 
 # For backward compatibility
-iconfig = _config
+iconfig = _config.to_dict()
