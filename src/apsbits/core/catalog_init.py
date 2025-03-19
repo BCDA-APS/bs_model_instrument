@@ -10,7 +10,6 @@ import logging
 
 import databroker
 
-from apsbits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -18,7 +17,7 @@ logger.bsdev(__file__)
 TEMPORARY_CATALOG_NAME = "temp"
 
 
-def init_catalog():
+def init_catalog(iconfig):
     """
     Initialize the Databroker catalog using the provided iconfig.
 
@@ -37,6 +36,3 @@ def init_catalog():
     logger.info("Databroker catalog name: %s", _cat.name)
     return _cat
 
-
-# Initialize cat at the module level with the iconfig
-cat = init_catalog()

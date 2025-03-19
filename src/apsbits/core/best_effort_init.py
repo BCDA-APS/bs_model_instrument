@@ -10,14 +10,13 @@ import logging
 
 from bluesky.callbacks.best_effort import BestEffortCallback
 
-from apsbits.utils.config_loaders import iconfig
 from apsbits.utils.helper_functions import running_in_queueserver
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-def init_bec_peaks():
+def init_bec_peaks(iconfig):
     """
     Create and configure a BestEffortCallback object based on the provided iconfig.
 
@@ -51,6 +50,3 @@ def init_bec_peaks():
 
     return bec, peaks
 
-
-# Initialize bec and peaks at the module level with the iconfig
-bec, peaks = init_bec_peaks()

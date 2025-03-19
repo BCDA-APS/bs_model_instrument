@@ -12,11 +12,9 @@ Includes:
 import logging
 from apsbits.demo_instrument import iconfig
 
-from apsbits.core.best_effort_init import bec  # noqa: F401
-from apsbits.core.best_effort_init import peaks  # noqa: F401
-from apsbits.core.catalog_init import cat  # noqa: F401
-from apsbits.core.run_engine_init import RE  # noqa: F401
-from apsbits.core.run_engine_init import sd  # noqa: F401
+from apsbits.core.best_effort_init import init_bec_peaks
+from apsbits.core.catalog_init import init_catalog
+from apsbits.core.run_engine_init import init_RE
 from apsbits.utils.aps_functions import aps_dm_setup
 
 # Bluesky data acquisition setup
@@ -29,6 +27,11 @@ from .plans import *  # noqa: F403
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
+
+bec, peaks = init_bec_peaks(iconfig)
+cat = init_catalog(iconfig)
+RE, sd = init_RE(iconfig, bec_instance=bec, cat_instance=cat)
+
 
 aps_dm_setup(iconfig.get("DM_SETUP_FILE"))
 

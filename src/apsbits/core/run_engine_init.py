@@ -16,13 +16,12 @@ from apsbits.utils.controls_setup import set_control_layer
 from apsbits.utils.controls_setup import set_timeouts
 from apsbits.utils.metadata import get_md_path
 from apsbits.utils.stored_dict import StoredDict
-from apsbits.utils.config_loaders import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-def init_RE(bec_instance=None, cat_instance=None):
+def init_RE(iconfig, bec_instance=None, cat_instance=None):
     """
     Initialize and configure a bluesky RunEngine (RE) instance.
 
@@ -113,5 +112,3 @@ def init_RE(bec_instance=None, cat_instance=None):
         RE.waiting_hook = pbar_manager
 
     return RE, sd
-
-RE, sd = init_RE()

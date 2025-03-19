@@ -16,7 +16,7 @@ iconfig_path = instrument_path / "configs" / "iconfig.yml"
 
 # Initialize the configuration with explicit path
 startup_config = StartupConfig(config_path=iconfig_path)
-
+iconfig = startup_config.to_dict()
 # Access configuration values using the startup_config instance
 # Example: startup_config.get('some_key', default_value)
 # Or: startup_config['required_key']
@@ -24,4 +24,3 @@ startup_config = StartupConfig(config_path=iconfig_path)
 print("Starting Instrument with iconfig:", iconfig_path)
 
 
-from apsbits.utils.config_loaders import iconfig

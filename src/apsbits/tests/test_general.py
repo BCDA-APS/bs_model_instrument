@@ -5,6 +5,7 @@ Here is just enough testing to get a CI workflow started. More are possible.
 """
 
 import pytest
+import time
 
 from apsbits.demo_instrument.plans.sim_plans import sim_count_plan
 from apsbits.demo_instrument.plans.sim_plans import sim_print_plan
@@ -49,11 +50,18 @@ def test_sim_plans(runengine_with_devices: object, plan: object, n_uids: int) ->
     Test supplied simulator plans using the RunEngine with devices.
     """
     bec.disable_plots()
+    # Get the initial number of runs in the catalog
     n_runs = len(cat)
     # Use the fixture-provided run engine to run the plan.
     uids = runengine_with_devices(plan())
     assert len(uids) == n_uids
-    assert len(cat) == n_runs + len(uids)
+    # Add a small delay to ensure data is saved
+    time.sleep(0.1)
+    # For sim_print_plan, we don't expect any new runs
+    if plan == sim_print_plan:
+        assert len(cat) == n_runs
+    else:
+        assert len(cat) == n_runs + len(uids)
 
 
 def test_iconfig() -> None:
