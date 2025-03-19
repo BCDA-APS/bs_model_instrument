@@ -18,8 +18,6 @@ from bluesky.magics import BlueskyMagics
 from bluesky_queueserver import is_re_worker_active
 from IPython import get_ipython
 
-from apsbits.utils.config_loaders import iconfig
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
@@ -55,11 +53,12 @@ def debug_python(xmode_level: str = "Minimal") -> None:
     """
     Enable detailed debugging for Python exceptions in the IPython environment.
 
-    This function adjusts the xmode settings for exception tracebacks based on the
-      provided xmode_level argument.
+    This function adjusts the xmode settings for exception tracebacks based on
+    the provided xmode_level argument.
 
     Args:
-        xmode_level (str): The level of detail for exception tracebacks. Defaults to "Minimal".
+        xmode_level (str): The level of detail for exception tracebacks.
+                           Defaults to "Minimal".
     """
     ipython = get_ipython()
     if ipython is not None:

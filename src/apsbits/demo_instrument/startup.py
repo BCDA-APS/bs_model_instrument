@@ -10,7 +10,6 @@ Includes:
 """
 
 import logging
-from pathlib import Path
 
 from apsbits.core.best_effort_init import bec  # noqa: F401
 from apsbits.core.best_effort_init import peaks  # noqa: F401

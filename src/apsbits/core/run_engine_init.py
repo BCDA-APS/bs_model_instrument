@@ -11,13 +11,10 @@ import logging
 import bluesky
 from bluesky.utils import ProgressBarManager
 
-from apsbits.core.best_effort_init import bec
-from apsbits.core.catalog_init import cat
-from apsbits.utils.config_loaders import iconfig
 from apsbits.utils.controls_setup import connect_scan_id_pv
 from apsbits.utils.controls_setup import set_control_layer
 from apsbits.utils.controls_setup import set_timeouts
-from apsbits.utils.metadata import MD_PATH
+from apsbits.utils.metadata import get_md_path
 from apsbits.utils.stored_dict import StoredDict
 
 logger = logging.getLogger(__name__)
@@ -88,8 +85,8 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
             )
             logger.warning("%s('%s') error:%s", handler_name, MD_PATH, error)
 
-# RE.md.update(re_metadata(cat))  # programmatic metadata
-# RE.md.update(re_config.get("DEFAULT_METADATA", {}))
+    # RE.md.update(re_metadata(cat))  # programmatic metadata
+    # RE.md.update(re_config.get("DEFAULT_METADATA", {}))
 
     sd = bluesky.SupplementalData()
     """Baselines & monitors for ``RE``."""

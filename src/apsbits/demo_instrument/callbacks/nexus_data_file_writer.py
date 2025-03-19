@@ -32,6 +32,14 @@ class MyNXWriter(NXWriter):
     """Patch to get sample title from metadata, if available."""
 
     def __init__(self, *args, **kwargs):
+        """
+        Initialize the MyNXWriter with instrument configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+                      May include 'iconfig' which will be extracted.
+        """
         self.iconfig = kwargs.pop("iconfig", None)
 
     def get_sample_title(self):

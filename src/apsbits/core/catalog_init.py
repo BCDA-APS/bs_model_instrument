@@ -10,8 +10,6 @@ import logging
 
 import databroker
 
-from apsbits.utils.config_loaders import iconfig
-
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 

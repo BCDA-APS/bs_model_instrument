@@ -9,16 +9,10 @@ Load supported configuration files, such as ``iconfig.yml``.
     ~IConfigFileVersionError
 """
 
-import gc
-import inspect
 import logging
 import pathlib
-from typing import Any
 
 import yaml
-
-
-from bits.utils.context_aware import iconfig
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

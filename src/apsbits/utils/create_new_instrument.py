@@ -106,14 +106,18 @@ def main() -> None:
         sys.exit(1)
 
     # Resolve the template path from the installed apsbits package.
-    # __file__ is located at apsbits/utils/create_new_instrument.py, so moving two levels up
-    # points to the root of the apsbits package where demo_instrument is expected to be.
-    template_path: Path = (Path(__file__).resolve().parent.parent / "demo_instrument").resolve()
+    # __file__ is located at apsbits/utils/create_new_instrument.py, so moving
+    # two levels up points to the root of the apsbits package where
+    # demo_instrument is expected to be.
+    template_path: Path = (
+        Path(__file__).resolve().parent.parent / "demo_instrument"
+    ).resolve()
     destination_parent: Path = Path(args.dest).resolve()
     new_instrument_dir: Path = destination_parent / args.name
 
     print(
-        f"Creating instrument '{args.name}' from '{template_path}' into '{new_instrument_dir}'."
+        f"Creating instrument '{args.name}' from '{template_path}' "
+        f"into '{new_instrument_dir}'."
     )
 
     if not template_path.exists():
