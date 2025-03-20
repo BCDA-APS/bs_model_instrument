@@ -39,12 +39,17 @@ RE, sd = init_RE(iconfig, bec_instance=bec, cat_instance=cat)
 
 # Import optional components based on configuration
 if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
-    from .callbacks.nexus_data_file_writer import nxwriter  # noqa: F401
+    from .callbacks.nexus_data_file_writer import nxwriter_init
+
+    nxwriter = nxwriter_init(RE)
 
 if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
+    from .callbacks.spec_data_file_writer import init_specwriter_with_RE
     from .callbacks.spec_data_file_writer import newSpecFile  # noqa: F401
     from .callbacks.spec_data_file_writer import spec_comment  # noqa: F401
     from .callbacks.spec_data_file_writer import specwriter  # noqa: F401
+
+    init_specwriter_with_RE(RE)
 
 # Import all plans
 from .plans import *  # noqa
