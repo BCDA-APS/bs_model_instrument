@@ -2,7 +2,7 @@
 
 | PyPI | Coverage |
 | --- | --- |
-[![PyPi](https://img.shields.io/pypi/v/apsbits.svg)](https://pypi.python.org/pypi/apsbits) | [![Coverage Status](https://coveralls.io/repos/github/bcda-aps/bits/badge.svg)](https://coveralls.io/github/bcda-aps/bits) |
+[![PyPi](https://img.shields.io/pypi/v/apsbits.svg)](https://pypi.python.org/pypi/apsbits) | [![Coverage Status](https://coveralls.io/repos/github/BCDA-APS/BITS/badge.svg?branch=main)](https://coveralls.io/github/BCDA-APS/BITS?branch=main) |
 
 BITS: **B**luesky **I**nstrument **T**emplate**S**
 
