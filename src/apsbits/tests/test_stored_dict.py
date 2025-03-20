@@ -1,6 +1,7 @@
 """
 Test the utils.stored_dict module.
 """
+
 import pathlib
 import tempfile
 import time
@@ -15,6 +16,8 @@ from apsbits.utils.stored_dict import StoredDict
 def luftpause(delay=0.05):
     """A brief wait for content to flush to storage."""
     time.sleep(max(0, delay))
+
+
 @pytest.fixture
 def md_file():
     """Provide a temporary file (deleted on close)."""
@@ -118,12 +121,16 @@ def test_set_exceptions(md, xcept, text, md_file):
     with context as reason:
         sdict.update(md)
     assert text in str(reason), f"{reason=}"
+
+
 def test_popitem(md_file):
     """Can't popitem from empty dict."""
     sdict = StoredDict(md_file, delay=0.2, title="unit testing")
     with pytest.raises(KeyError) as reason:
         sdict.popitem()
     assert "dictionary is empty" in str(reason), f"{reason=}"
+
+
 def test_repr(md_file):
     """__repr__"""
     sdict = StoredDict(md_file, delay=0.1, title="unit testing")

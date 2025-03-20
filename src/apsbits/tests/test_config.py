@@ -7,7 +7,6 @@ import tempfile
 from typing import TYPE_CHECKING
 
 import pytest
-import tomli
 import tomli_w
 import yaml
 

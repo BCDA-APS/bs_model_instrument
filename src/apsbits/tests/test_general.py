@@ -8,7 +8,6 @@ import time
 
 import pytest
 
-from apsbits.utils.config_loaders import get_config
 from apsbits.demo_instrument.plans.sim_plans import sim_count_plan
 from apsbits.demo_instrument.plans.sim_plans import sim_print_plan
 from apsbits.demo_instrument.plans.sim_plans import sim_rel_scan_plan
@@ -18,6 +17,7 @@ from apsbits.demo_instrument.startup import peaks
 from apsbits.demo_instrument.startup import running_in_queueserver
 from apsbits.demo_instrument.startup import sd
 from apsbits.demo_instrument.startup import specwriter
+from apsbits.utils.config_loaders import get_config
 
 
 def test_startup(runengine_with_devices: object) -> None:
