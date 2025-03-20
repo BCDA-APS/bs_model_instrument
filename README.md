@@ -12,16 +12,16 @@ queueserver.
 ## Installing the BITS Package for Development
 
 ```bash
-
 conda create -y -n BITS_env python=3.11 pyepics
 conda activate BITS_env
 pip install -e ."[all]"
 ```
 
-
-## Edit your instrument
-
-
+## Creating a New Instrument
+```bash
+create-bits "YOUR_INSTRUMENT_NAME" "src/"
+pip install -e ."[all]"
+```
 
 ## IPython console Start
 
@@ -37,8 +37,12 @@ Start JupyterLab, a Jupyter notebook server, or a notebook, VSCode.
 ## Starting the BITS Package
 
 ```py
-from instrument.startup import *
-RE(make_devices())  # create all the ophyd-style control devices
+from YOUR_INSTRUMENT_NAME.startup import *
+```
+
+For example, if you created an instrument named "test_instrument":
+```
+from test_instrument.startup import *
 ```
 
 ## Run Sim Plan Demo
