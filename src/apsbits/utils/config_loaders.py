@@ -119,28 +119,6 @@ def load_config_yaml(config_path: Optional[Path] = None) -> Dict[str, Any]:
         raise
 
 
-# def load_config_yaml_old(iconfig_yml=None) -> dict:
-#     """
-#     Load iconfig.yml (and other YAML) configuration files.
-
-#     Parameters
-#     ----------
-#     iconfig_yml: str
-#         Name of the YAML file to be loaded.  The name can be
-#         absolute or relative to the current working directory.
-#         Default: ``INSTRUMENT/demo_instrument/configs/iconfig.yml``
-#     """
-
-#     if iconfig_yml is None:
-#         path = DEFAULT_ICONFIG_YML_FILE
-#     else:
-#         path = pathlib.Path(iconfig_yml)
-#     if not path.exists():
-#         raise FileExistsError(f"Configuration file '{path}' does not exist.")
-#     iconfig = yaml.load(open(path, "r").read(), yaml.Loader)
-#     return iconfig
-
-
 # class IConfigFileVersionError(ValueError):
 #     """Configuration file version too old."""
 

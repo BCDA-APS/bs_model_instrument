@@ -88,7 +88,7 @@ addLoggingLevel("BSDEV", logging.INFO - 5)
 
 def configure_logging():
     """Configure logging as described in file."""
-    from .config_loaders import load_config_yaml
+    from apsbits.utils.config_loaders import load_config_yaml
 
     # (Re)configure the root logger.
     logger = logging.getLogger(__name__).root

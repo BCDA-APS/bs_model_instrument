@@ -65,3 +65,5 @@ else:
     from bluesky import plans as bp  # noqa: F401
 
     from apsbits.utils.controls_setup import oregistry  # noqa: F401
+
+oregistry.clear()
