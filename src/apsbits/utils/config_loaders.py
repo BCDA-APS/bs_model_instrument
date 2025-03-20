@@ -62,7 +62,7 @@ def load_config(config_path: Optional[Path] = None) -> Dict[str, Any]:
             _iconfig["ICONFIG_PATH"] = str(config_path)
             _iconfig["INSTRUMENT_PATH"] = str(config_path.parent)
             _iconfig["INSTRUMENT_FOLDER"] = str(config_path.parent.name)
-    
+
             return _iconfig
     except Exception as e:
         logger.error(f"Error loading configuration: {e}")

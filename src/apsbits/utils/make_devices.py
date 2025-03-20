@@ -22,14 +22,12 @@ from apstools.utils import dynamic_import
 from bluesky import plan_stubs as bps
 
 from apsbits.utils.aps_functions import host_on_aps_subnet
-from apsbits.utils.config_loaders import load_config_yaml
 from apsbits.utils.config_loaders import get_config
+from apsbits.utils.config_loaders import load_config_yaml
 from apsbits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
-
-
 
 
 def make_devices(*, pause: float = 1):
@@ -51,7 +49,6 @@ def make_devices(*, pause: float = 1):
 
     logger.debug("(Re)Loading local control objects.")
 
-
     iconfig = get_config()
 
     instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
@@ -61,14 +58,15 @@ def make_devices(*, pause: float = 1):
     logger.debug("Loading %r.", device_file_path)
 
     yield from run_blocking_function(
-        _loader, configs_path / device_file_path, main=True)
+        _loader, configs_path / device_file_path, main=True
+    )
 
     aps_control_devices_files = iconfig.get("APS_DEVICES_FILES", None)
     if aps_control_devices_files and host_on_aps_subnet():
-            for device_file in aps_control_devices_files:
-                yield from run_blocking_function(
-                    _loader, configs_path / device_file, main=True
-                )
+        for device_file in aps_control_devices_files:
+            yield from run_blocking_function(
+                _loader, configs_path / device_file, main=True
+            )
 
     if pause > 0:
         logger.debug(
