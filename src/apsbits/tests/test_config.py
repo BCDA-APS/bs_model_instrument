@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 import tomli
+import tomli_w
 import yaml
 
 from apsbits.utils.config_loaders import load_config
@@ -43,7 +44,7 @@ def toml_config_file():
     }
 
     with tempfile.NamedTemporaryFile(mode="wb", suffix=".toml", delete=False) as f:
-        f.write(tomli.dumps(config))
+        f.write(tomli_w.dumps(config).encode("utf-8"))
         path = pathlib.Path(f.name)
 
     yield path

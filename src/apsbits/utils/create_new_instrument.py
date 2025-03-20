@@ -15,9 +15,9 @@ from pathlib import Path
 from typing import Any
 
 try:
-    import toml
+    import tomli
 except ImportError:
-    print("Missing 'toml' package. Install with: pip install toml")
+    print("Missing 'tomli' package. Install with: pip install tomli")
     sys.exit(1)
 
 
@@ -46,7 +46,7 @@ def update_pyproject(
     :return: None
     """
     with pyproject_path.open("r", encoding="utf-8") as file:
-        config: dict[str, Any] = toml.load(file)
+        config: dict[str, Any] = tomli.load(file)
 
     config.setdefault("tool", {})
     # Update instruments section
@@ -63,7 +63,7 @@ def update_pyproject(
     pkg_dir[instrument_name] = relative_path
 
     with pyproject_path.open("w", encoding="utf-8") as file:
-        toml.dump(config, file)
+        tomli.dump(config, file)
 
 
 def update_templatesyncignore(relative_path: str) -> None:

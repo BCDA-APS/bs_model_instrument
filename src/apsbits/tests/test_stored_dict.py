@@ -1,23 +1,20 @@
 """
 Test the utils.stored_dict module.
 """
-
 import pathlib
 import tempfile
 import time
 from contextlib import nullcontext as does_not_raise
 
 import pytest
-import yaml
 
+from apsbits.utils.config_loaders import load_config_yaml
 from apsbits.utils.stored_dict import StoredDict
 
 
 def luftpause(delay=0.05):
     """A brief wait for content to flush to storage."""
     time.sleep(max(0, delay))
-
-
 @pytest.fixture
 def md_file():
     """Provide a temporary file (deleted on close)."""
@@ -27,17 +24,10 @@ def md_file():
         delete=False,
     )
     path = pathlib.Path(tfile.name)
-    tfile.close()  # Close the file to ensure it's empty
     yield pathlib.Path(tfile.name)
 
     if path.exists():
         path.unlink()  # delete the file
-
-
-@pytest.fixture(autouse=True)
-def setup_test_config(monkeypatch):
-    """Set up a test configuration."""
-    monkeypatch.setattr("apsbits.utils.config_loaders._iconfig", {})
 
 
 def test_StoredDict(md_file):
@@ -47,7 +37,7 @@ def test_StoredDict(md_file):
 
     sdict = StoredDict(md_file, delay=0.2, title="unit testing")
     assert sdict is not None
-    assert len(sdict) == 0  # Should be empty since we're using a new file
+    assert len(sdict) == 0
     assert sdict._delay == 0.2
     assert sdict._title == "unit testing"
     assert len(open(md_file).read().splitlines()) == 0  # still empty
@@ -55,51 +45,55 @@ def test_StoredDict(md_file):
     assert not sdict.sync_in_progress
 
     # Write an empty dictionary.
-    sdict.sync()
-    assert len(open(md_file).read().splitlines()) > 0  # not empty
+    sdict.flush()
+    luftpause()
+    buf = open(md_file).read().splitlines()
+    assert len(buf) == 4, f"{buf=}"
+    assert buf[-1] == "{}"  # The empty dict.
+    assert buf[0].startswith("# ")
+    assert buf[1].startswith("# ")
+    assert "unit testing" in buf[0]
 
-    # Write a key-value pair.
-    sdict["a"] = "b"
-    assert sdict["a"] == "b"
-    assert len(sdict) == 1
-    assert sdict.get("a") == "b"
-    assert sdict.get("b") is None
-    assert sdict.get("b", "c") == "c"
+    # Add a new {key: value} pair.
+    assert not sdict.sync_in_progress
+    sdict["a"] = 1
+    assert sdict.sync_in_progress
+    sdict.flush()
+    assert time.time() > sdict._sync_deadline
+    luftpause()
+    assert not sdict.sync_in_progress
+    assert len(open(md_file).read().splitlines()) == 4
+
+    # Change the only value.
+    sdict["a"] = 2
+    sdict.flush()
+    luftpause()
+    assert len(open(md_file).read().splitlines()) == 4  # Still.
+
+    # Add another key.
+    sdict["bee"] = "bumble"
+    sdict.flush()
+    print(f"\n\nthis is the md_file: {md_file}\n\n")
+    luftpause()
+    assert len(open(md_file).read().splitlines()) == 5
 
     # Test _delayed_sync_to_storage.
     sdict["bee"] = "queen"
-    luftpause(sdict._delay / 2)
-    with open(md_file) as f:
-        data = yaml.safe_load(f)
-        assert len(data) == 2  # a & bee
-        assert "a" in data
-        assert data["bee"] == "queen"  # The new value.
+    md = load_config_yaml(md_file)
+    assert len(md) == 2  # a & bee
+    assert "a" in md
+    assert md["bee"] == "bumble"  # The old value.
 
-    # Test context manager.
-    with StoredDict(md_file) as sdict:
-        sdict["c"] = "d"
-    with open(md_file) as f:
-        data = yaml.safe_load(f)
-        assert "c" in data
-        assert data["c"] == "d"
+    time.sleep(sdict._delay / 2)
+    # Still not written ...
+    assert load_config_yaml(md_file)["bee"] == "bumble"
 
-    # Test update method.
-    sdict.update({"e": "f", "g": "h"})
-    luftpause(sdict._delay / 2)
-    with open(md_file) as f:
-        data = yaml.safe_load(f)
-        assert "e" in data
-        assert "g" in data
-        assert data["e"] == "f"
-        assert data["g"] == "h"
+    time.sleep(sdict._delay)
+    # Should be written by now.
+    assert load_config_yaml(md_file)["bee"] == "queen"
 
-    # Test delete.
-    del sdict["a"]
-    assert "a" not in sdict
-    luftpause(sdict._delay / 2)
-    with open(md_file) as f:
-        data = yaml.safe_load(f)
-        assert "a" not in data
+    del sdict["bee"]  # __delitem__
+    assert "bee" not in sdict  # __getitem__
 
 
 @pytest.mark.parametrize(
@@ -124,16 +118,12 @@ def test_set_exceptions(md, xcept, text, md_file):
     with context as reason:
         sdict.update(md)
     assert text in str(reason), f"{reason=}"
-
-
 def test_popitem(md_file):
     """Can't popitem from empty dict."""
     sdict = StoredDict(md_file, delay=0.2, title="unit testing")
     with pytest.raises(KeyError) as reason:
         sdict.popitem()
     assert "dictionary is empty" in str(reason), f"{reason=}"
-
-
 def test_repr(md_file):
     """__repr__"""
     sdict = StoredDict(md_file, delay=0.1, title="unit testing")

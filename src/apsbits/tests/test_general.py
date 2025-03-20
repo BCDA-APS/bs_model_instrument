@@ -8,7 +8,7 @@ import time
 
 import pytest
 
-from apsbits.core.config import get_config
+from apsbits.utils.config_loaders import get_config
 from apsbits.demo_instrument.plans.sim_plans import sim_count_plan
 from apsbits.demo_instrument.plans.sim_plans import sim_print_plan
 from apsbits.demo_instrument.plans.sim_plans import sim_rel_scan_plan
