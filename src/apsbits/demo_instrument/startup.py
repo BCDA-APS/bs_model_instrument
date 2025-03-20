@@ -67,3 +67,5 @@ else:
     from apsbits.utils.controls_setup import oregistry  # noqa: F401
 
 oregistry.clear()
+
+RE(make_devices())
