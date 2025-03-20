@@ -34,6 +34,6 @@ def runengine_with_devices() -> Any:
     instrument_path = Path(__file__).parent.parent / "demo_instrument"
     iconfig_path = instrument_path / "configs" / "iconfig.yml"
     load_config(iconfig_path)
-    
+
     RE(make_devices())
     return RE
