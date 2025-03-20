@@ -10,8 +10,9 @@ Template of a Bluesky Data Acquisition Instrument in console, notebook, &
 queueserver.
 
 ## Installing the BITS Package for Development
-
-```bash
+```
+git clone github.com:BCDA-APS/BITS.git
+cd BITS
 conda create -y -n BITS_env python=3.11 pyepics
 conda activate BITS_env
 pip install -e ."[all]"
@@ -59,13 +60,6 @@ RE(sim_rel_scan_plan())
 
 See this [example](./docs/source/demo.ipynb).
 
-## Configuration files
-
-The files that can be configured to adhere to your preferences are:
-
-- `configs/iconfig.yml` - configuration for data collection
-- `configs/logging.yml` - configuration for session logging to console and/or files
-- `qserver/qs-config.yml`    - contains all configuration of the QS host process. See the [documentation](https://blueskyproject.io/bluesky-queueserver/manager_config.html) for more details of the configuration.
 
 ## queueserver
 
@@ -89,28 +83,6 @@ To run the gui client for the queueserver you can use the next command inside th
 
 ```bash
 queue-monitor &
-```
-
-### Shell script explained
-
-A [shell script](./qserver/qs_host.sh) is used to start the QS host process. Below
-are all the command options, and what they do.
-
-```bash
-(bstest) $ ./qserver/qs_host.sh help
-Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
-
-    COMMANDS
-        console   attach to process console if process is running in screen
-        checkup   check that process is running, restart if not
-        restart   restart process
-        run       run process in console (not screen)
-        start     start process
-        status    report if process is running
-        stop      stop process
-
-    OPTIONAL TERMS
-        NAME      name of process (default: bluesky_queueserver-)
 ```
 
 Alternatively, run the QS host's startup command directly within the `./qserver/`
@@ -148,58 +120,3 @@ Use this command to build the documentation locally:
 ```bash
 make -C docs clean html
 ```
-
-Once the documentation builds, view the HTML pages using your web browser:
-
-```bash
-BROWSER ./docs/build/html/index.html &
-```
-
-### Adding to the documentation source
-
-The documentation source is located in files and directories under
-`./docs/source`.  Various examples are provided.
-
-Documentation can be added in these formats:
-[`.rst`](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
-(reStructured text), [`.md`](https://en.wikipedia.org/wiki/Markdown) (markdown),
-and [`.ipynb`](https://jupyter.org/) (Jupyter notebook). For more information,
-see the [Sphinx](https://www.sphinx-doc.org/) documentation.
-
-## Warnings
-
-### Bluesky Queueserver
-
-The QS host process writes files into the `qserver/` directory. This directory can be
-relocated. However, it should not be moved into the instrument package since
-that might be installed into a read-only directory.
-
-## How-To Guides
-### How to use the template
-
-Consider renaming this `instrument` package to be more clear that is specific to *this*
-instrument.  This will be the name by which it is `pip` installed and also used with
-`import`.  Let's use an example instrument package name `my_instrument` below to show which parts are edited.
-
-1) Click on use as template button
-2) Adjust the following parameters in the following files:
-    - `pyproject.toml`
-        - `[project]` `name =` *example: `my_instrument`*
-        - `[project.urls]`  *change URLs for your repo*
-        - `[tool.setuptools]` `package-dir = {"instrument" = "src/instrument"}` *example: `{"my_instrument" = "src/instrument"}`*
-    - `src/instrument/init.py`
-        - `__package__ = "instrument"` *example: `"my_instrument"`*
-    - `src/instrument/configs/iconfig.yml`
-        - `DATABROKER_CATALOG:` *change from `temp` to your catalog's name*
-        - `beamline_id:` *one word beamline name (such as known by APS scheduling system)*
-        - `instrument_name:` *descriptive name of your beamline*
-        - `DM_SETUP_FILE:` *Path to DM bash setup file, comment out if you do not have*
-        - `BEC:` *adjust for your preferences*
-    - `qserver/qs-config.yml`
-        - `startup_module: instrument.startup` *example: `my_instrument.startup`*
-    - `docs/source/conf.py`
-        - `import instrument` *example `import my_instrument`*
-        - `project = "instrument"` *example: `"my_instrument"`*
-        - `version = instrument.__version__` *example: `my_instrument.__version__`*
-
-- [APS Data Management Plans](./docs/source/guides/dm.md)
