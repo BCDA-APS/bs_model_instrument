@@ -5,6 +5,7 @@ Here is just enough testing to get a CI workflow started. More are possible.
 """
 
 import time
+from pathlib import Path
 
 import pytest
 
@@ -18,13 +19,18 @@ from apsbits.demo_instrument.startup import running_in_queueserver
 from apsbits.demo_instrument.startup import sd
 from apsbits.demo_instrument.startup import specwriter
 from apsbits.utils.config_loaders import get_config
+from apsbits.utils.config_loaders import load_config
 
 
 def test_startup(runengine_with_devices: object) -> None:
     """
     Test that standard startup works and the RunEngine has initialized the devices.
+
+    Parameters
+    ----------
+    runengine_with_devices : object
+        Fixture providing initialized RunEngine with devices.
     """
-    # The fixture ensures that runengine_with_devices is initialized.
     assert runengine_with_devices is not None
     assert cat is not None
     assert bec is not None
