@@ -1,17 +1,12 @@
 """
 Storage-backed Dictionary
 =========================
-
 A dictionary that writes its contents to YAML file.
-
 Replaces ``bluesky.utils.PersistentDict``.
-
 * Contents must be JSON serializable.
 * Contents stored in a single human-readable YAML file.
 * Sync to disk shortly after dictionary is updated.
-
 .. autosummary::
-
     ~StoredDict
 """
 
@@ -35,31 +30,22 @@ logger.bsdev(__file__)
 class StoredDict(collections.abc.MutableMapping):
     """
     Dictionary that syncs to storage.
-
     .. autosummary::
-
         ~flush
         ~popitem
         ~reload
-
     .. rubric:: Static methods
-
     All support for the YAML format is implemented in the static methods.
-
     .. autosummary::
-
         ~dump
         ~load
-
     ----
     """
 
     def __init__(self, file, delay=5, title=None, serializable=True):
         """
         StoredDict : Dictionary that syncs to storage
-
         PARAMETERS
-
         file : str or pathlib.Path
             Name of file to store dictionary contents.
         delay : number
@@ -75,7 +61,6 @@ class StoredDict(collections.abc.MutableMapping):
         self._delay = max(0, delay)
         self._title = title or f"Written by {self.__class__.__name__}."
         self.test_serializable = serializable
-
         self.sync_in_progress = False
         self._sync_deadline = time.time()
         self._sync_key = f"sync_agent_{id(self):x}"
@@ -114,13 +99,11 @@ class StoredDict(collections.abc.MutableMapping):
 
         if self.test_serializable:
             json.dumps({key: value})
-
         self._cache[key] = value  # Store the new (or revised) content.
 
         # Reset the deadline.
         self._sync_deadline = time.time() + self._delay
         logger.debug("new sync deadline in %f s.", self._delay)
-
         if not self.sync_in_progress:
             # Start the sync_agent (thread).
             self._delayed_sync_to_storage()
@@ -128,7 +111,6 @@ class StoredDict(collections.abc.MutableMapping):
     def _delayed_sync_to_storage(self):
         """
         Sync the metadata to storage.
-
         Start a time-delay thread.  New writes to the metadata dictionary will
         extend the deadline.  Sync once the deadline is reached.
         """

@@ -17,13 +17,12 @@ import pathlib
 import apstools.callbacks
 import apstools.utils
 
-from apsbits.core.run_engine_init import RE
-from apsbits.utils.config_loaders import iconfig
+from apsbits.utils.config_loaders import get_config
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
-
+iconfig = get_config()
 file_extension = iconfig.get("SPEC_DATA_FILES", {}).get("FILE_EXTENSION", "dat")
 
 
@@ -62,6 +61,30 @@ def newSpecFile(title, scan_id=None, RE=None):
     logger.info(f"File will be {handled} at end of next bluesky scan.")
 
 
+# Add this function to specwriter.py
+def init_specwriter_with_RE(RE):
+    """Initialize specwriter with the run engine."""
+
+    # make the SPEC file in current working directory (assumes is writable)
+    specwriter.newfile(specwriter.spec_filename)
+
+    if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
+        RE.subscribe(specwriter.receiver)  # write data to SPEC files
+        logger.info("SPEC data file: %s", specwriter.spec_filename.resolve())
+
+    try:
+        # feature new in apstools 1.6.14
+        from apstools.plans import label_stream_wrapper
+
+        def motor_start_preprocessor(plan):
+            """Record motor positions at start of each run."""
+            return label_stream_wrapper(plan, "motor", when="start")
+
+        RE.preprocessors.append(motor_start_preprocessor)
+    except Exception:
+        logger.warning("Could load support to log motors positions.")
+
+
 # write scans to SPEC data file
 try:
     # apstools >=1.6.21
@@ -72,22 +95,3 @@ except AttributeError:
 
 specwriter = _specwriter
 """The SPEC file writer object."""
-
-# make the SPEC file in current working directory (assumes is writable)
-specwriter.newfile(specwriter.spec_filename)
-
-if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
-    RE.subscribe(specwriter.receiver)  # write data to SPEC files
-    logger.info("SPEC data file: %s", specwriter.spec_filename.resolve())
-
-try:
-    # feature new in apstools 1.6.14
-    from apstools.plans import label_stream_wrapper
-
-    def motor_start_preprocessor(plan):
-        """Record motor positions at start of each run."""
-        return label_stream_wrapper(plan, "motor", when="start")
-
-    RE.preprocessors.append(motor_start_preprocessor)
-except Exception:
-    logger.warning("Could load support to log motors positions.")

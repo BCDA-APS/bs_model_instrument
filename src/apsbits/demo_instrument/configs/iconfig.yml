@@ -48,7 +48,6 @@ BEC:
 NEXUS_DATA_FILES:
     ENABLE: false
     FILE_EXTENSION: hdf
-    WARN_MISSING_CONTENT: true
 
 SPEC_DATA_FILES:
     ENABLE: true
@@ -59,8 +58,8 @@ SPEC_DATA_FILES:
 DM_SETUP_FILE: "/home/dm/etc/dm.setup.sh"
 
 ### Local OPHYD Device Control Yaml
-DEVICES_FILE: devices.yml
-APS_DEVICES_FILE: devices_aps_only.yml
+DEVICES_FILES: devices.yml
+APS_DEVICES_FILES: devices_aps_only.yml
 
 # ----------------------------------
 

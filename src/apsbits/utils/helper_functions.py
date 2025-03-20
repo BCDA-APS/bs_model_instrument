@@ -11,56 +11,66 @@ Generic utility helper functions
 """
 
 import logging
+import os
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from bluesky.magics import BlueskyMagics
-from bluesky_queueserver import is_re_worker_active
 from IPython import get_ipython
 
-from apsbits.utils.config_loaders import iconfig
+from apsbits.utils.config_loaders import get_config
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
 def register_bluesky_magics() -> None:
-    """
-    Register Bluesky magics if an IPython environment is detected.
-
-    This function registers the BlueskyMagics if get_ipython() returns a valid IPython
-      instance.
-    """
-    ipython = get_ipython()
-    if ipython is not None:
-        ipython.register_magics(BlueskyMagics)
+    """Register Bluesky IPython magics."""
+    try:
+        ip = get_ipython()
+        if ip is not None:
+            ip.register_magics(BlueskyMagics)
+            logger.info("Registered Bluesky IPython magics")
+    except Exception as e:
+        logger.warning("Could not register Bluesky IPython magics: %s", e)
 
 
 def running_in_queueserver() -> bool:
     """
-    Detect if running in the bluesky queueserver.
+    Check if we are running in a Bluesky queueserver.
 
     Returns:
-        bool: True if running in the queueserver, False otherwise.
+        True if running in a queueserver, False otherwise.
     """
-    try:
-        active: bool = is_re_worker_active()
-        return active
-    except Exception as cause:
-        print(f"{cause=}")
-        return False
+    return os.environ.get("QSERVER_URI") is not None
 
 
-def debug_python() -> None:
+def get_xmode_level() -> str:
+    """
+    Get the current XMode debug level.
+
+    Returns:
+        The current XMode debug level.
+    """
+    iconfig = get_config()
+    xmode_level: str = iconfig.get("XMODE_DEBUG_LEVEL", "Plain")
+    return xmode_level
+
+
+def debug_python(xmode_level: str = "Plain") -> None:
     """
     Enable detailed debugging for Python exceptions in the IPython environment.
 
-    This function adjusts the xmode settings for exception tracebacks based on the
-      configuration.
+    This function adjusts the xmode settings for exception tracebacks based on
+    the provided xmode_level argument.
+
+    Args:
+        xmode_level (str): The level of detail for exception tracebacks.
+                           Defaults to "Minimal".
     """
     ipython = get_ipython()
     if ipython is not None:
-        xmode_level: str = iconfig.get("XMODE_DEBUG_LEVEL", "Minimal")
+        xmode_level: str = get_xmode_level()
         ipython.run_line_magic("xmode", xmode_level)
         print("\nEnd of IPython settings\n")
         logger.bsdev("xmode exception level: '%s'", xmode_level)

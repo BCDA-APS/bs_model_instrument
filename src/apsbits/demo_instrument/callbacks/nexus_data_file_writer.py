@@ -1,25 +1,19 @@
 """
+Nexus data file writer callback.
 
-NeXus Writer
-============
-
-Write scan(s) to a NeXus/HDF5 file.
-
-.. autosummary::
-    :nosignatures:
-
-    ~MyNXWriter
-    ~nxwriter
+This module provides callbacks for writing data to Nexus data files.
 """
 
 import logging
 
-from apsbits.core.run_engine_init import RE
 from apsbits.utils.aps_functions import host_on_aps_subnet
-from apsbits.utils.config_loaders import iconfig
+from apsbits.utils.config_loaders import get_config
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
+
+# Get the configuration
+iconfig = get_config()
 
 
 if host_on_aps_subnet():
@@ -45,16 +39,20 @@ class MyNXWriter(NXWriter):
         return title
 
 
-nxwriter = MyNXWriter()  # create the callback instance
-"""The NeXus file writer object."""
+def nxwriter_init(RE):
+    """Initialize the Nexus data file writer callback."""
+    nxwriter = MyNXWriter()  # create the callback instance
+    """The NeXus file writer object."""
 
-if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
-    RE.subscribe(nxwriter.receiver)  # write data to NeXus files
+    if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
+        RE.subscribe(nxwriter.receiver)  # write data to NeXus files
 
-nxwriter.file_extension = iconfig.get("NEXUS_DATA_FILES", {}).get(
-    "FILE_EXTENSION", "hdf"
-)
-print("\n\n\n")
-print(nxwriter.file_extension)
-warn_missing = iconfig.get("NEXUS_DATA_FILES", {}).get("WARN_MISSING", False)
-nxwriter.warn_on_missing_content = warn_missing
+    nxwriter.file_extension = iconfig.get("NEXUS_DATA_FILES", {}).get(
+        "FILE_EXTENSION", "hdf"
+    )
+
+    print(nxwriter.file_extension)
+    warn_missing = iconfig.get("NEXUS_DATA_FILES", {}).get("WARN_MISSING", False)
+    nxwriter.warn_on_missing_content = warn_missing
+
+    return nxwriter

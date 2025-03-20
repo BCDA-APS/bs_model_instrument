@@ -9,12 +9,14 @@ Fixtures:
     runengine_with_devices: A RunEngine object in a session with devices configured.
 """
 
+from pathlib import Path
 from typing import Any
 
 import pytest
 
 from apsbits.demo_instrument.startup import RE
 from apsbits.demo_instrument.startup import make_devices
+from apsbits.utils.config_loaders import load_config
 
 
 @pytest.fixture(scope="session")
@@ -28,5 +30,10 @@ def runengine_with_devices() -> Any:
     Returns:
         Any: An instance of the RunEngine with devices configured.
     """
+    # Load the configuration before testing
+    instrument_path = Path(__file__).parent.parent / "demo_instrument"
+    iconfig_path = instrument_path / "configs" / "iconfig.yml"
+    load_config(iconfig_path)
+
     RE(make_devices())
     return RE

@@ -22,20 +22,12 @@ from apstools.utils import dynamic_import
 from bluesky import plan_stubs as bps
 
 from apsbits.utils.aps_functions import host_on_aps_subnet
+from apsbits.utils.config_loaders import get_config
 from apsbits.utils.config_loaders import load_config_yaml
-from apsbits.utils.context_aware import iconfig
-from apsbits.utils.context_aware import resolve_path
 from apsbits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
-
-# Get the main module (same as before)
-main_namespace = sys.modules["__main__"]
-
-# Resolve device files directly using resolve_path
-local_control_devices_file = resolve_path(iconfig["DEVICES_FILE"])
-aps_control_devices_file = resolve_path(iconfig["APS_DEVICES_FILE"])
 
 
 def make_devices(*, pause: float = 1):
@@ -54,11 +46,26 @@ def make_devices(*, pause: float = 1):
         Wait 'pause' seconds (default: 1) for slow objects to connect.
 
     """
-    logger.debug("(Re)Loading local control objects.")
-    yield from run_blocking_function(_loader, local_control_devices_file, main=True)
 
-    if host_on_aps_subnet():
-        yield from run_blocking_function(_loader, aps_control_devices_file, main=True)
+    logger.debug("(Re)Loading local control objects.")
+
+    iconfig = get_config()
+
+    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
+    configs_path = instrument_path / "configs"
+    device_file_path = iconfig.get("DEVICES_FILES", [])
+    logger.debug("Loading %r.", device_file_path)
+
+    yield from run_blocking_function(
+        _loader, configs_path / device_file_path, main=True
+    )
+
+    aps_control_devices_files = iconfig.get("APS_DEVICES_FILES", None)
+    if aps_control_devices_files and host_on_aps_subnet():
+        for device_file in aps_control_devices_files:
+            yield from run_blocking_function(
+                _loader, configs_path / device_file, main=True
+            )
 
     if pause > 0:
         logger.debug(
@@ -85,9 +92,10 @@ def _loader(yaml_device_file, main=True):
     logger.debug("Devices file %r.", str(yaml_device_file))
     t0 = time.time()
     _instr.load(yaml_device_file)
-    logger.debug("Devices loaded in %.3f s.", time.time() - t0)
+    logger.info("Devices loaded in %.3f s.", time.time() - t0)
 
     if main:
+        main_namespace = sys.modules["__main__"]
         for label in oregistry.device_names:
             # add to __main__ namespace
             setattr(main_namespace, label, oregistry[label])

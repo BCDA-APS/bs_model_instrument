@@ -4,6 +4,8 @@ Test that instrument can be started.
 Here is just enough testing to get a CI workflow started. More are possible.
 """
 
+import time
+
 import pytest
 
 from apsbits.demo_instrument.plans.sim_plans import sim_count_plan
@@ -11,26 +13,30 @@ from apsbits.demo_instrument.plans.sim_plans import sim_print_plan
 from apsbits.demo_instrument.plans.sim_plans import sim_rel_scan_plan
 from apsbits.demo_instrument.startup import bec
 from apsbits.demo_instrument.startup import cat
-from apsbits.demo_instrument.startup import iconfig
 from apsbits.demo_instrument.startup import peaks
 from apsbits.demo_instrument.startup import running_in_queueserver
 from apsbits.demo_instrument.startup import sd
 from apsbits.demo_instrument.startup import specwriter
+from apsbits.utils.config_loaders import get_config
 
 
 def test_startup(runengine_with_devices: object) -> None:
     """
     Test that standard startup works and the RunEngine has initialized the devices.
+
+    Parameters
+    ----------
+    runengine_with_devices : object
+        Fixture providing initialized RunEngine with devices.
     """
-    # The fixture ensures that runengine_with_devices is initialized.
     assert runengine_with_devices is not None
     assert cat is not None
     assert bec is not None
     assert peaks is not None
     assert sd is not None
-    assert iconfig is not None
     assert specwriter is not None
 
+    iconfig = get_config()
     if iconfig.get("DATABROKER_CATALOG", "temp") == "temp":
         assert len(cat) == 0
     assert not running_in_queueserver()
@@ -49,17 +55,26 @@ def test_sim_plans(runengine_with_devices: object, plan: object, n_uids: int) ->
     Test supplied simulator plans using the RunEngine with devices.
     """
     bec.disable_plots()
+    # Get the initial number of runs in the catalog
     n_runs = len(cat)
     # Use the fixture-provided run engine to run the plan.
     uids = runengine_with_devices(plan())
     assert len(uids) == n_uids
-    assert len(cat) == n_runs + len(uids)
+    # Add a small delay to ensure data is saved
+    time.sleep(0.1)
+    # For sim_print_plan, we don't expect any new runs
+    if plan == sim_print_plan:
+        assert len(cat) == n_runs
+    else:
+        assert len(cat) == n_runs + len(uids)
 
 
 def test_iconfig() -> None:
     """
     Test the instrument configuration.
     """
+    iconfig = get_config()
+
     version: str = iconfig.get(
         "ICONFIG_VERSION", "0.0.0"
     )  # TODO: Will anyone ever have a wrong catalog version?
