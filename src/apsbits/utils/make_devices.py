@@ -21,9 +21,10 @@ from apstools.plans import run_blocking_function
 from apstools.utils import dynamic_import
 from bluesky import plan_stubs as bps
 
-from bits.utils.aps_functions import host_on_aps_subnet
-from bits.utils.config_loaders import get_config
-from bits.utils.controls_setup import oregistry  # noqa: F401
+from apsbits.utils.aps_functions import host_on_aps_subnet
+from apsbits.utils.config_loaders import load_config_yaml
+from apsbits.utils.config_loaders import get_config
+from apsbits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -53,13 +54,14 @@ def make_devices(*, pause: float = 1):
 
     iconfig = get_config()
 
-    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH"))
+    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
     configs_path = instrument_path / "configs"
+    print(configs_path)
+    device_file_path = iconfig.get("DEVICES_FILES", [])
+    logger.debug("Loading %r.", device_file_path)
 
-    for device_file in iconfig.get("DEVICE_FILES", []):
-        logger.debug("Loading %r.", device_file)
-        yield from run_blocking_function(
-            _loader, configs_path / device_file, main=False)
+    yield from run_blocking_function(
+        _loader, configs_path / device_file_path, main=True)
 
     aps_control_devices_files = iconfig.get("APS_DEVICES_FILES", None)
     if aps_control_devices_files and host_on_aps_subnet():
@@ -93,7 +95,7 @@ def _loader(yaml_device_file, main=True):
     logger.debug("Devices file %r.", str(yaml_device_file))
     t0 = time.time()
     _instr.load(yaml_device_file)
-    logger.debug("Devices loaded in %.3f s.", time.time() - t0)
+    logger.info("Devices loaded in %.3f s.", time.time() - t0)
 
     if main:
         main_namespace = sys.modules["__main__"]
