@@ -10,7 +10,7 @@ import pytest
 import tomli
 import yaml
 
-from apsbits.core.config import load_config
+from apsbits.utils.config_loaders import load_config
 
 if TYPE_CHECKING:
     pass
