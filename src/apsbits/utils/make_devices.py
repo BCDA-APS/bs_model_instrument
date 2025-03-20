@@ -1,73 +1,136 @@
 """
-Load device definitions from YAML files.
+Make devices from YAML files
+=============================
 
-This module provides functionality to load device definitions from YAML files
-and register them with the ophyd registry.
+Construct ophyd-style devices from simple specifications in YAML files.
+
+.. autosummary::
+    :nosignatures:
+
+    ~make_devices
+    ~Instrument
 """
 
 import logging
-from pathlib import Path
-from typing import Generator
+import pathlib
+import sys
+import time
 
-from bluesky.utils import Msg
+import guarneri
+from apstools.plans import run_blocking_function
+from apstools.utils import dynamic_import
+from bluesky import plan_stubs as bps
 
-from apsbits.utils.config_loaders import get_config
-from apsbits.utils.controls_setup import oregistry
+from bits.utils.aps_functions import host_on_aps_subnet
+from bits.utils.config_loaders import get_config
+from bits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-def make_devices() -> Generator[Msg, None, None]:
-    """
-    Load device definitions from YAML files and register them with the ophyd registry.
 
-    This is a Bluesky plan that loads device definitions. Since this is just loading
-    device definitions and not collecting data, it doesn't create a run.
 
-    Returns:
-        A generator that yields Bluesky messages.
+def make_devices(*, pause: float = 1):
     """
+    (plan stub) Create the ophyd-style controls for this instrument.
+
+    Feel free to modify this plan to suit the needs of your instrument.
+
+    EXAMPLE::
+
+        RE(make_devices())
+
+    PARAMETERS
+
+    pause : float
+        Wait 'pause' seconds (default: 1) for slow objects to connect.
+
+    """
+
+    logger.debug("(Re)Loading local control objects.")
+
+
     iconfig = get_config()
 
-    # Load local control devices
-    local_control_devices_file = Path(iconfig.get("DEVICES_FILE", "")).resolve()
-    if local_control_devices_file.exists():
-        logger.info(
-            "Loading local control devices from: %s", local_control_devices_file
+    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH"))
+    configs_path = instrument_path / "configs"
+
+    for device_file in iconfig.get("DEVICE_FILES", []):
+        logger.debug("Loading %r.", device_file)
+        yield from run_blocking_function(
+            _loader, configs_path / device_file, main=False)
+
+    aps_control_devices_files = iconfig.get("APS_DEVICES_FILES", None)
+    if aps_control_devices_files and host_on_aps_subnet():
+            for device_file in aps_control_devices_files:
+                yield from run_blocking_function(
+                    _loader, configs_path / device_file, main=True
+                )
+
+    if pause > 0:
+        logger.debug(
+            "Waiting %s seconds for slow objects to connect.",
+            pause,
         )
-        _load_devices(local_control_devices_file)
+        yield from bps.sleep(pause)
 
-    # Load APS control devices
-    aps_control_devices_file = Path(iconfig.get("APS_DEVICES_FILE", "")).resolve()
-    if aps_control_devices_file.exists():
-        logger.info("Loading APS control devices from: %s", aps_control_devices_file)
-        _load_devices(aps_control_devices_file)
-
-    # Yield a null message to make this a valid plan
-    yield Msg("null")
+    # Configure any of the controls here, or in plan stubs
 
 
-def _load_devices(devices_file: Path) -> None:
+def _loader(yaml_device_file, main=True):
     """
-    Load device definitions from a YAML file.
+    Load our ophyd-style controls as described in a YAML file.
 
-    Args:
-        devices_file: Path to the devices YAML file.
+    PARAMETERS
+
+    yaml_device_file : str or pathlib.Path
+        YAML file describing ophyd-style controls to be created.
+    main : bool
+        If ``True`` add these devices to the ``__main__`` namespace.
+
     """
-    import yaml
+    logger.debug("Devices file %r.", str(yaml_device_file))
+    t0 = time.time()
+    _instr.load(yaml_device_file)
+    logger.debug("Devices loaded in %.3f s.", time.time() - t0)
 
-    try:
-        with open(devices_file, "r") as f:
-            devices = yaml.safe_load(f)
+    if main:
+        main_namespace = sys.modules["__main__"]
+        for label in oregistry.device_names:
+            # add to __main__ namespace
+            setattr(main_namespace, label, oregistry[label])
 
-        for name, device_config in devices.items():
-            if name not in oregistry:
-                logger.info("Registering device: %s", name)
-                oregistry[name] = device_config
-            else:
-                logger.warning("Device already registered: %s", name)
 
-    except Exception as e:
-        logger.error("Error loading devices from %s: %s", devices_file, e)
-        raise
+class Instrument(guarneri.Instrument):
+    """Custom YAML loader for guarneri."""
+
+    def parse_yaml_file(self, config_file: pathlib.Path | str) -> list[dict]:
+        """Read device configurations from YAML format file."""
+        if isinstance(config_file, str):
+            config_file = pathlib.Path(config_file)
+
+        def parser(creator, specs):
+            if creator not in self.device_classes:
+                self.device_classes[creator] = dynamic_import(creator)
+            entries = [
+                {
+                    "device_class": creator,
+                    "args": (),  # ALL specs are kwargs!
+                    "kwargs": table,
+                }
+                for table in specs
+            ]
+            return entries
+
+        devices = [
+            device
+            # parse the file
+            for k, v in load_config_yaml(config_file).items()
+            # each support type (class, factory, function, ...)
+            for device in parser(k, v)
+        ]
+        return devices
+
+
+_instr = Instrument({}, registry=oregistry)  # singleton
