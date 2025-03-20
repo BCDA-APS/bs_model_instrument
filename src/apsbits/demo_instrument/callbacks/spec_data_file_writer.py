@@ -59,17 +59,9 @@ def newSpecFile(title, scan_id=None, RE=None):
     logger.info(f"SPEC file name : {specwriter.spec_filename}")
     logger.info(f"File will be {handled} at end of next bluesky scan.")
 
-def specwriter_init(RE):
-# write scans to SPEC data file
-    try:
-        # apstools >=1.6.21
-        _specwriter = apstools.callbacks.SpecWriterCallback2()
-    except AttributeError:
-        # apstools <1.6.21
-        _specwriter = apstools.callbacks.SpecWriterCallback()
-
-    specwriter = _specwriter
-    """The SPEC file writer object."""
+# Add this function to specwriter.py
+def init_specwriter_with_RE(RE):
+    """Initialize specwriter with the run engine."""
 
     # make the SPEC file in current working directory (assumes is writable)
     specwriter.newfile(specwriter.spec_filename)
@@ -89,3 +81,14 @@ def specwriter_init(RE):
         RE.preprocessors.append(motor_start_preprocessor)
     except Exception:
         logger.warning("Could load support to log motors positions.")
+
+# write scans to SPEC data file
+try:
+    # apstools >=1.6.21
+    _specwriter = apstools.callbacks.SpecWriterCallback2()
+except AttributeError:
+    # apstools <1.6.21
+    _specwriter = apstools.callbacks.SpecWriterCallback()
+
+specwriter = _specwriter
+"""The SPEC file writer object."""
