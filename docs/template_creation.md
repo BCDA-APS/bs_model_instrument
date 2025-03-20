@@ -28,4 +28,4 @@ This guide explains how to create a new repository from this template.
 
 8. Optionally, if the personal account or organization in which you're creating uses any GitHub Apps from GitHub Marketplace, select any apps you'd like to use in the repository.
 
-9. Click "Create repository from template". 
+9. Click "Create repository from template".
