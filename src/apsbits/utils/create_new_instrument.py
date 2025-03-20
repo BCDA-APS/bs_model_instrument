@@ -15,9 +15,9 @@ from pathlib import Path
 from typing import Any
 
 try:
-    import tomli
+    import toml
 except ImportError:
-    print("Missing 'tomli' package. Install with: pip install tomli")
+    print("Missing 'toml' package. Install with: pip install toml")
     sys.exit(1)
 
 
@@ -46,7 +46,7 @@ def update_pyproject(
     :return: None
     """
     with pyproject_path.open("r", encoding="utf-8") as file:
-        config: dict[str, Any] = tomli.load(file)
+        config: dict[str, Any] = toml.load(file)
 
     config.setdefault("tool", {})
     # Update instruments section
@@ -63,7 +63,7 @@ def update_pyproject(
     pkg_dir[instrument_name] = relative_path
 
     with pyproject_path.open("w", encoding="utf-8") as file:
-        tomli.dump(config, file)
+        toml.dump(config, file)
 
 
 def update_templatesyncignore(relative_path: str) -> None:
@@ -106,18 +106,14 @@ def main() -> None:
         sys.exit(1)
 
     # Resolve the template path from the installed apsbits package.
-    # __file__ is located at apsbits/utils/create_new_instrument.py, so moving
-    # two levels up points to the root of the apsbits package where
-    # demo_instrument is expected to be.
-    template_path: Path = (
-        Path(__file__).resolve().parent.parent / "demo_instrument"
-    ).resolve()
+    # __file__ is located at apsbits/utils/create_new_instrument.py, so moving two levels up
+    # points to the root of the apsbits package where demo_instrument is expected to be.
+    template_path: Path = (Path(__file__).resolve().parent.parent / "demo_instrument").resolve()
     destination_parent: Path = Path(args.dest).resolve()
     new_instrument_dir: Path = destination_parent / args.name
 
     print(
-        f"Creating instrument '{args.name}' from '{template_path}' "
-        f"into '{new_instrument_dir}'."
+        f"Creating instrument '{args.name}' from '{template_path}' into '{new_instrument_dir}'."
     )
 
     if not template_path.exists():
