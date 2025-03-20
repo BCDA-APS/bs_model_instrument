@@ -53,7 +53,6 @@ def make_devices(*, pause: float = 1):
 
     instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
     configs_path = instrument_path / "configs"
-    print(configs_path)
     device_file_path = iconfig.get("DEVICES_FILES", [])
     logger.debug("Loading %r.", device_file_path)
 
