@@ -18,7 +18,7 @@ from apsbits.utils.aps_functions import aps_dm_setup
 from apsbits.utils.config_loaders import get_config
 from apsbits.utils.helper_functions import register_bluesky_magics
 from apsbits.utils.helper_functions import running_in_queueserver
-from apsbits.utils.make_devices import make_devices  # noqa: F401
+from apsbits.utils.make_devices import make_devices
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -69,7 +69,7 @@ else:
     from bluesky import plan_stubs as bps  # noqa: F401
     from bluesky import plans as bp  # noqa: F401
 
-    from apsbits.utils.controls_setup import oregistry  # noqa: F401
+    from apsbits.utils.controls_setup import oregistry
 
 oregistry.clear()
 
