@@ -25,6 +25,7 @@ logger.bsdev(__file__)
 iconfig = get_config()
 file_extension = iconfig.get("SPEC_DATA_FILES", {}).get("FILE_EXTENSION", "dat")
 
+
 def spec_comment(comment, doc=None):
     """Make it easy for user to add comments to the data file."""
     apstools.callbacks.spec_comment(comment, doc, specwriter)
@@ -59,6 +60,7 @@ def newSpecFile(title, scan_id=None, RE=None):
     logger.info(f"SPEC file name : {specwriter.spec_filename}")
     logger.info(f"File will be {handled} at end of next bluesky scan.")
 
+
 # Add this function to specwriter.py
 def init_specwriter_with_RE(RE):
     """Initialize specwriter with the run engine."""
@@ -81,6 +83,7 @@ def init_specwriter_with_RE(RE):
         RE.preprocessors.append(motor_start_preprocessor)
     except Exception:
         logger.warning("Could load support to log motors positions.")
+
 
 # write scans to SPEC data file
 try:
