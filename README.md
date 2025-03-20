@@ -28,8 +28,12 @@ pip install apsbits
 ```
 
 
-## Edit your instrument
-
+## Creating a New Instrument
+```bash
+export YOUR_INSTRUMENT_NAME=YOUR_INSTRUMENT_NAME
+create-bits $YOUR_INSTRUMENT_NAME "src/"
+pip install -e ."[all]"
+```
 
 
 ## IPython console Start
@@ -46,8 +50,7 @@ Start JupyterLab, a Jupyter notebook server, or a notebook, VSCode.
 ## Starting the BITS Package
 
 ```py
-from instrument.startup import *
-RE(make_devices())  # create all the ophyd-style control devices
+from YOUR_INSTRUMENT_NAME.startup import *
 ```
 
 ## Run Sim Plan Demo
