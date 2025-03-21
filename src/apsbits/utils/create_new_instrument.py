@@ -47,16 +47,16 @@ def create_qserver(qserver_dir: Path, name: str) -> None:
 
     # Update startup module in qs-config.yml
     qs_config_path = qserver_dir / "qs-config.yml"
-    if qs_config_path.exists():
-        with open(qs_config_path, "r") as f:
-            config_contents = f.read()
-        # Replace demo_instrument with new name in startup module path
-        updated_contents = config_contents.replace(
-            "startup_module: instrument.startup", f"startup_module: {name}.startup"
-        )
 
-        with open(qs_config_path, "w") as f:
-            f.write(updated_contents)
+    with open(qs_config_path, "r") as f:
+        config_contents = f.read()
+    # Replace demo_instrument with new name in startup module path
+    updated_contents = config_contents.replace(
+        "startup_module: demo_instrument.startup", f"startup_module: {name}.startup"
+    )
+
+    with open(qs_config_path, "w") as f:
+        f.write(updated_contents)
 
     new_script_path = qserver_dir / "qs_host.sh"
 

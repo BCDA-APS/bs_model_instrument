@@ -41,7 +41,7 @@ run_engine:
 
 startup:
     keep_re: true
-    startup_module: instrument.startup
+    startup_module: demo_instrument.startup
     existing_plans_and_devices_path: ./
     user_group_permissions_path: ./
 
