@@ -5,9 +5,9 @@
 
 SHELL_SCRIPT_NAME=${BASH_SOURCE:-${0}}
 SCRIPT_DIR="$( cd -- "$( dirname -- "${SHELL_SCRIPT_NAME}" )" &> /dev/null && pwd )"
-# CONFIGS_DIR="${SCRIPT_DIR}"/../src/instrument/configs
-command="import pathlib, instrument;"
-command+="print(pathlib.Path(instrument.__file__).parent / 'configs')"
+# CONFIGS_DIR="${SCRIPT_DIR}"/../src/demo_instrument/configs
+command="import pathlib, demo_instrument;"
+command+="print(pathlib.Path(demo_instrument.__file__).parent / 'configs')"
 CONFIGS_DIR=$(python -c "${command}")
 
 ###-----------------------------

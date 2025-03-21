@@ -31,7 +31,7 @@ def copy_instrument(destination_dir: Path) -> None:
     shutil.copytree(str(demo_template_path), str(destination_dir))
 
 
-def create_qserver_config(destination_dir: Path) -> None:
+def create_qserver_config(destination_dir: Path, name: str) -> None:
     """
     Create a qserver config file in the destination directory.
     """
@@ -46,6 +46,20 @@ def create_qserver_config(destination_dir: Path) -> None:
     # Copy all yml files from demo_qserver to destination qserver dir
     for yml_file in demo_qserver_path.glob("*.yml"):
         shutil.copy2(yml_file, qserver_dir)
+
+    # Update startup module in qs-config.yml
+    qs_config_path = qserver_dir / "qs-config.yml"
+    if qs_config_path.exists():
+        with open(qs_config_path, "r") as f:
+            config_contents = f.read()
+
+        # Replace demo_instrument with new name in startup module path
+        updated_contents = config_contents.replace(
+            "startup_module: instrument.startup", f"startup_module: {name}.startup"
+        )
+
+        with open(qs_config_path, "w") as f:
+            f.write(updated_contents)
 
 
 def create_qserver_startup_script(new_scripts_dir: Path, name: str) -> None:
@@ -124,7 +138,7 @@ def main() -> None:
         sys.exit(1)
 
     try:
-        create_qserver_config(new_instrument_dir)
+        create_qserver_config(new_instrument_dir, args.name)
         print(f"Qserver config created in '{new_instrument_dir}'.")
     except Exception as exc:
         print(f"Error creating qserver config: {exc}", file=sys.stderr)
