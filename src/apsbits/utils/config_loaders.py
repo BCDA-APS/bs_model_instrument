@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import Optional
+import pathlib
 
 import tomli  # type: ignore
 import yaml
@@ -89,7 +90,36 @@ def update_config(updates: Dict[str, Any]) -> None:
     _iconfig.update(updates)
 
 
-def load_config_yaml(config_path: Optional[Path] = None) -> Dict[str, Any]:
+# def load_config_yaml(config_path: Optional[Path] = None) -> Dict[str, Any]:
+#     """
+#     Load configuration from a YAML file.
+
+#     Args:
+#         config_path: Path to the configuration file.
+
+#     Returns:
+#         The loaded configuration dictionary.
+
+#     Raises:
+#         FileNotFoundError: If the configuration file does not exist.
+#     """
+#     if config_path is None:
+#         raise ValueError("config_path must be provided")
+
+#     if not config_path.exists():
+#         raise FileNotFoundError(f"Configuration file not found at {config_path}")
+
+#     try:
+#         with open(config_path) as f:
+#             config = yaml.safe_load(f)
+#             if config is None:
+#                 config = {}
+#             return config
+#     except Exception as e:
+#         logger.error(f"Error loading configuration: {e}")
+#         raise
+
+def load_config_yaml(config_obj) -> dict:
     """
     Load configuration from a YAML file.
 
@@ -102,22 +132,24 @@ def load_config_yaml(config_path: Optional[Path] = None) -> Dict[str, Any]:
     Raises:
         FileNotFoundError: If the configuration file does not exist.
     """
-    if config_path is None:
+
+    if config_obj is None:
         raise ValueError("config_path must be provided")
 
-    if not config_path.exists():
-        raise FileNotFoundError(f"Configuration file not found at {config_path}")
-
     try:
-        with open(config_path) as f:
-            config = yaml.safe_load(f)
-            if config is None:
-                config = {}
-            return config
+        # If it's a path, open it first
+        if isinstance(config_obj, (str, pathlib.Path)):
+            with open(config_obj, "r") as f:
+                content = f.read()
+        # Otherwise assume it's a file-like object
+        else:
+            content = config_obj.read()
+
+        iconfig = yaml.load(content, yaml.Loader)
+        return iconfig
     except Exception as e:
         logger.error(f"Error loading configuration: {e}")
         raise
-
 
 # class IConfigFileVersionError(ValueError):
 #     """Configuration file version too old."""
