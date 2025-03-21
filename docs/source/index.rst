@@ -1,7 +1,9 @@
-instrument (|release|)
+APSBITS (|release|)
 ======================
 
-Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver.
+What is BITS? BITS is a python package that provides a Bluesky Instrument Template Structure at the APS
+
+Using this package you can create instruments which allow you to execute Bluesky Data Acquisition in console, notebook, & queueserver.
 
 Start the data collection session with the same command, whether in the IPython
 console, a Jupyter notebook, the queueserver, or even a Python script:
