@@ -53,19 +53,43 @@ def make_devices(*, pause: float = 1):
 
     instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
     configs_path = instrument_path / "configs"
-    device_file_path = iconfig.get("DEVICES_FILES", [])
-    logger.debug("Loading %r.", device_file_path)
 
-    yield from run_blocking_function(
-        _loader, configs_path / device_file_path, main=True
-    )
+    # Get device files and ensure it's a list
+    device_files = iconfig.get("DEVICES_FILES", [])
+    if isinstance(device_files, str):
+        device_files = [device_files]
+    logger.debug("Loading device files: %r", device_files)
 
-    aps_control_devices_files = iconfig.get("APS_DEVICES_FILES", None)
+    # Load each device file
+    for device_file in device_files:
+        device_path = configs_path / device_file
+        if not device_path.exists():
+            logger.error(f"Device file not found: {device_path}")
+            continue
+        logger.info(f"Loading device file: {device_path}")
+        try:
+            yield from run_blocking_function(_loader, device_path, main=True)
+        except Exception as e:
+            logger.error(f"Error loading device file {device_path}: {str(e)}")
+            continue
+
+    # Handle APS-specific device files if on APS subnet
+    aps_control_devices_files = iconfig.get("APS_DEVICES_FILES", [])
+    if isinstance(aps_control_devices_files, str):
+        aps_control_devices_files = [aps_control_devices_files]
+
     if aps_control_devices_files and host_on_aps_subnet():
         for device_file in aps_control_devices_files:
-            yield from run_blocking_function(
-                _loader, configs_path / device_file, main=True
-            )
+            device_path = configs_path / device_file
+            if not device_path.exists():
+                logger.error(f"APS device file not found: {device_path}")
+                continue
+            logger.info(f"Loading APS device file: {device_path}")
+            try:
+                yield from run_blocking_function(_loader, device_path, main=True)
+            except Exception as e:
+                logger.error(f"Error loading APS device file {device_path}: {str(e)}")
+                continue
 
     if pause > 0:
         logger.debug(
@@ -97,7 +121,7 @@ def _loader(yaml_device_file, main=True):
     if main:
         main_namespace = sys.modules["__main__"]
         for label in oregistry.device_names:
-            # add to __main__ namespace
+            logger.info(f"Setting up {label} in main namespace")
             setattr(main_namespace, label, oregistry[label])
 
 
