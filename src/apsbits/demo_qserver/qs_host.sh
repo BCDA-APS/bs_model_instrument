@@ -18,7 +18,7 @@ ICONFIG_YML="${CONFIGS_DIR}"/iconfig.yml
 
 # Bluesky queueserver configuration YAML file.
 # This file contains the definition of 'redis_addr'.  (default: localhost:6379)
-QS_CONFIG_YML="${CONFIGS_DIR}/qs-config.yml"
+QS_CONFIG_YML="${SCRIPT_DIR}/qs-config.yml"
 
 # Host name (from $hostname) where the queueserver host process runs.
 # QS_HOSTNAME=amber.xray.aps.anl.gov  # if a specific host is required
