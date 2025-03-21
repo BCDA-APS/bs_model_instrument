@@ -6,9 +6,6 @@
 SHELL_SCRIPT_NAME=${BASH_SOURCE:-${0}}
 SCRIPT_DIR="$(dirname $(readlink -f  "${SHELL_SCRIPT_NAME}"))"
 CONFIGS_DIR=$(readlink -f "${SCRIPT_DIR}/../demo_instrument/configs")
-# command="import pathlib, demo_instrument;"
-# command+="print(pathlib.Path(demo_instrument.__file__).parent / 'configs')"
-# CONFIGS_DIR=$(python -c "${command}")
 
 ###-----------------------------
 ### Change program defaults here
