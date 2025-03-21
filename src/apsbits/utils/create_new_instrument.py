@@ -31,7 +31,7 @@ def copy_instrument(destination_dir: Path) -> None:
     shutil.copytree(str(demo_template_path), str(destination_dir))
 
 
-def create_qserver_config(destination_dir: Path, name: str) -> None:
+def create_qserver(qserver_dir: Path, name: str) -> None:
     """
     Create a qserver config file in the destination directory.
     """
@@ -40,19 +40,17 @@ def create_qserver_config(destination_dir: Path, name: str) -> None:
         Path(__file__).resolve().parent.parent / "demo_qserver"
     ).resolve()
 
-    # Create qserver directory if it doesn't exist
-    qserver_dir = destination_dir / "configs"
 
     # Copy all yml files from demo_qserver to destination qserver dir
-    for yml_file in demo_qserver_path.glob("*.yml"):
+    for yml_file in demo_qserver_path.glob("*"):
         shutil.copy2(yml_file, qserver_dir)
+
 
     # Update startup module in qs-config.yml
     qs_config_path = qserver_dir / "qs-config.yml"
     if qs_config_path.exists():
         with open(qs_config_path, "r") as f:
             config_contents = f.read()
-
         # Replace demo_instrument with new name in startup module path
         updated_contents = config_contents.replace(
             "startup_module: instrument.startup", f"startup_module: {name}.startup"
@@ -62,31 +60,10 @@ def create_qserver_config(destination_dir: Path, name: str) -> None:
             f.write(updated_contents)
 
 
-def create_qserver_startup_script(new_scripts_dir: Path, name: str) -> None:
-    """
-    Create a qserver startup script in the destination directory.
-
-    Copies the demo qserver host script to the user's scripts folder and updates
-    the initialization package name.
-
-    Parameters
-    ----------
-    destination_dir : Path
-        Path to the destination directory where the script should be created
-    """
-
-    demo_qserver_path: Path = (
-        Path(__file__).resolve().parent.parent / "demo_qserver"
-    ).resolve()
-
-    demo_script_path = demo_qserver_path / "qs_host.sh"
-
-    new_script_path = new_scripts_dir / f"{name}_qs_host.sh"
-
-    new_scripts_dir.mkdir(exist_ok=True)
+    new_script_path = qserver_dir / "qs_host.sh"
 
     # Read script contents
-    with open(demo_script_path, "r") as src:
+    with open(new_script_path, "r") as src:
         script_contents = src.read()
 
     # Replace demo package name with new instrument name
@@ -122,7 +99,7 @@ def main() -> None:
 
     new_instrument_dir: Path = main_path / "src" / args.name
 
-    new_scripts_dir: Path = main_path / "scripts"
+    new_qserver_dir: Path = main_path / "scripts" / f"{args.name}_qserver"
 
     print(
         f"Creating instrument '{args.name}' from demo_instrument into \
@@ -141,18 +118,12 @@ def main() -> None:
         sys.exit(1)
 
     try:
-        create_qserver_config(new_instrument_dir, args.name)
-        print(f"Qserver config created in '{new_instrument_dir}'.")
+        create_qserver(new_qserver_dir, args.name)
+        print(f"Qserver config created in '{new_qserver_dir}'.")
     except Exception as exc:
         print(f"Error creating qserver config: {exc}", file=sys.stderr)
         sys.exit(1)
 
-    try:
-        create_qserver_startup_script(new_scripts_dir, args.name)
-        print(f"Qserver startup script created in '{new_scripts_dir}'.")
-    except Exception as exc:
-        print(f"Error creating qserver startup script: {exc}", file=sys.stderr)
-        sys.exit(1)
 
     print(f"Instrument '{args.name}' created.")
 
