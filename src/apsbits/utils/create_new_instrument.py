@@ -25,6 +25,51 @@ def copy_instrument(template_dir: Path, destination_dir: Path) -> None:
     shutil.copytree(str(template_dir), str(destination_dir))
 
 
+def create_qserver_config(destination_dir: Path) -> None:
+    """
+    Create a qserver config file in the destination directory.
+    """
+    qserver_config_path = destination_dir / "qserver.yml"
+    with open(qserver_config_path, "w") as f:
+        f.write("qserver: !QServer\n")
+
+def create_qserver_startup_script(destination_dir: Path) -> None:
+    """
+    Create a qserver startup script in the destination directory.
+
+    Copies the demo qserver host script to the user's scripts folder and updates
+    the initialization package name.
+
+    Parameters
+    ----------
+    destination_dir : Path
+        Path to the destination directory where the script should be created
+    """
+    # Get path to demo qserver host script
+    demo_script_path = Path(__file__).resolve().parent.parent / "demo_qserver" / "qs_host.sh"
+    
+    # Create scripts directory if it doesn't exist
+    scripts_dir = destination_dir / "scripts"
+    scripts_dir.mkdir(exist_ok=True)
+    
+    # Copy script to destination
+    dest_script_path = scripts_dir / "qs_host.sh"
+    
+    # Read demo script and replace package name
+    with open(demo_script_path, "r") as src:
+        script_contents = src.read()
+        
+    # Get package name from destination dir
+    package_name = destination_dir.name
+    
+    # Replace demo package with new package name
+    updated_contents = script_contents.replace("demo_instrument", package_name)
+    
+    # Write updated script
+    with open(dest_script_path, "w") as dest:
+        dest.write(updated_contents)
+
+
 def main() -> None:
     """
     Parse arguments and create the instrument.
@@ -73,6 +118,14 @@ def main() -> None:
     except Exception as exc:
         print(f"Error copying instrument: {exc}", file=sys.stderr)
         sys.exit(1)
+
+    try:
+        create_qserver_config(new_instrument_dir)
+        print(f"Qserver config created in '{new_instrument_dir}'.")
+    except Exception as exc:
+        print(f"Error creating qserver config: {exc}", file=sys.stderr)
+        sys.exit(1)
+        
 
     print(f"Instrument '{args.name}' created.")
 
