@@ -96,6 +96,9 @@ def create_qserver_startup_script(new_scripts_dir: Path, name: str) -> None:
     with open(new_script_path, "w") as dest:
         dest.write(updated_contents)
 
+    # Make script executable
+    os.chmod(new_script_path, new_script_path.stat().st_mode | 0o755)
+
 
 def main() -> None:
     """
