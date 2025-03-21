@@ -41,15 +41,14 @@ def create_qserver_config(destination_dir: Path) -> None:
     ).resolve()
 
     # Create qserver directory if it doesn't exist
-    qserver_dir = destination_dir / "qserver"
-    qserver_dir.mkdir(exist_ok=True)
+    qserver_dir = destination_dir / "configs"
 
     # Copy all yml files from demo_qserver to destination qserver dir
     for yml_file in demo_qserver_path.glob("*.yml"):
         shutil.copy2(yml_file, qserver_dir)
 
 
-def create_qserver_startup_script(destination_dir: Path, name: str) -> None:
+def create_qserver_startup_script(new_scripts_dir: Path, name: str) -> None:
     """
     Create a qserver startup script in the destination directory.
 
@@ -66,16 +65,11 @@ def create_qserver_startup_script(destination_dir: Path, name: str) -> None:
         Path(__file__).resolve().parent.parent / "demo_qserver"
     ).resolve()
 
-    # Get path to demo qserver host script
     demo_script_path = demo_qserver_path / "qs_host.sh"
 
-    new_script_path = (
-        destination_dir / "scripts" / demo_script_path.name + "_qserver.sh"
-    )
+    new_script_path = new_scripts_dir / f"{name}_qs_host.sh"
 
-    # Create scripts directory if it doesn't exist
-    scripts_dir = destination_dir / "scripts"
-    scripts_dir.mkdir(exist_ok=True)
+    new_scripts_dir.mkdir(exist_ok=True)
 
     # Read script contents
     with open(demo_script_path, "r") as src:
@@ -101,18 +95,17 @@ def main() -> None:
     parser.add_argument(
         "name", type=str, help="New instrument name; must be a valid package name."
     )
-    parser.add_argument("dest", type=str, help="Destination directory.")
     args = parser.parse_args()
 
     if re.fullmatch(r"[a-z][_a-z0-9]*", args.name) is None:
         print(f"Error: Invalid instrument name '{args.name}'.", file=sys.stderr)
         sys.exit(1)
 
-    main_path: Path = Path(os.getcwd()).resolve() / args.name
+    main_path: Path = Path(os.getcwd()).resolve()
 
     new_instrument_dir: Path = main_path / "src" / args.name
 
-    scripts_dir: Path = main_path / "scripts"
+    new_scripts_dir: Path = main_path / "scripts"
 
     print(
         f"Creating instrument '{args.name}' from demo_instrument into \
@@ -138,8 +131,8 @@ def main() -> None:
         sys.exit(1)
 
     try:
-        create_qserver_startup_script(scripts_dir, args.name)
-        print(f"Qserver startup script created in '{scripts_dir}'.")
+        create_qserver_startup_script(new_scripts_dir, args.name)
+        print(f"Qserver startup script created in '{new_scripts_dir}'.")
     except Exception as exc:
         print(f"Error creating qserver startup script: {exc}", file=sys.stderr)
         sys.exit(1)
