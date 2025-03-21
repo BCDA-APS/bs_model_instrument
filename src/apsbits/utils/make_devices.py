@@ -158,4 +158,5 @@ class Instrument(guarneri.Instrument):
             ]
         return devices
 
+
 _instr = Instrument({}, registry=oregistry)  # singleton

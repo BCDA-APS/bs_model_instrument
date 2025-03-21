@@ -7,11 +7,11 @@ access to the configuration throughout the application.
 """
 
 import logging
+import pathlib
 from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import Optional
-import pathlib
 
 import tomli  # type: ignore
 import yaml
@@ -119,6 +119,7 @@ def update_config(updates: Dict[str, Any]) -> None:
 #         logger.error(f"Error loading configuration: {e}")
 #         raise
 
+
 def load_config_yaml(config_obj) -> dict:
     """
     Load configuration from a YAML file.
@@ -150,6 +151,7 @@ def load_config_yaml(config_obj) -> dict:
     except Exception as e:
         logger.error(f"Error loading configuration: {e}")
         raise
+
 
 # class IConfigFileVersionError(ValueError):
 #     """Configuration file version too old."""
