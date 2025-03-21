@@ -58,10 +58,9 @@ SPEC_DATA_FILES:
 DM_SETUP_FILE: "/home/dm/etc/dm.setup.sh"
 
 ### Local OPHYD Device Control Yaml
-DEVICES_FILES: 
+DEVICES_FILES:
 - devices.yml
-- devices_2.yml
-APS_DEVICES_FILES: 
+APS_DEVICES_FILES:
 - devices_aps_only.yml
 
 # ----------------------------------
