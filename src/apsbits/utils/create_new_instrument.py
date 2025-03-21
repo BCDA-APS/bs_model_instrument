@@ -40,11 +40,10 @@ def create_qserver(qserver_dir: Path, name: str) -> None:
         Path(__file__).resolve().parent.parent / "demo_qserver"
     ).resolve()
 
-
+    os.makedirs(qserver_dir, exist_ok=True)
     # Copy all yml files from demo_qserver to destination qserver dir
     for yml_file in demo_qserver_path.glob("*"):
         shutil.copy2(yml_file, qserver_dir)
-
 
     # Update startup module in qs-config.yml
     qs_config_path = qserver_dir / "qs-config.yml"
@@ -58,7 +57,6 @@ def create_qserver(qserver_dir: Path, name: str) -> None:
 
         with open(qs_config_path, "w") as f:
             f.write(updated_contents)
-
 
     new_script_path = qserver_dir / "qs_host.sh"
 
@@ -99,7 +97,7 @@ def main() -> None:
 
     new_instrument_dir: Path = main_path / "src" / args.name
 
-    new_qserver_dir: Path = main_path / "scripts" / f"{args.name}_qserver"
+    new_qserver_dir: Path = main_path / "src" / f"{args.name}_qserver"
 
     print(
         f"Creating instrument '{args.name}' from demo_instrument into \
@@ -123,7 +121,6 @@ def main() -> None:
     except Exception as exc:
         print(f"Error creating qserver config: {exc}", file=sys.stderr)
         sys.exit(1)
-
 
     print(f"Instrument '{args.name}' created.")
 
