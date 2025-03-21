@@ -226,7 +226,7 @@ line-ending = "auto"
 package-dir = {"apsbits" = "src/apsbits"}
 
 [tool.setuptools.package-data]
-"*" = ["*.yml"]
+"*" = ["*.yml", "*.sh"]
 
 [tool.setuptools_scm]
 write_to = "src/apsbits/_version.py"

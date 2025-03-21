@@ -146,13 +146,16 @@ class Instrument(guarneri.Instrument):
             ]
             return entries
 
-        devices = [
-            device
-            # parse the file
-            for k, v in load_config_yaml(config_file).items()
-            # each support type (class, factory, function, ...)
-            for device in parser(k, v)
-        ]
+        with open(config_file, "r") as f:
+            config_data = load_config_yaml(f)
+
+            devices = [
+                device
+                # parse the file using already loaded config data
+                for k, v in config_data.items()
+                # each support type (class, factory, function, ...)
+                for device in parser(k, v)
+            ]
         return devices
 
 
