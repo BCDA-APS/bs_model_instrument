@@ -69,6 +69,8 @@ def create_qserver_startup_script(destination_dir: Path, name: str) -> None:
     # Get path to demo qserver host script
     demo_script_path = demo_qserver_path / "qs_host.sh"
 
+    new_script_path = destination_dir / "scripts" / demo_script_path.name + '_qserver.sh'
+
     # Create scripts directory if it doesn't exist
     scripts_dir = destination_dir / "scripts"
     scripts_dir.mkdir(exist_ok=True)
@@ -81,9 +83,10 @@ def create_qserver_startup_script(destination_dir: Path, name: str) -> None:
     updated_contents = script_contents.replace("demo_instrument", name)
 
     # Write updated script
-    with open(scripts_dir / demo_script_path.name, "w") as dest:
+    with open(new_script_path, "w") as dest:
         dest.write(updated_contents)
 
+    
 
 def main() -> None:
     """
