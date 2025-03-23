@@ -29,6 +29,8 @@ from ..utils.controls_setup import oregistry  # noqa: F401
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
+MAIN_NAMESPACE = "__main__"
+
 
 def make_devices(*, pause: float = 1, clear: bool = True):
     """
@@ -52,8 +54,12 @@ def make_devices(*, pause: float = 1, clear: bool = True):
     logger.debug("(Re)Loading local control objects.")
 
     if clear:
-        # TODO: Also remove items from __main__ namespace?
-        # Either oregistry.root_devices or oregistry.component_names?
+        main_namespace = sys.modules[MAIN_NAMESPACE]
+        for dev_name in oregistry.device_names:
+            # Remove from __main__ namespace any devices registered previously.
+            if hasattr(main_namespace, dev_name):
+                delattr(main_namespace, dev_name)
+
         oregistry.clear()
 
     iconfig = get_config()
@@ -126,7 +132,7 @@ def _loader(yaml_device_file, main=True):
     logger.info("Devices loaded in %.3f s.", time.time() - t0)
 
     if main:
-        main_namespace = sys.modules["__main__"]
+        main_namespace = sys.modules[MAIN_NAMESPACE]
         for label in oregistry.device_names:
             logger.info(f"Setting up {label} in main namespace")
             setattr(main_namespace, label, oregistry[label])
