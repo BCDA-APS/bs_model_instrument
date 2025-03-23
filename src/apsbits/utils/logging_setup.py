@@ -169,7 +169,7 @@ def _setup_file_logger(logger, cfg):
     if cfg.get("rotate_on_startup", False):
         handler.doRollover()
     logger.addHandler(handler)
-    logger.info("%s Bluesky Startup Initialized", "*" * 40)
+    logger.info("%s Bluesky Startup", "*" * 40)
     logger.bsdev(__file__)
     logger.bsdev("Log file: %s", file_name)
 

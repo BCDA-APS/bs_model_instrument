@@ -38,6 +38,7 @@ DEFAULT_MD_PATH = pathlib.Path.home() / ".config" / "Bluesky_RunEngine_md"
 HOSTNAME = socket.gethostname() or "localhost"
 USERNAME = getpass.getuser() or "Bluesky user"
 VERSIONS = dict(
+    apsbits=apsbits.__version__,
     apstools=apstools.__version__,
     bluesky=bluesky.__version__,
     databroker=databroker.__version__,
@@ -48,10 +49,9 @@ VERSIONS = dict(
     numpy=numpy.__version__,
     ophyd=ophyd.__version__,
     pyRestTable=pyRestTable.__version__,
-    python=sys.version.split(" ")[0],
     pysumreg=pysumreg.__version__,
+    python=sys.version.split(" ")[0],
     spec2nexus=spec2nexus.__version__,
-    apsbits=apsbits.__version__,
 )
 
 
@@ -73,7 +73,7 @@ def get_md_path(iconfig=None):
     RE_CONFIG = iconfig.get("RUN_ENGINE", {})
     md_path_name = RE_CONFIG.get("MD_PATH", DEFAULT_MD_PATH)
     path = pathlib.Path(md_path_name)
-    logger.info("RunEngine metadata saved in directory: %s", str(path))
+    logger.info("RunEngine metadata saved to: %s", str(path))
     return str(path)
 
 
