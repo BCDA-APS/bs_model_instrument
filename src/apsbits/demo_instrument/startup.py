@@ -73,4 +73,4 @@ else:
     from bluesky import plans as bp  # noqa: F401
 
 
-RE(make_devices())
+RE(make_devices(clear=False))

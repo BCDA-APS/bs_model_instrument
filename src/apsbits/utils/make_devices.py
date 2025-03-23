@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
 
-def make_devices(*, pause: float = 1):
+def make_devices(*, pause: float = 1, clear: bool = True):
     """
     (plan stub) Create the ophyd-style controls for this instrument.
 
@@ -44,10 +44,17 @@ def make_devices(*, pause: float = 1):
 
     pause : float
         Wait 'pause' seconds (default: 1) for slow objects to connect.
+    clear : bool
+        Clear 'oregistry' first if True (the default).
 
     """
 
     logger.debug("(Re)Loading local control objects.")
+    
+    if clear:
+        # TODO: Also remove items from __main__ namespace?  
+        # Either oregistry.root_devices or oregistry.component_names?
+        oregistry.clear()
 
     iconfig = get_config()
 
