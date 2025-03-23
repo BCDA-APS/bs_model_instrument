@@ -54,10 +54,15 @@ def make_devices(*, pause: float = 1, clear: bool = True):
     logger.debug("(Re)Loading local control objects.")
 
     if clear:
+        log_level = get_config().get("MAKE_DEVICES", {}).get("LOG_LEVEL", "info")
+        if isinstance(log_level, str):
+            log_level = logging._nameToLevel[log_level.upper()]
+
         main_namespace = sys.modules[MAIN_NAMESPACE]
         for dev_name in oregistry.device_names:
             # Remove from __main__ namespace any devices registered previously.
             if hasattr(main_namespace, dev_name):
+                logger.log(log_level, "Removing %r from %r", dev_name, MAIN_NAMESPACE)
                 delattr(main_namespace, dev_name)
 
         oregistry.clear()
@@ -134,9 +139,13 @@ def _loader(yaml_device_file, main=True):
     logger.info("Devices loaded in %.3f s.", time.time() - t0)
 
     if main:
+        log_level = get_config().get("MAKE_DEVICES", {}).get("LOG_LEVEL", "info")
+        if isinstance(log_level, str):
+            log_level = logging._nameToLevel[log_level.upper()]
+
         main_namespace = sys.modules[MAIN_NAMESPACE]
         for label in oregistry.device_names:
-            logger.info("Setting up %s in main namespace", label)
+            logger.log(log_level, "Adding ophyd device %r to main namespace", label)
             setattr(main_namespace, label, oregistry[label])
 
 
