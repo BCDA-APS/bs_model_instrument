@@ -32,6 +32,15 @@ logger.bsdev(__file__)
 MAIN_NAMESPACE = "__main__"
 
 
+def _get_make_devices_log_level() -> int:
+    """(internal) User choice for log level used in 'make_devices()'."""
+    level = get_config().get("MAKE_DEVICES", {}).get("LOG_LEVEL", "info")
+    if isinstance(level, str):
+        # Allow log level as str or int in iconfig.yml.
+        level = logging._nameToLevel[level.upper()]
+    return level
+
+
 def make_devices(*, pause: float = 1, clear: bool = True):
     """
     (plan stub) Create the ophyd-style controls for this instrument.
@@ -54,9 +63,7 @@ def make_devices(*, pause: float = 1, clear: bool = True):
     logger.debug("(Re)Loading local control objects.")
 
     if clear:
-        log_level = get_config().get("MAKE_DEVICES", {}).get("LOG_LEVEL", "info")
-        if isinstance(log_level, str):
-            log_level = logging._nameToLevel[log_level.upper()]
+        log_level = _get_make_devices_log_level()
 
         main_namespace = sys.modules[MAIN_NAMESPACE]
         for dev_name in oregistry.device_names:
@@ -139,9 +146,7 @@ def _loader(yaml_device_file, main=True):
     logger.info("Devices loaded in %.3f s.", time.time() - t0)
 
     if main:
-        log_level = get_config().get("MAKE_DEVICES", {}).get("LOG_LEVEL", "info")
-        if isinstance(log_level, str):
-            log_level = logging._nameToLevel[log_level.upper()]
+        log_level = _get_make_devices_log_level()
 
         main_namespace = sys.modules[MAIN_NAMESPACE]
         for label in oregistry.device_names:
