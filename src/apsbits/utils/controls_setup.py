@@ -3,14 +3,15 @@ EPICS & ophyd related setup
 ===========================
 
 .. autosummary::
+    ~connect_scan_id_pv
+    ~epics_scan_id_source
     ~oregistry
     ~set_control_layer
     ~set_timeouts
-    ~epics_scan_id_source
-    ~connect_scan_id_pv
 """
 
 import logging
+from typing import Optional
 
 import ophyd
 from ophyd.signal import EpicsSignalBase
@@ -22,6 +23,7 @@ logger.bsdev(__file__)
 
 DEFAULT_CONTROL_LAYER = "PyEpics"
 DEFAULT_TIMEOUT = 60  # default used next...
+SCAN_ID_SIGNAL_NAME = "scan_id_epics"
 
 
 def epics_scan_id_source(_md):
@@ -38,19 +40,18 @@ def epics_scan_id_source(_md):
     Exception will be raised if PV is not connected when next
     ``bps.open_run()`` is called.
     """
-    scan_id_epics = oregistry.find(name="scan_id_epics")
+    scan_id_epics = oregistry.find(name=SCAN_ID_SIGNAL_NAME)
     new_scan_id = max(scan_id_epics.get(), 0) + 1
     scan_id_epics.put(new_scan_id)
     return new_scan_id
 
 
-def connect_scan_id_pv(RE, pv: str = None, scan_id_pv: str = None):
+def connect_scan_id_pv(RE, pv: Optional[str] = None):
     """
     Define a PV to use for the RunEngine's `scan_id`.
     """
     from ophyd import EpicsSignal
 
-    pv = pv or scan_id_pv
     if pv is None:
         return
 
