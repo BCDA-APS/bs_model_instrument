@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 from bluesky.magics import BlueskyMagics
 from IPython import get_ipython
 
-from apsbits.utils.config_loaders import get_config
+from ..utils.config_loaders import get_config
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

@@ -2,7 +2,7 @@
 
 """Model Bluesky Data Acquisition Instrument."""
 
-from apsbits.utils.logging_setup import configure_logging
+from .utils.logging_setup import configure_logging
 
 configure_logging()
 

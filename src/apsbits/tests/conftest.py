@@ -14,9 +14,9 @@ from typing import Any
 
 import pytest
 
-from apsbits.demo_instrument.startup import RE
-from apsbits.demo_instrument.startup import make_devices
-from apsbits.utils.config_loaders import load_config
+from ..demo_instrument.startup import RE
+from ..demo_instrument.startup import make_devices
+from ..utils.config_loaders import load_config
 
 
 @pytest.fixture(scope="session")
