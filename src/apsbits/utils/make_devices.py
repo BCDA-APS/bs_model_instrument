@@ -50,9 +50,9 @@ def make_devices(*, pause: float = 1, clear: bool = True):
     """
 
     logger.debug("(Re)Loading local control objects.")
-    
+
     if clear:
-        # TODO: Also remove items from __main__ namespace?  
+        # TODO: Also remove items from __main__ namespace?
         # Either oregistry.root_devices or oregistry.component_names?
         oregistry.clear()
 
