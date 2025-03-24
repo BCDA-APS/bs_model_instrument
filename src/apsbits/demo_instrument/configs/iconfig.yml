@@ -63,6 +63,10 @@ DEVICES_FILES:
 APS_DEVICES_FILES:
 - devices_aps_only.yml
 
+# Log when devices are added to console (__main__ namespace)
+MAKE_DEVICES:
+    LOG_LEVEL: info
+
 # ----------------------------------
 
 OPHYD:

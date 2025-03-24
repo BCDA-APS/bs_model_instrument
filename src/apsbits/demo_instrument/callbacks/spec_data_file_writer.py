@@ -49,7 +49,7 @@ def newSpecFile(title, scan_id=None, RE=None):
     clean = apstools.utils.cleanupText(title)
     fname = pathlib.Path(f"{mmdd}_{clean}.{file_extension}")
     if fname.exists():
-        logger.warning(f">>> file already exists: {fname} <<<")
+        logger.warning(">>> file already exists: %s <<<", fname)
         handled = "appended"
     else:
         kwargs["scan_id"] = scan_id or 1
@@ -57,8 +57,8 @@ def newSpecFile(title, scan_id=None, RE=None):
 
     specwriter.newfile(fname, **kwargs)
 
-    logger.info(f"SPEC file name : {specwriter.spec_filename}")
-    logger.info(f"File will be {handled} at end of next bluesky scan.")
+    logger.info("SPEC file name : %s", specwriter.spec_filename)
+    logger.info("File will be %s at end of next bluesky scan.", handled)
 
 
 # Add this function to specwriter.py

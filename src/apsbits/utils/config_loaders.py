@@ -66,7 +66,7 @@ def load_config(config_path: Optional[Path] = None) -> Dict[str, Any]:
 
             return _iconfig
     except Exception as e:
-        logger.error(f"Error loading configuration: {e}")
+        logger.error("Error loading configuration: %s", e)
         raise
 
 
@@ -88,36 +88,6 @@ def update_config(updates: Dict[str, Any]) -> None:
         updates: Dictionary of configuration updates.
     """
     _iconfig.update(updates)
-
-
-# def load_config_yaml(config_path: Optional[Path] = None) -> Dict[str, Any]:
-#     """
-#     Load configuration from a YAML file.
-
-#     Args:
-#         config_path: Path to the configuration file.
-
-#     Returns:
-#         The loaded configuration dictionary.
-
-#     Raises:
-#         FileNotFoundError: If the configuration file does not exist.
-#     """
-#     if config_path is None:
-#         raise ValueError("config_path must be provided")
-
-#     if not config_path.exists():
-#         raise FileNotFoundError(f"Configuration file not found at {config_path}")
-
-#     try:
-#         with open(config_path) as f:
-#             config = yaml.safe_load(f)
-#             if config is None:
-#                 config = {}
-#             return config
-#     except Exception as e:
-#         logger.error(f"Error loading configuration: {e}")
-#         raise
 
 
 def load_config_yaml(config_obj) -> dict:
@@ -149,21 +119,5 @@ def load_config_yaml(config_obj) -> dict:
         iconfig = yaml.load(content, yaml.Loader)
         return iconfig
     except Exception as e:
-        logger.error(f"Error loading configuration: {e}")
+        logger.error("Error loading configuration: %s", e)
         raise
-
-
-# class IConfigFileVersionError(ValueError):
-#     """Configuration file version too old."""
-
-
-# # Validate the iconfig file has the minimum version.
-# _version = iconfig.get("ICONFIG_VERSION")
-# print(f"\n\n\niconfig version: {_version}\n\n\n")
-# if _version is None or _version < ICONFIG_MINIMUM_VERSION:
-#     raise IConfigFileVersionError(
-#         "Configuration file version too old."
-#         f" Found {_version!r}."
-#         f" Expected minimum {ICONFIG_MINIMUM_VERSION!r}."
-#         f" Configuration file '{DEFAULT_ICONFIG_YML_FILE}'."
-#     )

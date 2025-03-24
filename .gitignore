@@ -167,7 +167,7 @@ _version.py
 # Developer content
 dev_*
 
-qserver/existing_plans_and_devices.yaml
+existing_plans_and_devices.yaml
 .vscode/
 .logs/
 *.dat

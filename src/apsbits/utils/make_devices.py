@@ -29,8 +29,19 @@ from apsbits.utils.controls_setup import oregistry  # noqa: F401
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
 
+MAIN_NAMESPACE = "__main__"
 
-def make_devices(*, pause: float = 1):
+
+def _get_make_devices_log_level() -> int:
+    """(internal) User choice for log level used in 'make_devices()'."""
+    level = get_config().get("MAKE_DEVICES", {}).get("LOG_LEVEL", "info")
+    if isinstance(level, str):
+        # Allow log level as str or int in iconfig.yml.
+        level = logging._nameToLevel[level.upper()]
+    return level
+
+
+def make_devices(*, pause: float = 1, clear: bool = True):
     """
     (plan stub) Create the ophyd-style controls for this instrument.
 
@@ -44,10 +55,24 @@ def make_devices(*, pause: float = 1):
 
     pause : float
         Wait 'pause' seconds (default: 1) for slow objects to connect.
+    clear : bool
+        Clear 'oregistry' first if True (the default).
 
     """
 
     logger.debug("(Re)Loading local control objects.")
+
+    if clear:
+        log_level = _get_make_devices_log_level()
+
+        main_namespace = sys.modules[MAIN_NAMESPACE]
+        for dev_name in oregistry.device_names:
+            # Remove from __main__ namespace any devices registered previously.
+            if hasattr(main_namespace, dev_name):
+                logger.log(log_level, "Removing %r from %r", dev_name, MAIN_NAMESPACE)
+                delattr(main_namespace, dev_name)
+
+        oregistry.clear()
 
     iconfig = get_config()
 
@@ -64,13 +89,13 @@ def make_devices(*, pause: float = 1):
     for device_file in device_files:
         device_path = configs_path / device_file
         if not device_path.exists():
-            logger.error(f"Device file not found: {device_path}")
+            logger.error("Device file not found: %s", device_path)
             continue
-        logger.info(f"Loading device file: {device_path}")
+        logger.info("Loading device file: %s", device_path)
         try:
             yield from run_blocking_function(_loader, device_path, main=True)
         except Exception as e:
-            logger.error(f"Error loading device file {device_path}: {str(e)}")
+            logger.error("Error loading device file %s: %s", device_path, str(e))
             continue
 
     # Handle APS-specific device files if on APS subnet
@@ -82,13 +107,15 @@ def make_devices(*, pause: float = 1):
         for device_file in aps_control_devices_files:
             device_path = configs_path / device_file
             if not device_path.exists():
-                logger.error(f"APS device file not found: {device_path}")
+                logger.error("APS device file not found: %s", device_path)
                 continue
-            logger.info(f"Loading APS device file: {device_path}")
+            logger.info("Loading APS device file: %s", device_path)
             try:
                 yield from run_blocking_function(_loader, device_path, main=True)
             except Exception as e:
-                logger.error(f"Error loading APS device file {device_path}: {str(e)}")
+                logger.error(
+                    "Error loading APS device file %s: %s", device_path, str(e)
+                )
                 continue
 
     if pause > 0:
@@ -119,9 +146,11 @@ def _loader(yaml_device_file, main=True):
     logger.info("Devices loaded in %.3f s.", time.time() - t0)
 
     if main:
-        main_namespace = sys.modules["__main__"]
+        log_level = _get_make_devices_log_level()
+
+        main_namespace = sys.modules[MAIN_NAMESPACE]
         for label in oregistry.device_names:
-            logger.info(f"Setting up {label} in main namespace")
+            logger.log(log_level, "Adding ophyd device %r to main namespace", label)
             setattr(main_namespace, label, oregistry[label])
 
 

@@ -62,15 +62,24 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
     """
     re_config = iconfig.get("RUN_ENGINE", {})
 
+    # Steps which MUST happen before ANY EpicsSignalBase (or subclass) is created.
+    control_layer = iconfig.get("OPHYD", {}).get("CONTROL_LAYER", "PyEpics")
+    set_control_layer(control_layer=control_layer)
+    set_timeouts(timeouts=iconfig.get("OPHYD", {}).get("TIMEOUTS", {}))
+
     RE = bluesky.RunEngine()
     """The bluesky RunEngine object."""
+
+    sd = bluesky.SupplementalData()
+    """Baselines & monitors for ``RE``."""
+    RE.preprocessors.append(sd)
 
     MD_PATH = get_md_path(iconfig)
     # Save/restore RE.md dictionary, in this precise order.
     if MD_PATH is not None:
         handler_name = re_config.get("MD_STORAGE_HANDLER", "StoredDict")
         logger.debug(
-            "Select %r to store 'RE.md' dictionary in %s.",
+            "Selected %r to store 'RE.md' dictionary in %s.",
             handler_name,
             MD_PATH,
         )
@@ -90,25 +99,13 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
     if cat_instance is not None:
         RE.md.update(re_metadata(iconfig, cat_instance))  # programmatic metadata
         RE.md.update(re_config.get("DEFAULT_METADATA", {}))
-
-    sd = bluesky.SupplementalData()
-    """Baselines & monitors for ``RE``."""
-
-    if cat_instance is not None:
         RE.subscribe(cat_instance.v1.insert)
     if bec_instance is not None:
         RE.subscribe(bec_instance)
     RE.preprocessors.append(sd)
 
-    set_control_layer(
-        control_layer=iconfig.get("OPHYD", {}).get("CONTROL_LAYER", "PyEpics")
-    )
-    # MUST happen before ANY EpicsSignalBase (or subclass) is created.
-    set_timeouts(timeouts=iconfig.get("OPHYD", {}).get("TIMEOUTS", {}))
-    connect_scan_id_pv(
-        RE,
-        scan_id_pv=iconfig.get("RUN_ENGINE", {}).get("SCAN_ID_PV"),
-    )  # need to add the variables I removed from iconfig here as args
+    scan_id_pv = iconfig.get("RUN_ENGINE", {}).get("SCAN_ID_PV")
+    connect_scan_id_pv(RE, pv=scan_id_pv)
 
     if re_config.get("USE_PROGRESS_BAR", True):
         # Add a progress bar.
