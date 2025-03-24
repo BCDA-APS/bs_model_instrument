@@ -56,8 +56,9 @@ console, a Jupyter notebook, the queueserver, or even a Python script:
    guides/index
    install
    logging_config
-   license
    api/index
+   license
+   history
 
 About ...
 ---------
@@ -69,3 +70,4 @@ About ...
 :full version: |version|
 :published: |today|
 :reference: :ref:`genindex`, :ref:`modindex`, :ref:`search`
+:release notes: :doc:`History of Changes with each Release <history>`
