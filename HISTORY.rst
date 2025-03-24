@@ -3,7 +3,9 @@
   At this time, there is no automation to update this file.
   Try to describe in human terms what is relevant for each release.
 
-  subsections could include these headings (in this order), omit if no content
+  Revise this file before tagging a new release.
+
+  Subsections could include these headings (in this order), omit if no content.
 
     Notice
     Breaking Changes
