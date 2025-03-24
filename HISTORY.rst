@@ -44,7 +44,7 @@ Fixes
 * make_devices() is noisy
 * Why does make_devices() add all ophyd.sim simulator objects to ophyd registry?
 * First argument to logger.LEVEL() should not be an f-string
-* Adjust the order of steps when creating RE 
+* Adjust the order of steps when creating RE
 * bp.scan (& others) missing in queueserver
 * QS restart does not restart when QS was running
 
