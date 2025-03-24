@@ -1,5 +1,7 @@
 ..
   This file describes user-visible changes between the versions.
+  At this time, there is no automation to update this file.
+  Try to describe in human terms what is relevant for each release.
 
   subsections could include these headings (in this order), omit if no content
 
@@ -23,12 +25,13 @@ Brief notes describing each release and what's new.
 Project `milestones <https://github.com/prjemian/hklpy2/milestones>`_
 describe future plans.
 
-.. comment
+.. Coming release content can be gathered here.
+    Some people object to publishing unreleased changes.
 
     1.0.2
     #####
 
-    release expected 2025-Q4
+    release expected 2025-Q2
 
 1.0.1
 #####
