@@ -164,7 +164,7 @@ class StoredDict(collections.abc.MutableMapping):
     @staticmethod
     def load(file):
         """Read dictionary from YAML file."""
-        from .config_loaders import load_config_yaml
+        from apsbits.utils.config_loaders import load_config_yaml
 
         file = pathlib.Path(file)
         logger.debug("_load('%s')", file)
