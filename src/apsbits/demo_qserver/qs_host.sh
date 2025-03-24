@@ -143,6 +143,7 @@ function exit_if_running() {
 
 function restart() {
     stop
+    sleep 0.1  # empirical, 0.01 is too short, 1.0 is plenty.
     start
 }
 
