@@ -1,1 +1,1 @@
-"""Source package for the instrument system.""" 
+"""Source package for the instrument system."""

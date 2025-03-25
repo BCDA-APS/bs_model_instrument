@@ -1,1 +1,1 @@
-"""Test package for the instrument system.""" 
+"""Test package for the instrument system."""

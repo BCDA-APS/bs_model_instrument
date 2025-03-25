@@ -13,7 +13,6 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-
 from apsbits.demo_instrument.startup import RE
 from apsbits.demo_instrument.startup import make_devices
 from apsbits.utils.config_loaders import load_config

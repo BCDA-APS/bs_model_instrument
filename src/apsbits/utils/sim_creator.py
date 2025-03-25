@@ -19,9 +19,8 @@ Device factories are used to:
 
 import logging
 
-from apstools.utils import dynamic_import
-
 from apsbits.utils.controls_setup import oregistry
+from apstools.utils import dynamic_import
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

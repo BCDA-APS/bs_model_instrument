@@ -161,4 +161,4 @@ Common issues and solutions:
 ## References
 
 - [Systemd Documentation](https://www.freedesktop.org/software/systemd/man/systemd.service.html)
-- [Bluesky Queue Server Documentation](https://blueskyproject.io/bluesky-queueserver/) 
+- [Bluesky Queue Server Documentation](https://blueskyproject.io/bluesky-queueserver/)

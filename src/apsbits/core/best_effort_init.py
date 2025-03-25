@@ -8,9 +8,8 @@ BestEffortCallback: simple real-time visualizations, provides ``bec``.
 
 import logging
 
-from bluesky.callbacks.best_effort import BestEffortCallback
-
 from apsbits.utils.helper_functions import running_in_queueserver
+from bluesky.callbacks.best_effort import BestEffortCallback
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

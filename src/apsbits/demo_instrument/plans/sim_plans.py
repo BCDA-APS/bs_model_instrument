@@ -12,10 +12,9 @@ For development and testing only, provides plans.
 
 import logging
 
+from apsbits.utils.controls_setup import oregistry
 from bluesky import plan_stubs as bps
 from bluesky import plans as bp
-
-from apsbits.utils.controls_setup import oregistry
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
