@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 import pytest
 from pathlib import Path
 import yaml
-from src.create_new_device import DeviceConfig, create_new_device, create_device_class, get_device_class
+from apsbits.utils.create_new_device import DeviceConfig, create_new_device, create_device_class, get_device_class
 
 if TYPE_CHECKING:
     from pytest_mock.plugin import MockerFixture

@@ -10,11 +10,16 @@ Plans in support of APS Data Management
 """
 
 import logging
+from typing import Any, Dict, List, Optional, Union
 
 from apstools.devices import DM_WorkflowConnector
 from apstools.utils import dm_api_proc
 from apstools.utils import share_bluesky_metadata_with_dm
 from bluesky import plan_stubs as bps
+from bluesky.preprocessors import run_decorator
+from ophyd import Device, Signal
+
+from apsbits.demo_instrument.devices import det, motor, motor1, motor2, motor3
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)
@@ -109,3 +114,136 @@ def dm_submit_workflow_job(workflowName, argsDict):
 
     job = api.startProcessingJob(api.username, workflowName, argsDict)
     print(f"workflow={workflowName!r}  id={job['id']!r}")
+
+
+@run_decorator(md={})
+def dm_count_plan(
+    num: int = 5,
+    detector: Optional[Device] = None,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """Perform a counting measurement with metadata.
+
+    Args:
+        num: Number of counts to perform. Defaults to 5.
+        detector: Detector to use for the scan. If None, uses the default detector.
+        metadata: Additional metadata to include in the run. Defaults to None.
+
+    Returns:
+        Any: The result of the plan execution.
+    """
+    if detector is None:
+        detector = det
+    if metadata is None:
+        metadata = {}
+    yield from bps.count([detector], num=num, md=metadata)
+
+
+@run_decorator(md={})
+def dm_scan_plan(
+    start: float = -1,
+    stop: float = 1,
+    num: int = 10,
+    detector: Optional[Device] = None,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """Perform a scan with metadata.
+
+    Args:
+        start: Starting position. Defaults to -1.
+        stop: Stopping position. Defaults to 1.
+        num: Number of points in the scan. Defaults to 10.
+        detector: Detector to use for the scan. If None, uses the default detector.
+        metadata: Additional metadata to include in the run. Defaults to None.
+
+    Returns:
+        Any: The result of the plan execution.
+    """
+    if detector is None:
+        detector = det
+    if metadata is None:
+        metadata = {}
+    yield from bps.scan([detector], motor, start, stop, num, md=metadata)
+
+
+@run_decorator(md={})
+def dm_grid_scan_plan(
+    start1: float = -1,
+    stop1: float = 1,
+    num1: int = 5,
+    start2: float = -1,
+    stop2: float = 1,
+    num2: int = 5,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """Perform a 2D grid scan with metadata.
+
+    Args:
+        start1: Starting position for first motor. Defaults to -1.
+        stop1: Stopping position for first motor. Defaults to 1.
+        num1: Number of points for first motor. Defaults to 5.
+        start2: Starting position for second motor. Defaults to -1.
+        stop2: Stopping position for second motor. Defaults to 1.
+        num2: Number of points for second motor. Defaults to 5.
+        metadata: Additional metadata to include in the run. Defaults to None.
+
+    Returns:
+        Any: The result of the plan execution.
+    """
+    if metadata is None:
+        metadata = {}
+    yield from bps.grid_scan(
+        [det], motor1, start1, stop1, num1, motor2, start2, stop2, num2, md=metadata
+    )
+
+
+@run_decorator(md={})
+def dm_list_scan_plan(
+    positions: List[float],
+    detector: Optional[Device] = None,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """Perform a scan at specified positions with metadata.
+
+    Args:
+        positions: List of positions to scan.
+        detector: Detector to use for the scan. If None, uses the default detector.
+        metadata: Additional metadata to include in the run. Defaults to None.
+
+    Returns:
+        Any: The result of the plan execution.
+    """
+    if detector is None:
+        detector = det
+    if metadata is None:
+        metadata = {}
+    yield from bps.list_scan([detector], motor, positions, md=metadata)
+
+
+@run_decorator(md={})
+def dm_adaptive_scan_plan(
+    start: float = -1,
+    stop: float = 1,
+    min_step: float = 0.1,
+    max_step: float = 1.0,
+    target_delta: float = 0.1,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """Perform an adaptive scan with metadata.
+
+    Args:
+        start: Starting position. Defaults to -1.
+        stop: Stopping position. Defaults to 1.
+        min_step: Minimum step size. Defaults to 0.1.
+        max_step: Maximum step size. Defaults to 1.0.
+        target_delta: Target change in signal between points. Defaults to 0.1.
+        metadata: Additional metadata to include in the run. Defaults to None.
+
+    Returns:
+        Any: The result of the plan execution.
+    """
+    if metadata is None:
+        metadata = {}
+    yield from bps.adaptive_scan(
+        [det], motor, start, stop, min_step, max_step, target_delta, md=metadata
+    )
