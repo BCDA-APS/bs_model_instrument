@@ -4,6 +4,7 @@ This module contains plans that simulate various data collection scenarios.
 These plans are useful for testing and development purposes.
 """
 
+<<<<<<< HEAD
 from typing import Any
 from typing import List
 from typing import Optional
@@ -16,6 +17,15 @@ from apsbits.demo_instrument.devices import det
 from apsbits.demo_instrument.devices import motor
 from apsbits.demo_instrument.devices import motor1
 from apsbits.demo_instrument.devices import motor2
+=======
+from typing import Any, Dict, List, Optional, Union
+
+from bluesky import plan_stubs as bps
+from bluesky.preprocessors import run_decorator
+from ophyd import Device, Signal
+
+from apsbits.demo_instrument.devices import det, motor, motor1, motor2, motor3
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
 
 
 @run_decorator(md={})
@@ -89,6 +99,7 @@ def sim_grid_scan_plan(
         Any: The result of the plan execution.
     """
     yield from bps.grid_scan(
+<<<<<<< HEAD
         [det],
         motor1,
         start1,
@@ -99,6 +110,9 @@ def sim_grid_scan_plan(
         stop2,
         num2,
         md={"noise": noise},
+=======
+        [det], motor1, start1, stop1, num1, motor2, start2, stop2, num2, md={"noise": noise}
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     )
 
 

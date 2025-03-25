@@ -187,4 +187,8 @@ References
 ==========
 
 * `Systemd Documentation <https://www.freedesktop.org/software/systemd/man/systemd.service.html>`_
+<<<<<<< HEAD
 * `Bluesky Queue Server Documentation <https://blueskyproject.io/bluesky-queueserver/>`_
+=======
+* `Bluesky Queue Server Documentation <https://blueskyproject.io/bluesky-queueserver/>`_ 
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1

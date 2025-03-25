@@ -49,4 +49,8 @@ Here's how to use the queue server:
     status = api.status()
     print(f"Queue status: {status['manager_state']}")
 
+<<<<<<< HEAD
 For more details on using the Queue Server, see :doc:`../qserver_service`.
+=======
+For more details on using the Queue Server, see :doc:`../qserver_service`. 
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1

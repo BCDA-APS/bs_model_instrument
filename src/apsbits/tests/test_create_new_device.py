@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -21,11 +22,32 @@ def temp_config_file(tmp_path: Path) -> Path:
     Args:
         tmp_path: Pytest fixture providing temporary directory
 
+=======
+from typing import TYPE_CHECKING
+import pytest
+from pathlib import Path
+import yaml
+from apsbits.utils.create_new_device import DeviceConfig, create_new_device, create_device_class, get_device_class
+
+if TYPE_CHECKING:
+    from pytest_mock.plugin import MockerFixture
+    from _pytest.logging import LogCaptureFixture
+    from _pytest.monkeypatch import MonkeyPatch
+
+@pytest.fixture
+def temp_config_file(tmp_path: Path) -> Path:
+    """Create a temporary config file for testing.
+    
+    Args:
+        tmp_path: Pytest fixture providing temporary directory
+        
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Returns:
         Path to temporary config file
     """
     return tmp_path / "devices.yml"
 
+<<<<<<< HEAD
 
 @pytest.fixture
 def temp_devices_dir(tmp_path: Path, monkeypatch: "MonkeyPatch") -> Path:
@@ -35,11 +57,22 @@ def temp_devices_dir(tmp_path: Path, monkeypatch: "MonkeyPatch") -> Path:
         tmp_path: Pytest fixture providing temporary directory
         monkeypatch: Pytest fixture for modifying Python objects
 
+=======
+@pytest.fixture
+def temp_devices_dir(tmp_path: Path, monkeypatch: "MonkeyPatch") -> Path:
+    """Create a temporary devices directory for testing.
+    
+    Args:
+        tmp_path: Pytest fixture providing temporary directory
+        monkeypatch: Pytest fixture for modifying Python objects
+        
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Returns:
         Path to temporary devices directory
     """
     devices_dir = tmp_path / "instrument" / "devices"
     devices_dir.mkdir(parents=True)
+<<<<<<< HEAD
     monkeypatch.setattr(
         "src.create_new_device.Path",
         lambda x: devices_dir if x == "instrument/devices" else Path(x),
@@ -50,6 +83,14 @@ def temp_devices_dir(tmp_path: Path, monkeypatch: "MonkeyPatch") -> Path:
 def test_create_new_device_with_config_file(temp_config_file: Path) -> None:
     """Test device creation with configuration file.
 
+=======
+    monkeypatch.setattr("src.create_new_device.Path", lambda x: devices_dir if x == "instrument/devices" else Path(x))
+    return devices_dir
+
+def test_create_new_device_with_config_file(temp_config_file: Path) -> None:
+    """Test device creation with configuration file.
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Args:
         temp_config_file: Path to temporary config file
     """
@@ -58,6 +99,7 @@ def test_create_new_device_with_config_file(temp_config_file: Path) -> None:
         device_type="sensor",
         class_name="TestSensor",
         parameters={"port": "COM1"},
+<<<<<<< HEAD
         location="room_1",
     )
 
@@ -71,24 +113,53 @@ def test_create_new_device_with_config_file(temp_config_file: Path) -> None:
     with open(temp_config_file, "r") as f:
         yaml_data = yaml.safe_load(f)
 
+=======
+        location="room_1"
+    )
+    
+    result = create_new_device(config, temp_config_file)
+    
+    assert result["name"] == "test_device"
+    assert result["type"] == "sensor"
+    assert result["class"] == "TestSensor"
+    
+    # Verify YAML file was created and contains the device
+    with open(temp_config_file, 'r') as f:
+        yaml_data = yaml.safe_load(f)
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     assert "devices" in yaml_data
     assert "test_device" in yaml_data["devices"]
     assert yaml_data["devices"]["test_device"] == result
 
+<<<<<<< HEAD
 
 def test_create_device_class(temp_devices_dir: Path) -> None:
     """Test creation of new device class file.
 
+=======
+def test_create_device_class(temp_devices_dir: Path) -> None:
+    """Test creation of new device class file.
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Args:
         temp_devices_dir: Path to temporary devices directory
     """
     create_device_class("TestDevice", "test_type")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     # Verify class file was created
     class_file = temp_devices_dir / "testdevice.py"
     assert class_file.exists()
     assert (temp_devices_dir / "__init__.py").exists()
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     # Verify file content
     content = class_file.read_text()
     assert "class TestDevice:" in content
@@ -96,6 +167,7 @@ def test_create_device_class(temp_devices_dir: Path) -> None:
     assert "def initialize" in content
     assert "def close" in content
 
+<<<<<<< HEAD
 
 def test_create_new_device_empty_name() -> None:
     """Test device creation with empty name raises ValueError."""
@@ -110,10 +182,28 @@ def test_create_new_device_empty_name() -> None:
 def test_create_new_device_logging(caplog: "LogCaptureFixture") -> None:
     """Test that proper logging occurs during device creation.
 
+=======
+def test_create_new_device_empty_name() -> None:
+    """Test device creation with empty name raises ValueError."""
+    config = DeviceConfig(
+        name="",
+        device_type="sensor",
+        class_name="TestSensor",
+        parameters={}
+    )
+    
+    with pytest.raises(ValueError, match="Device name cannot be empty"):
+        create_new_device(config)
+
+def test_create_new_device_logging(caplog: "LogCaptureFixture") -> None:
+    """Test that proper logging occurs during device creation.
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Args:
         caplog: Pytest fixture for capturing log messages
     """
     config = DeviceConfig(
+<<<<<<< HEAD
         name="test_device", device_type="sensor", class_name="TestSensor", parameters={}
     )
 
@@ -125,40 +215,73 @@ def test_create_new_device_logging(caplog: "LogCaptureFixture") -> None:
 def test_get_device_class_existing(temp_devices_dir: Path) -> None:
     """Test getting an existing device class.
 
+=======
+        name="test_device",
+        device_type="sensor",
+        class_name="TestSensor",
+        parameters={}
+    )
+    
+    create_new_device(config)
+    
+    assert "Creating new device: test_device" in caplog.text
+
+def test_get_device_class_existing(temp_devices_dir: Path) -> None:
+    """Test getting an existing device class.
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Args:
         temp_devices_dir: Path to temporary devices directory
     """
     # Create a test device class
     create_device_class("TestDevice", "test_type")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     # Get the class
     device_class = get_device_class("TestDevice")
     assert device_class.__name__ == "TestDevice"
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
 def test_get_device_class_nonexistent() -> None:
     """Test getting a nonexistent device class raises ImportError."""
     with pytest.raises(ImportError):
         get_device_class("NonexistentDevice")
 
+<<<<<<< HEAD
 
 def test_create_new_device_with_existing_class(
     temp_devices_dir: Path, temp_config_file: Path
 ) -> None:
     """Test creating a device with an existing class.
 
+=======
+def test_create_new_device_with_existing_class(temp_devices_dir: Path, temp_config_file: Path) -> None:
+    """Test creating a device with an existing class.
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Args:
         temp_devices_dir: Path to temporary devices directory
         temp_config_file: Path to temporary config file
     """
     # Create a test device class first
     create_device_class("TestDevice", "test_type")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     # Create a device using the existing class
     config = DeviceConfig(
         name="test_device",
         device_type="test_type",
         class_name="TestDevice",
+<<<<<<< HEAD
         parameters={"param1": "value1"},
     )
 
@@ -167,3 +290,13 @@ def test_create_new_device_with_existing_class(
     assert result["name"] == "test_device"
     assert result["class"] == "TestDevice"
     assert result["parameters"] == {"param1": "value1"}
+=======
+        parameters={"param1": "value1"}
+    )
+    
+    result = create_new_device(config, temp_config_file)
+    
+    assert result["name"] == "test_device"
+    assert result["class"] == "TestDevice"
+    assert result["parameters"] == {"param1": "value1"} 
+>>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
