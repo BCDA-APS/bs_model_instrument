@@ -10,4 +10,5 @@ Guides show how to use certain features of this instrument.
     :glob:
 
     dm
-    template_sync
+    template_creation
+    qserver_service

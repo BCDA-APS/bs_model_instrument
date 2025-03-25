@@ -50,17 +50,16 @@ Start your data collection session using the demo instrument as an example:
    :maxdepth: 1
    :hidden:
 
+   install
    demo
+   guides/template_creation
    sessions
    guides/index
-   install
+   guides/qserver_service
    logging_config
    api/index
    license
    history
-   create_new_device
-   qserver_service
-   template_creation
 
 
 About ...

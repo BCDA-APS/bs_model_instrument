@@ -10,7 +10,6 @@ The APSBITS package provides tools and utilities to build Bluesky instruments. T
 
     docs/source         sphinx documentation source
     pyproject.toml      project configuration
-    qserver/           files for running a queueserver host process
     src/               Python source code tree
         apsbits/       root of the 'apsbits' package
             core/      core components for Bluesky data acquisition
