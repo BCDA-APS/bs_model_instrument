@@ -62,4 +62,4 @@ plans
 .. automodule:: apsbits.demo_instrument.plans
    :members:
    :undoc-members:
-   :show-inheritance: 
+   :show-inheritance:
