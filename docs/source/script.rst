@@ -9,7 +9,7 @@ named ``example.py``).  Be sure to make the file executable. [#]_
     :linenos:
 
     #!/usr/bin/env python
-    from instrument.startup import RE
+    from apsbits.demo_instrument.startup import RE
 
     print(f"{dict(RE.md)=!r}")
 

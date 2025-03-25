@@ -3,40 +3,84 @@
 API: The Source Code
 ====================
 
-The instrument model is described by this directory structure:
+The APSBITS package provides tools and utilities to build Bluesky instruments. The package structure is:
 
 .. code-block:: text
     :linenos:
 
     docs/source         sphinx documentation source
     pyproject.toml      project configuration
-    qserver/                 files for running a queueserver host process
-    src/                Python source code tree
-        instrument/     root of the 'instrument' package
-            startup.py  Python code to setup a session for Bluesky data acquisition
-            callbacks/  receive and handle info from other code
-            configs/    configuration files
-            core/       create core components of Bluesky data acquisition
-            devices/    your instrument's controls
-            plans/      your instrument's measurement procedures
-            utils/      other code to setup or use your instrument
+    src/               Python source code tree
+        apsbits/       root of the 'apsbits' package
+            core/      core components for Bluesky data acquisition
+            utils/     utilities for setup and configuration
+            demo_instrument/  example instrument implementation
+                startup.py   setup a demo session for Bluesky data acquisition
+                callbacks/  receive and handle info from other code
+                configs/   configuration files
+                devices/   demo instrument's controls
+                plans/    demo instrument's measurement procedures
+            demo_qserver/   example queueserver implementation
 
-A Bluesky data acquisition session :ref:`begins with <api.startup>`:
+A Bluesky data acquisition session using the demo instrument begins with:
 
 .. code-block:: py
 
-    from instrument.startup import *
+    from apsbits.demo_instrument.startup import *
 
-The ``instrument/`` directory is described in the following sections.
+The ``apsbits/`` package is described in the following sections.
+
+API Documentation
+=================
+
+This section contains detailed API documentation for the APSBITS package.
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Contents:
+   :maxdepth: 2
 
-   startup
-   callbacks
-   configs
    core
-   devices
-   plans
    utils
+   demo_instrument
+   demo_qserver
+
+Core Components
+--------------
+
+The core components provide the fundamental building blocks for Bluesky data acquisition:
+
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   apsbits.core.best_effort_init
+   apsbits.core.catalog_init
+   apsbits.core.run_engine_init
+
+Utilities
+---------
+
+The utilities module provides helper functions and tools:
+
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   apsbits.utils.aps_functions
+   apsbits.utils.config_loaders
+   apsbits.utils.controls_setup
+   apsbits.utils.helper_functions
+   apsbits.utils.logging_setup
+   apsbits.utils.metadata
+   apsbits.utils.stored_dict
+
+Demo Components
+--------------
+
+Example implementations and templates:
+
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   apsbits.demo_instrument
+   apsbits.demo_qserver

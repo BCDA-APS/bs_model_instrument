@@ -21,7 +21,7 @@ code cell:
 
 .. code-block:: py
 
-    from instrument.startup import *
+    from apsbits.demo_instrument.startup import *
 
 Jupyter Lab
 -----------
@@ -38,7 +38,7 @@ code cell:
 
 .. code-block:: py
 
-    from instrument.startup import *
+    from apsbits.demo_instrument.startup import *
 
 VSCode editor
 -------------
@@ -60,4 +60,4 @@ code cell:
 
 .. code-block:: py
 
-    from instrument.startup import *
+    from apsbits.demo_instrument.startup import *

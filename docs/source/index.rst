@@ -1,16 +1,15 @@
-instrument (|release|)
+APSBITS (|release|)
 ======================
 
-Model of a Bluesky Data Acquisition Instrument in console, notebook, & queueserver.
+A Python package providing tools and utilities to build Bluesky Data Acquisition Instruments that can run in console, notebook, & queueserver environments.
 
-Start the data collection session with the same command, whether in the IPython
-console, a Jupyter notebook, the queueserver, or even a Python script:
+Start your data collection session using the demo instrument as an example:
 
 .. code-block:: py
       :linenos:
 
-      from instrument.startup import *
-      from instrument.tests.sim_plans import *
+      from apsbits.demo_instrument.startup import *
+      from apsbits.demo_instrument.plans import *
 
       RE(sim_print_plan())
       RE(sim_count_plan())
@@ -24,24 +23,24 @@ console, a Jupyter notebook, the queueserver, or even a Python script:
 
     .. grid-item-card:: :material-regular:`install_desktop;3em` :doc:`install`
 
-      How to install the *instrument* package.
+      How to install the *apsbits* package.
 
     .. grid-item-card:: :material-regular:`preview;3em` :doc:`demo`
 
-      Demo: Notebook Startup.
+      Demo: Using the demo instrument.
 
     .. grid-item-card:: :material-regular:`school;3em` :ref:`guides`
 
-      Guides, How-Tos, ...
+      Guides, How-Tos, and examples for creating your own instrument.
 
     .. grid-item-card:: :material-regular:`play_arrow;3em` :doc:`sessions`
 
-      Start the instrument in IPython, Jupyter notebook, Python scripts, and
+      Run instruments in IPython, Jupyter notebook, Python scripts, and
       Bluesky Queueserver sessions.
 
     .. grid-item-card:: :material-regular:`subscriptions;3em` :ref:`api`
 
-      Explore the Python code for your instrument.
+      Explore the Python code and core functionality.
 
     .. grid-item-card:: :material-regular:`description;3em` :doc:`logging_config`
 
@@ -51,14 +50,17 @@ console, a Jupyter notebook, the queueserver, or even a Python script:
    :maxdepth: 1
    :hidden:
 
+   install
    demo
+   guides/template_creation
    sessions
    guides/index
-   install
+   guides/qserver_service
    logging_config
    api/index
    license
    history
+
 
 About ...
 ---------
