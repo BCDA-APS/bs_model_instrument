@@ -73,18 +73,18 @@ from typing import Dict, Any
 
 class DeviceName:
     """Device class for device_type.
-    
+
     Attributes:
         config: Configuration dictionary for the device
     """
-    
+
     def __init__(self, config: Dict[str, Any]) -> None:
         self.config = config
-        
+
     def initialize(self) -> None:
         """Initialize the device hardware."""
         pass
-        
+
     def close(self) -> None:
         """Close the device connection."""
         pass
@@ -188,4 +188,4 @@ The tests cover:
 
 - PyYAML: For YAML file handling
 - Python 3.7+: For dataclass support
-- typing: For type annotations 
+- typing: For type annotations
