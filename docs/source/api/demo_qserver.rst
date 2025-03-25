@@ -1,52 +1,30 @@
 .. _api.demo_qserver:
 
 Demo Queue Server
-================
-
-The demo queue server provides an example implementation of a Bluesky Queue Server using APSBITS.
-
-Configuration
-============
-
-The Queue Server configuration is stored in ``src/apsbits/demo_qserver/qs-config.yml``:
-
-.. literalinclude:: ../../../src/apsbits/demo_qserver/qs-config.yml
-   :language: yaml
-
-Starting the Server
 =================
 
-The Queue Server can be started using the script at ``src/apsbits/demo_qserver/qs_host.sh``:
+.. currentmodule:: apsbits.demo_qserver
 
-.. literalinclude:: ../../../src/apsbits/demo_qserver/qs_host.sh
-   :language: bash
 
-Example Usage
-============
 
-Here's how to use the queue server:
+Starting the Server
+==================
 
-.. code-block:: python
+.. code-block:: bash
 
-    from bluesky.plans import count
-    from ophyd.sim import det
+    ./qs_host.sh
 
-    # Connect to the Queue Server
-    from bluesky_queueserver_api import BPlan
-    from bluesky_queueserver_api.zmq import REManagerAPI
+Configuration
+-------------
 
-    # Create a plan
-    plan = BPlan("count", [det], num=5)
+.. code-block:: yaml
 
-    # Add the plan to the queue
-    api = REManagerAPI()
-    api.item_add(plan)
+    # qs-config.yml
+    host: localhost
+    port: 8080
+    name: demo_qserver
+    log_level: INFO
 
-    # Start the queue
-    api.queue_start()
-
-    # Monitor progress
-    status = api.status()
-    print(f"Queue status: {status['manager_state']}")
+The demo queue server provides an example implementation of a Bluesky Queue Server using APSBITS.
 
 For more details on using the Queue Server, see :doc:`../qserver_service`.

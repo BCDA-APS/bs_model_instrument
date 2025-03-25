@@ -1,4 +1,4 @@
-﻿apsbits.demo\_instrument.callbacks.spec\_data\_file\_writer
+apsbits.demo\_instrument.callbacks.spec\_data\_file\_writer
 ===========================================================
 
 .. automodule:: apsbits.demo_instrument.callbacks.spec_data_file_writer

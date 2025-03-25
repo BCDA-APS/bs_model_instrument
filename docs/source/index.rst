@@ -11,9 +11,9 @@ Start your data collection session using the demo instrument as an example:
       from apsbits.demo_instrument.startup import *
       from apsbits.demo_instrument.plans import *
 
-      RE(demo_print_plan())
-      RE(demo_count_plan())
-      RE(demo_rel_scan_plan())
+      RE(sim_print_plan())
+      RE(sim_count_plan())
+      RE(sim_rel_scan_plan())
 
 
 .. for icon suggestions, see:

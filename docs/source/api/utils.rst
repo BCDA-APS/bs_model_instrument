@@ -28,7 +28,7 @@ These utilities help with:
 5. Creating and managing device configurations
 
 Example Usage
-------------
+-------------
 
 Here's how to use some of the utility functions:
 
@@ -46,7 +46,7 @@ Here's how to use some of the utility functions:
     md = metadata.get_metadata()
 
 API Reference
-------------
+-------------
 
 .. automodule:: apsbits.utils
    :members:

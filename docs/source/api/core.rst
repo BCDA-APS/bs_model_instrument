@@ -23,7 +23,7 @@ These components are used to:
 4. Establish baseline configurations
 
 Example Usage
-------------
+-------------
 
 Here's how to initialize the Run Engine, set up data catalogs, and configure best-effort callbacks:
 
@@ -41,7 +41,7 @@ Here's how to initialize the Run Engine, set up data catalogs, and configure bes
     bec = best_effort_init(RE)
 
 API Reference
-------------
+-------------
 
 .. automodule:: apsbits.core
    :members:

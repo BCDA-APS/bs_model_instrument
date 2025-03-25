@@ -32,7 +32,7 @@ A Bluesky data acquisition session using the demo instrument begins with:
 The ``apsbits/`` package is described in the following sections.
 
 API Documentation
-================
+=================
 
 This section contains detailed API documentation for the APSBITS package.
 
@@ -58,7 +58,7 @@ The core components provide the fundamental building blocks for Bluesky data acq
    apsbits.core.run_engine_init
 
 Utilities
---------
+---------
 
 The utilities module provides helper functions and tools:
 
@@ -75,7 +75,7 @@ The utilities module provides helper functions and tools:
    apsbits.utils.stored_dict
 
 Demo Components
--------------
+--------------
 
 Example implementations and templates:
 

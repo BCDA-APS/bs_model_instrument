@@ -1,65 +1,55 @@
 .. _api.demo_instrument:
 
 Demo Instrument
-=============
+===============
 
-The ``demo_instrument`` module provides a complete example of how to build a Bluesky instrument using APSBITS. It includes:
+.. currentmodule:: apsbits.demo_instrument
 
-.. code-block:: text
-    :linenos:
+.. autosummary::
+   :toctree: generated
+   :recursive:
 
-    demo_instrument/
-        startup.py   setup a demo session for Bluesky data acquisition
-        callbacks/   receive and handle info from other code
-        configs/    configuration files
-        devices/    demo instrument's controls
-        plans/      demo instrument's measurement procedures
+   startup
+   callbacks
+   devices
+   plans
 
 Example Usage
-------------
+-------------
 
-Start a Bluesky data acquisition session with:
-
-.. code-block:: python
+.. code-block:: py
 
     from apsbits.demo_instrument.startup import *
-    from apsbits.demo_instrument.plans import *
-
-    RE(demo_print_plan())
-    RE(demo_count_plan())
-    RE(demo_rel_scan_plan())
 
 Components
----------
+----------
 
-startup
-~~~~~~~
-
-.. automodule:: apsbits.demo_instrument.startup
-   :members:
-   :undoc-members:
-   :show-inheritance:
+The demo instrument is organized into several components:
 
 callbacks
-~~~~~~~~
+~~~~~~~~~
 
-.. automodule:: apsbits.demo_instrument.callbacks
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   callbacks.nexus_data_file_writer
+   callbacks.spec_data_file_writer
 
 devices
 ~~~~~~~
 
-.. automodule:: apsbits.demo_instrument.devices
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
 
 plans
 ~~~~~
 
-.. automodule:: apsbits.demo_instrument.plans
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   plans.dm_plans
+   plans.sim_plans
