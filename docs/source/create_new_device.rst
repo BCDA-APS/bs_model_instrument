@@ -19,7 +19,6 @@ Example Configuration Files
 The demo instrument includes example configuration files:
 
 * Main device configuration: ``src/apsbits/demo_instrument/configs/devices.yml``
-* APS-specific devices: ``src/apsbits/demo_instrument/configs/devices_aps_only.yml``
 * Instrument configuration: ``src/apsbits/demo_instrument/configs/iconfig.yml``
 * Logging configuration: ``src/apsbits/demo_instrument/configs/logging.yml``
 
@@ -38,56 +37,41 @@ Here's an example of various device configurations that can be defined in your `
 
 .. code-block:: yaml
 
-    ## Examples of different device types and their configurations
+    # Simulated Devices
+    apsbits.utils.sim_creator.predefined_device:
+    - {creator: ophyd.sim.motor, name: sim_motor}
+    - {creator: ophyd.sim.noisy_det, name: sim_det}
 
-    # Simple Signal Device
+    # Simulated Shutter
+    apstools.devices.SimulatedApsPssShutterWithStatus:
+    - name: shutter
+      labels: ["shutters"]
+
+    # Example Signal Device
     ophyd.Signal:
     - name: test
       value: 50.7
     - name: t2
       value: 2
 
-    # 2D Slit Device
+    # Example 2D Slit Device
     apstools.synApps.Optics2Slit2D_HV:
     - name: slit1
       prefix: ioc:Slit1
       labels: ["slits"]
 
-    # Simulated 4-circle Diffractometer
-    hkl.SimulatedE4CV:
-    - name: sim4c
-      prefix: ""
-      labels: ["diffractometer"]
-
-    # Scaler Channel Device
+    # Example Scaler Channel Device
     ophyd.scaler.ScalerCH:
     - name: scaler1
       prefix: vme:scaler1
       labels: ["scalers", "detectors"]
 
-    # Multiple EPICS Motors
+    # Example EPICS Motors
     ophyd.EpicsMotor:
     - {name: m1, prefix: gp:m1, labels: ["motor"]}
     - {name: m2, prefix: gp:m2, labels: ["motor"]}
     - {name: m3, prefix: gp:m3, labels: ["motor"]}
     - {name: m4, prefix: gp:m4, labels: ["motor"]}
-
-    # Area Detector with Plugins
-    apstools.devices.ad_creator:
-      - name: adsimdet
-        prefix: "ad:"
-        labels: ["area_detector", "detectors"]
-        plugins:
-          - cam:
-              class: apstools.devices.SimDetectorCam_V34
-          - image
-          - pva
-          - hdf1:
-              class: apstools.devices.AD_EpicsFileNameHDF5Plugin
-              read_path_template: "/path/to/bluesky/tmp/"
-              write_path_template: "/path/to/ioc/tmp/"
-          - roi1
-          - stats1
 
 Each device configuration specifies:
 
@@ -95,7 +79,6 @@ Each device configuration specifies:
 * Device name and prefix (if applicable)
 * Labels for device categorization
 * Additional parameters specific to each device type
-* Plugin configurations for complex devices like area detectors
 
 Usage
 -----
@@ -106,7 +89,7 @@ Basic Usage
 .. code-block:: python
 
     from pathlib import Path
-    from apsbits.demo_instrument.configs import DeviceConfig, create_new_device
+    from apsbits.utils.create_new_device import DeviceConfig, create_new_device
 
     # Create a device configuration
     config = DeviceConfig(
@@ -253,7 +236,90 @@ get_device_class
     def get_device_class(class_name: str) -> Type[Any]
     """
 
-Gets the device class by name, importing it from the devices directory.
+Gets a device class by name, importing it from the devices directory.
+
+**Parameters:**
+* ``class_name``: Name of the class to import
+
+**Returns:**
+* The device class
+
+**Raises:**
+* ``ImportError``: If the class cannot be imported
+
+validate_device_config
+^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    def validate_device_config(config: DeviceConfig) -> None
+    """
+
+Validates a device configuration.
+
+**Parameters:**
+* ``config``: Device configuration to validate
+
+**Raises:**
+* ``ValueError``: If configuration is invalid
+
+update_device_config
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    def update_device_config(
+        device_name: str,
+        updates: Dict[str, Any],
+        config_file: Path
+    ) -> Dict[str, Any]
+    """
+
+Updates an existing device configuration.
+
+**Parameters:**
+* ``device_name``: Name of the device to update
+* ``updates``: Dictionary of updates to apply
+* ``config_file``: Path to configuration file
+
+**Returns:**
+* Updated device configuration
+
+**Raises:**
+* ``ValueError``: If device does not exist
+
+delete_device
+^^^^^^^^^^^^
+
+.. code-block:: python
+
+    def delete_device(device_name: str, config_file: Path) -> None
+    """
+
+Deletes a device from the configuration.
+
+**Parameters:**
+* ``device_name``: Name of the device to delete
+* ``config_file``: Path to configuration file
+
+**Raises:**
+* ``ValueError``: If device does not exist
+
+list_devices
+^^^^^^^^^^^
+
+.. code-block:: python
+
+    def list_devices(config_file: Path) -> Dict[str, Dict[str, Any]]
+    """
+
+Lists all devices in the configuration.
+
+**Parameters:**
+* ``config_file``: Path to configuration file
+
+**Returns:**
+* Dictionary of device configurations
 
 File Structure
 --------------
