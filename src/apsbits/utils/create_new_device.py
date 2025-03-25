@@ -62,7 +62,11 @@ def create_device_class(class_name: str, device_type: str) -> None:
     Args:
         class_name: Name of the class to create
         device_type: Type of device for documentation
+
+    Raises:
+        ValueError: If class name is invalid
     """
+    validate_device_class(class_name)
     devices_dir = Path("instrument/devices")
     devices_dir.mkdir(parents=True, exist_ok=True)
 

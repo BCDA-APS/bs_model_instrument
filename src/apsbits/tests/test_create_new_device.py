@@ -50,7 +50,7 @@ def temp_devices_dir(tmp_path: Path, monkeypatch: "MonkeyPatch") -> Path:
     devices_dir = tmp_path / "instrument" / "devices"
     devices_dir.mkdir(parents=True)
     monkeypatch.setattr(
-        "src.create_new_device.Path",
+        "apsbits.utils.create_new_device.Path",
         lambda x: devices_dir if x == "instrument/devices" else Path(x),
     )
     return devices_dir
