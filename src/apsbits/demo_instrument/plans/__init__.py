@@ -1,10 +1,4 @@
-"""Demo instrument plans.
-
-This module provides various plans for the demo instrument, including:
-- Data management plans for workflow control
-- Simulation plans for testing
-- Demo plans for examples
-"""
+""Bluesky plans."""
 
 from .dm_plans import dm_kickoff_workflow  # noqa: F401
 from .dm_plans import dm_list_processing_jobs  # noqa: F401
