@@ -1,7 +1,7 @@
 Create New Device
-================
+==================
 
-This module provides functionality to create and configure new devices in the instrument system. It handles both the creation of device class files and the management of device configurations in YAML format.
+The Queue Server provides a way to run Bluesky plans remotely.
 
 Overview
 --------
@@ -14,7 +14,7 @@ The ``create_new_device`` module allows you to:
 * Load existing device classes
 
 Example Configuration Files
--------------------------
+---------------------------
 
 The demo instrument includes example configuration files:
 
@@ -24,18 +24,84 @@ The demo instrument includes example configuration files:
 * Logging configuration: ``src/apsbits/demo_instrument/configs/logging.yml``
 
 Example Device Definitions
-------------------------
+--------------------------
 
 The demo instrument includes example device definitions in ``src/apsbits/demo_instrument/devices/__init__.py``:
 
 .. literalinclude:: ../../src/apsbits/demo_instrument/devices/__init__.py
    :language: python
 
+Device Configuration Examples
+-----------------------------
+
+Here's an example of various device configurations that can be defined in your ``devices.yml`` file:
+
+.. code-block:: yaml
+
+    ## Examples of different device types and their configurations
+    
+    # Simple Signal Device
+    ophyd.Signal:
+    - name: test
+      value: 50.7
+    - name: t2
+      value: 2
+
+    # 2D Slit Device
+    apstools.synApps.Optics2Slit2D_HV:
+    - name: slit1
+      prefix: ioc:Slit1
+      labels: ["slits"]
+
+    # Simulated 4-circle Diffractometer
+    hkl.SimulatedE4CV:
+    - name: sim4c
+      prefix: ""
+      labels: ["diffractometer"]
+
+    # Scaler Channel Device
+    ophyd.scaler.ScalerCH:
+    - name: scaler1
+      prefix: vme:scaler1
+      labels: ["scalers", "detectors"]
+
+    # Multiple EPICS Motors
+    ophyd.EpicsMotor:
+    - {name: m1, prefix: gp:m1, labels: ["motor"]}
+    - {name: m2, prefix: gp:m2, labels: ["motor"]}
+    - {name: m3, prefix: gp:m3, labels: ["motor"]}
+    - {name: m4, prefix: gp:m4, labels: ["motor"]}
+
+    # Area Detector with Plugins
+    apstools.devices.ad_creator:
+      - name: adsimdet
+        prefix: "ad:"
+        labels: ["area_detector", "detectors"]
+        plugins:
+          - cam:
+              class: apstools.devices.SimDetectorCam_V34
+          - image
+          - pva
+          - hdf1:
+              class: apstools.devices.AD_EpicsFileNameHDF5Plugin
+              read_path_template: "/path/to/bluesky/tmp/"
+              write_path_template: "/path/to/ioc/tmp/"
+          - roi1
+          - stats1
+
+Each device configuration specifies:
+
+* Device class path (e.g., ``ophyd.Signal``, ``ophyd.EpicsMotor``)
+* Device name and prefix (if applicable)
+* Labels for device categorization
+* Additional parameters specific to each device type
+* Plugin configurations for complex devices like area detectors
+
 Usage
 -----
 
 Basic Usage
-~~~~~~~~~~
+~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -61,7 +127,7 @@ Basic Usage
     )
 
 Configuration Structure
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``DeviceConfig`` dataclass accepts the following parameters:
 
@@ -72,7 +138,7 @@ The ``DeviceConfig`` dataclass accepts the following parameters:
 * ``location`` (Optional[str]): Physical location of the device
 
 YAML Configuration
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 Devices are stored in ``instrument/configs/devices.yml`` with the following structure:
 
@@ -90,7 +156,7 @@ Devices are stored in ``instrument/configs/devices.yml`` with the following stru
         status: initialized
 
 Generated Device Classes
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 When a new device class is created, it will be placed in ``instrument/devices/`` with the following structure:
 
@@ -117,10 +183,10 @@ When a new device class is created, it will be placed in ``instrument/devices/``
             pass
 
 API Reference
-------------
+-------------
 
 DeviceConfig
-~~~~~~~~~~
+~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -133,7 +199,7 @@ DeviceConfig
         location: Optional[str] = None
 
 create_new_device
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -157,10 +223,10 @@ Creates a new device with the specified configuration and optionally saves it to
 * ``ImportError``: If the device class cannot be loaded
 
 Helper Functions
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 load_or_create_yaml
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -170,7 +236,7 @@ load_or_create_yaml
 Loads an existing YAML file or creates a new one if it doesn't exist.
 
 create_device_class
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -180,7 +246,7 @@ create_device_class
 Creates a new device class file if it doesn't exist.
 
 get_device_class
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^    
 
 .. code-block:: python
 
@@ -190,7 +256,7 @@ get_device_class
 Gets the device class by name, importing it from the devices directory.
 
 File Structure
--------------
+--------------
 
 ::
 
@@ -204,7 +270,7 @@ File Structure
         └── create_new_device.py
 
 Error Handling
--------------
+--------------
 
 The module includes comprehensive error handling for common scenarios:
 
@@ -232,9 +298,3 @@ The tests cover:
 * YAML file management
 * Logging functionality
 
-Dependencies
------------
-
-* PyYAML: For YAML file handling
-* Python 3.7+: For dataclass support
-* typing: For type annotations 
