@@ -1,10 +1,11 @@
+=============================
 Queue Server Systemd Service
 =============================
 
 This document describes how to set up and manage the Bluesky Queue Server as a systemd service, allowing for automatic startup and management of the Queue Server on Linux systems.
 
 Service Configuration
-====================
+=====================
 
 Create a systemd service unit file at ``/etc/systemd/system/queueserver.service``. The configuration should be based on the settings in ``src/apsbits/demo_qserver/qs-config.yml`` and ``src/apsbits/demo_qserver/qs_host.sh``:
 
@@ -39,7 +40,7 @@ Create a systemd service unit file at ``/etc/systemd/system/queueserver.service`
     WantedBy=multi-user.target
 
 Configuration Parameters
-=======================
+========================
 
 Before implementing the service, you need to modify the following parameters:
 
@@ -51,10 +52,10 @@ Before implementing the service, you need to modify the following parameters:
 * ``/path/to/your/working/dir``: Working directory for the service
 
 Service Management
-=================
+==================
 
 Installation
-~~~~~~~~~~~
+~~~~~~~~~~~~
 
 1. Save the service configuration file:
 
@@ -69,7 +70,7 @@ Installation
        sudo systemctl daemon-reload
 
 Basic Service Commands
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 Start the service:
 
@@ -108,7 +109,7 @@ Disable service from starting on boot:
     sudo systemctl disable queueserver
 
 Monitoring and Troubleshooting
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 View service logs:
 
@@ -123,7 +124,7 @@ Follow logs in real-time:
     journalctl -u queueserver -f
 
 Security Considerations
-=====================
+=======================
 
 1. Ensure the service user has appropriate permissions:
 
@@ -139,7 +140,7 @@ Security Considerations
    * Security tokens or credentials (use secure methods)
 
 Additional Configuration Options
-==============================
+================================
 
 The service can be further customized with additional systemd directives:
 
@@ -161,7 +162,7 @@ The service can be further customized with additional systemd directives:
     NoNewPrivileges=true
 
 Troubleshooting
-==============
+===============
 
 Common issues and solutions:
 
