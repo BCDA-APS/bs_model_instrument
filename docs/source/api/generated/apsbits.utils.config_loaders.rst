@@ -10,11 +10,11 @@
    .. autosummary::
 
 =======
-   
+
    .. rubric:: Functions
 
    .. autosummary::
-   
+
 >>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
       get_config
       load_config
@@ -22,5 +22,5 @@
       update_config
 <<<<<<< HEAD
 =======
-   
+
 >>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1

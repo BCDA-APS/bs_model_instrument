@@ -65,5 +65,5 @@ plans
 <<<<<<< HEAD
    :show-inheritance:
 =======
-   :show-inheritance: 
+   :show-inheritance:
 >>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1

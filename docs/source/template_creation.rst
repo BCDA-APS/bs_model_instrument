@@ -36,5 +36,5 @@ Steps to Create Repository
 <<<<<<< HEAD
 9. Click "Create repository from template".
 =======
-9. Click "Create repository from template". 
+9. Click "Create repository from template".
 >>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1

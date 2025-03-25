@@ -39,7 +39,7 @@ Here's an example of various device configurations that can be defined in your `
 .. code-block:: yaml
 
     ## Examples of different device types and their configurations
-    
+
     # Simple Signal Device
     ophyd.Signal:
     - name: test
@@ -166,18 +166,18 @@ When a new device class is created, it will be placed in ``instrument/devices/``
 
     class DeviceName:
         """Device class for device_type.
-        
+
         Attributes:
             config: Configuration dictionary for the device
         """
-        
+
         def __init__(self, config: Dict[str, Any]) -> None:
             self.config = config
-            
+
         def initialize(self) -> None:
             """Initialize the device hardware."""
             pass
-            
+
         def close(self) -> None:
             """Close the device connection."""
             pass
@@ -246,7 +246,7 @@ create_device_class
 Creates a new device class file if it doesn't exist.
 
 get_device_class
-^^^^^^^^^^^^^^^^    
+^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 

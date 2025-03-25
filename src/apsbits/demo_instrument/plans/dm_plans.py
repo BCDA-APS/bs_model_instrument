@@ -10,32 +10,22 @@ Plans in support of APS Data Management
 """
 
 import logging
-<<<<<<< HEAD
 from typing import Any
 from typing import Dict
 from typing import List
 from typing import Optional
-=======
-from typing import Any, Dict, List, Optional, Union
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
 
 from apstools.devices import DM_WorkflowConnector
 from apstools.utils import dm_api_proc
 from apstools.utils import share_bluesky_metadata_with_dm
 from bluesky import plan_stubs as bps
 from bluesky.preprocessors import run_decorator
-<<<<<<< HEAD
 from ophyd import Device
 
 from apsbits.demo_instrument.devices import det
 from apsbits.demo_instrument.devices import motor
 from apsbits.demo_instrument.devices import motor1
 from apsbits.demo_instrument.devices import motor2
-=======
-from ophyd import Device, Signal
-
-from apsbits.demo_instrument.devices import det, motor, motor1, motor2, motor3
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

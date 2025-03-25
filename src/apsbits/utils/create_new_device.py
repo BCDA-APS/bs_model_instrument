@@ -1,4 +1,13 @@
-<<<<<<< HEAD
+"""Device creation and management utilities.
+
+This module provides functionality for creating and managing device configurations,
+including:
+- Device configuration data structures
+- YAML configuration file handling
+- Device class generation
+- Device instance management
+"""
+
 import importlib
 import logging
 from dataclasses import dataclass
@@ -17,22 +26,6 @@ logger = logging.getLogger(__name__)
 class DeviceConfig:
     """Configuration data structure for device creation.
 
-=======
-from typing import Dict, Optional, Type, Any
-from dataclasses import dataclass
-import logging
-from pathlib import Path
-import yaml
-import importlib
-import inspect
-
-logger = logging.getLogger(__name__)
-
-@dataclass
-class DeviceConfig:
-    """Configuration data structure for device creation.
-    
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Attributes:
         name: The name of the device
         device_type: The type of device being created
@@ -40,17 +33,13 @@ class DeviceConfig:
         parameters: Additional parameters for the device
         location: Optional location identifier for the device
     """
-<<<<<<< HEAD
 
-=======
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     name: str
     device_type: str
     class_name: str
     parameters: Dict[str, Any]
     location: Optional[str] = None
 
-<<<<<<< HEAD
 
 def load_or_create_yaml(file_path: Path) -> Dict[str, Any]:
     """Load existing YAML file or create new one if it doesn't exist.
@@ -58,19 +47,10 @@ def load_or_create_yaml(file_path: Path) -> Dict[str, Any]:
     Args:
         file_path: Path to the YAML file
 
-=======
-def load_or_create_yaml(file_path: Path) -> Dict[str, Any]:
-    """Load existing YAML file or create new one if it doesn't exist.
-    
-    Args:
-        file_path: Path to the YAML file
-        
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Returns:
         Dict containing the YAML content
     """
     if file_path.exists():
-<<<<<<< HEAD
         with open(file_path, "r") as f:
             return yaml.safe_load(f) or {}
     return {"devices": {}}
@@ -79,33 +59,19 @@ def load_or_create_yaml(file_path: Path) -> Dict[str, Any]:
 def create_device_class(class_name: str, device_type: str) -> None:
     """Create a new device class file if it doesn't exist.
 
-=======
-        with open(file_path, 'r') as f:
-            return yaml.safe_load(f) or {}
-    return {"devices": {}}
-
-def create_device_class(class_name: str, device_type: str) -> None:
-    """Create a new device class file if it doesn't exist.
-    
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Args:
         class_name: Name of the class to create
         device_type: Type of device for documentation
     """
     devices_dir = Path("instrument/devices")
     devices_dir.mkdir(parents=True, exist_ok=True)
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     file_path = devices_dir / f"{class_name.lower()}.py"
     if not file_path.exists():
         class_content = f'''from typing import Dict, Any
 
 class {class_name}:
     """Device class for {device_type}.
-<<<<<<< HEAD
 
     Attributes:
         config: Configuration dictionary for the device
@@ -114,52 +80,27 @@ class {class_name}:
     def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize the {device_type} device.
 
-=======
-    
-    Attributes:
-        config: Configuration dictionary for the device
-    """
-    
-    def __init__(self, config: Dict[str, Any]) -> None:
-        """Initialize the {device_type} device.
-        
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
         Args:
             config: Configuration dictionary for the device
         """
         self.config = config
-<<<<<<< HEAD
 
     def initialize(self) -> None:
         """Initialize the device hardware."""
         pass
 
-=======
-        
-    def initialize(self) -> None:
-        """Initialize the device hardware."""
-        pass
-        
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     def close(self) -> None:
         """Close the device connection."""
         pass
 '''
-<<<<<<< HEAD
         with open(file_path, "w") as f:
             f.write(class_content)
 
-=======
-        with open(file_path, 'w') as f:
-            f.write(class_content)
-        
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
         # Create __init__.py if it doesn't exist
         init_file = devices_dir / "__init__.py"
         if not init_file.exists():
             init_file.touch()
 
-<<<<<<< HEAD
 
 def get_device_class(class_name: str) -> Type[Any]:
     """Get the device class by name, importing it from the devices directory.
@@ -170,17 +111,6 @@ def get_device_class(class_name: str) -> Type[Any]:
     Returns:
         The device class
 
-=======
-def get_device_class(class_name: str) -> Type[Any]:
-    """Get the device class by name, importing it from the devices directory.
-    
-    Args:
-        class_name: Name of the class to import
-        
-    Returns:
-        The device class
-        
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     Raises:
         ImportError: If the class cannot be imported
     """
@@ -188,142 +118,183 @@ def get_device_class(class_name: str) -> Type[Any]:
         module = importlib.import_module(f"instrument.devices.{class_name.lower()}")
         return getattr(module, class_name)
     except (ImportError, AttributeError) as e:
-        raise ImportError(f"Could not import device class {class_name}: {str(e)}")
+        raise ImportError(f"Could not import device class {class_name}") from e
 
-<<<<<<< HEAD
 
-def create_new_device(
-    config: DeviceConfig, config_file: Optional[Path] = None
-) -> Dict[str, Any]:
-    """Create a new device with the specified configuration.
-
-    Args:
-        config: DeviceConfig object containing device specifications
-        config_file: Optional path to the devices configuration file
-
-    Returns:
-        Dict containing the created device information
-
-=======
 def create_new_device(
     config: DeviceConfig,
-    config_file: Optional[Path] = None
+    config_file: Optional[Path] = None,
 ) -> Dict[str, Any]:
     """Create a new device with the specified configuration.
-    
+
     Args:
-        config: DeviceConfig object containing device specifications
-        config_file: Optional path to the devices configuration file
-        
+        config: Configuration for the new device
+        config_file: Optional path to configuration file
+
     Returns:
-        Dict containing the created device information
-        
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
+        Dict containing the device configuration
+
     Raises:
-        ValueError: If the device name is empty or invalid
-        ImportError: If the device class cannot be loaded
+        ValueError: If device name is empty or invalid
+        ImportError: If device class cannot be loaded
     """
-    if not config.name or not config.name.strip():
+    logger.info(f"Creating new device: {config.name}")
+
+    if not config.name:
         raise ValueError("Device name cannot be empty")
-<<<<<<< HEAD
 
-    logger.info(f"Creating new device: {config.name} of type {config.device_type}")
-
-=======
-    
-    logger.info(f"Creating new device: {config.name} of type {config.device_type}")
-    
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
-    # Create or load device class
-    try:
-        device_class = get_device_class(config.class_name)
-    except ImportError:
-        logger.info(f"Creating new device class: {config.class_name}")
-        create_device_class(config.class_name, config.device_type)
-        device_class = get_device_class(config.class_name)
-<<<<<<< HEAD
-
-    # Create device instance to validate configuration
-    device = device_class(config.parameters)
-
-=======
-    
-    # Create device instance to validate configuration
-    device = device_class(config.parameters)
-    
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
-    device_info = {
+    device_data = {
         "name": config.name,
         "type": config.device_type,
         "class": config.class_name,
-        "location": config.location or "unknown",
         "parameters": config.parameters,
-<<<<<<< HEAD
-        "status": "initialized",
     }
 
-=======
-        "status": "initialized"
-    }
-    
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
-    # Update YAML configuration if provided
+    if config.location:
+        device_data["location"] = config.location
+
     if config_file:
-        config_file = Path(config_file)
         yaml_data = load_or_create_yaml(config_file)
-        yaml_data["devices"][config.name] = device_info
-<<<<<<< HEAD
-
-        config_file.parent.mkdir(parents=True, exist_ok=True)
+        if config.name in yaml_data.get("devices", {}):
+            raise ValueError(f"Device with name {config.name} already exists")
+        yaml_data.setdefault("devices", {})[config.name] = device_data
         with open(config_file, "w") as f:
-            yaml.safe_dump(yaml_data, f, default_flow_style=False)
+            yaml.dump(yaml_data, f)
 
-        logger.info(f"Updated device configuration in {config_file}")
+    logger.info("Device created successfully")
+    return device_data
 
-    logger.debug(f"Device created successfully: {device_info}")
-    return device_info
+
+def validate_device_class(class_name: str) -> None:
+    """Validate that a device class name is valid.
+
+    Args:
+        class_name: Name of the class to validate
+
+    Raises:
+        ValueError: If class name is invalid
+    """
+    if not class_name.isidentifier():
+        raise ValueError("Invalid class name")
+    if not class_name[0].isupper():
+        raise ValueError("Class name must start with uppercase letter")
+
+
+def get_device_instance(class_name: str, config: Dict[str, Any]) -> Any:
+    """Get an instance of a device class with the given configuration.
+
+    Args:
+        class_name: Name of the class to instantiate
+        config: Configuration dictionary for the device
+
+    Returns:
+        Instance of the device class
+
+    Raises:
+        ImportError: If device class cannot be loaded
+        TypeError: If device class constructor is invalid
+    """
+    device_class = get_device_class(class_name)
+    try:
+        return device_class(config)
+    except TypeError as e:
+        raise TypeError(f"Failed to instantiate device class {class_name}") from e
+
+
+def validate_device_config(config: DeviceConfig) -> None:
+    """Validate a device configuration.
+
+    Args:
+        config: Device configuration to validate
+
+    Raises:
+        ValueError: If configuration is invalid
+    """
+    if not config.name:
+        raise ValueError("Device name cannot be empty")
+    if not config.device_type:
+        raise ValueError("Device type cannot be empty")
+    validate_device_class(config.class_name)
+
+
+def update_device_config(
+    device_name: str,
+    updates: Dict[str, Any],
+    config_file: Path,
+) -> Dict[str, Any]:
+    """Update an existing device configuration.
+
+    Args:
+        device_name: Name of the device to update
+        updates: Dictionary of updates to apply
+        config_file: Path to configuration file
+
+    Returns:
+        Updated device configuration
+
+    Raises:
+        ValueError: If device does not exist
+    """
+    yaml_data = load_or_create_yaml(config_file)
+    if device_name not in yaml_data.get("devices", {}):
+        raise ValueError(f"Device {device_name} does not exist")
+
+    device_data = yaml_data["devices"][device_name]
+    device_data.update(updates)
+
+    with open(config_file, "w") as f:
+        yaml.dump(yaml_data, f)
+
+    return device_data
+
+
+def delete_device(device_name: str, config_file: Path) -> None:
+    """Delete a device from the configuration.
+
+    Args:
+        device_name: Name of the device to delete
+        config_file: Path to configuration file
+
+    Raises:
+        ValueError: If device does not exist
+    """
+    yaml_data = load_or_create_yaml(config_file)
+    if device_name not in yaml_data.get("devices", {}):
+        raise ValueError(f"Device {device_name} does not exist")
+
+    del yaml_data["devices"][device_name]
+
+    with open(config_file, "w") as f:
+        yaml.dump(yaml_data, f)
+
+
+def list_devices(config_file: Path) -> Dict[str, Dict[str, Any]]:
+    """List all devices in the configuration.
+
+    Args:
+        config_file: Path to configuration file
+
+    Returns:
+        Dictionary of device configurations
+    """
+    yaml_data = load_or_create_yaml(config_file)
+    return yaml_data.get("devices", {})
 
 
 def main() -> None:
     """Entry point for the device creation script."""
     logging.basicConfig(level=logging.INFO)
 
-=======
-        
-        config_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(config_file, 'w') as f:
-            yaml.safe_dump(yaml_data, f, default_flow_style=False)
-        
-        logger.info(f"Updated device configuration in {config_file}")
-    
-    logger.debug(f"Device created successfully: {device_info}")
-    return device_info
-
-def main() -> None:
-    """Entry point for the device creation script."""
-    logging.basicConfig(level=logging.INFO)
-    
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
     try:
         # Example usage
         config = DeviceConfig(
             name="test_sensor_1",
             device_type="temperature_sensor",
             class_name="TemperatureSensor",
-<<<<<<< HEAD
             parameters={"port": "/dev/ttyUSB0", "baud_rate": 9600},
             location="lab_room_1",
         )
 
-=======
-            parameters={
-                "port": "/dev/ttyUSB0",
-                "baud_rate": 9600
-            },
-            location="lab_room_1"
-        )
-        
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
         config_file = Path("instrument/configs/devices.yml")
         result = create_new_device(config, config_file)
         print(f"Device created successfully: {result}")
@@ -331,11 +302,6 @@ def main() -> None:
         logger.error(f"Failed to create device: {str(e)}")
         raise
 
-<<<<<<< HEAD
 
 if __name__ == "__main__":
     main()
-=======
-if __name__ == "__main__":
-    main() 
->>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1

@@ -10,11 +10,11 @@
    .. autosummary::
 
 =======
-   
+
    .. rubric:: Functions
 
    .. autosummary::
-   
+
 >>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
       debug_python
       get_xmode_level
@@ -24,5 +24,5 @@
       running_in_queueserver
 <<<<<<< HEAD
 =======
-   
+
 >>>>>>> d4841a2b133ec2f8de5bd85c87c97e12c58a69a1
