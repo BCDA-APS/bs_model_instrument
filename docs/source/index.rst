@@ -51,12 +51,12 @@ Start your data collection session using the demo instrument as an example:
    :hidden:
 
    install
-   demo
    guides/template_creation
    sessions
    guides/index
    guides/qserver_service
    logging_config
+   demo
    api/index
    license
    history
