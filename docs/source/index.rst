@@ -17,11 +17,11 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
 
       Demo: Using the demo instrument.
 
-    .. grid-item-card:: :material-regular:`school;3em` :doc:`guides/developing_bits`
+    .. grid-item-card:: :material-regular:`description;3em` :doc:`guides/developing_bits`
 
       Guides, How-Tos, and examples for creating your own instrument.
 
-    .. grid-item-card:: :material-regular:`description;3em` :doc:`guides/index`
+    .. grid-item-card:: :material-regular:`school;3em` :doc:`guides/index`
 
       Configure the session logging capabilities.
 
@@ -42,11 +42,7 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
    guides/template_creation
    sessions
    guides/index
-   guides/qserver_service
-   demo
    api/index
-   license
-   history
 
 
 About ...

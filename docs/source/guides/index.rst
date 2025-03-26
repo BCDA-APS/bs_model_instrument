@@ -15,4 +15,3 @@ Guides show how to use certain features of this instrument.
     dm
     sessions
     logging_config
-
