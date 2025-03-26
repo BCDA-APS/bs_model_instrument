@@ -1,7 +1,6 @@
 """Test the device factories."""
 
 import pytest
-
 from apsbits.utils.sim_creator import motors
 from apsbits.utils.sim_creator import predefined_device
 

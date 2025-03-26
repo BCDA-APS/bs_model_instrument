@@ -15,6 +15,7 @@ import pathlib
 import socket
 import sys
 
+import apsbits
 import apstools
 import bluesky
 import databroker
@@ -27,8 +28,6 @@ import ophyd
 import pyRestTable
 import pysumreg
 import spec2nexus
-
-import apsbits
 
 logger = logging.getLogger(__name__)
 logger.bsdev(__file__)

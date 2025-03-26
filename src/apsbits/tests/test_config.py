@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING
 import pytest
 import tomli_w
 import yaml
-
 from apsbits.utils.config_loaders import load_config
 
 if TYPE_CHECKING:
