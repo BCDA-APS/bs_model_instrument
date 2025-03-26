@@ -9,23 +9,11 @@ PyQt, and others), install those packages with ``conda``.  For pure Python code,
 use ``pip`` [#]_ (which will be installed when the conda environment is
 created).
 
-The project comes pre-configured to install the content in the
-``src/instrument`` directory as a package named ``instrument``.  This name can
-be changed (by editing the ``name`` key in the ``pyproject.toml`` file) before
-running the ``pip`` step. If the package is installed under a different name,
-other code (such as ``qserver/qs_host.sh``) will need to be edited to find the new
-package name.
-
-.. note:: All of these commands start with the current working directory set
-    to the base directory of this repository, the one with with
-    ``pyproject.toml`` file and ``src`` directory.
-
-.. [#] https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-.. [#] https://python.land/virtual-environments/installing-packages-with-pip
 
 Install for routine data acquisition
 ------------------------------------
 
+You are welcome to set up your data acquisition repository as you see fit, however we reccomend using the Instrument Repository Template.
 These commands create a conda environment and then install all packages required
 by this ``instrument`` package for routine data acquisition.
 
