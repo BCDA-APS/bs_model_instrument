@@ -1,19 +1,7 @@
-APSBITS (|release|)
+APSBITS
 ======================
 
 A Python package providing tools and utilities to build Bluesky Data Acquisition Instruments that can run in console, notebook, & queueserver environments.
-
-Start your data collection session using the demo instrument as an example:
-
-.. code-block:: py
-      :linenos:
-
-      from apsbits.demo_instrument.startup import *
-      from apsbits.demo_instrument.plans import *
-
-      RE(sim_print_plan())
-      RE(sim_count_plan())
-      RE(sim_rel_scan_plan())
 
 
 .. for icon suggestions, see:
@@ -25,15 +13,15 @@ Start your data collection session using the demo instrument as an example:
 
       How to install the *apsbits* package.
 
-    .. grid-item-card:: :material-regular:`preview;3em` :doc:`demo`
+    .. grid-item-card:: :material-regular:`preview;3em` :doc:`Getting Started with BITS`
 
       Demo: Using the demo instrument.
 
-    .. grid-item-card:: :material-regular:`school;3em` :ref:`guides`
+    .. grid-item-card:: :material-regular:`school;3em` :ref:`_guides/developing_bits`
 
       Guides, How-Tos, and examples for creating your own instrument.
 
-    .. grid-item-card:: :material-regular:`play_arrow;3em` :doc:`sessions`
+    .. grid-item-card:: :material-regular:`play_arrow;3em` :doc:`Your Instrument`
 
       Run instruments in IPython, Jupyter notebook, Python scripts, and
       Bluesky Queueserver sessions.
@@ -42,7 +30,7 @@ Start your data collection session using the demo instrument as an example:
 
       Explore the Python code and core functionality.
 
-    .. grid-item-card:: :material-regular:`description;3em` :doc:`logging_config`
+    .. grid-item-card:: :material-regular:`description;3em` :doc:`Guides`
 
       Configure the session logging capabilities.
 
