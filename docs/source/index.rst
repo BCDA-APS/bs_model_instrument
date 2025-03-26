@@ -13,26 +13,26 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
 
       How to install the *apsbits* package.
 
-    .. grid-item-card:: :material-regular:`preview;3em` :doc:`Getting Started with BITS`
+    .. grid-item-card:: :material-regular:`preview;3em` :doc:`guides/template_creation`
 
       Demo: Using the demo instrument.
 
-    .. grid-item-card:: :material-regular:`school;3em` :ref:`_guides/developing_bits`
+    .. grid-item-card:: :material-regular:`school;3em` :doc:`guides/developing_bits`
 
       Guides, How-Tos, and examples for creating your own instrument.
 
-    .. grid-item-card:: :material-regular:`play_arrow;3em` :doc:`Your Instrument`
+    .. grid-item-card:: :material-regular:`description;3em` :doc:`guides/index`
 
-      Run instruments in IPython, Jupyter notebook, Python scripts, and
-      Bluesky Queueserver sessions.
+      Configure the session logging capabilities.
 
     .. grid-item-card:: :material-regular:`subscriptions;3em` :ref:`api`
 
       Explore the Python code and core functionality.
 
-    .. grid-item-card:: :material-regular:`description;3em` :doc:`Guides`
+    .. grid-item-card:: :material-regular:`play_arrow;3em` :doc:`guides/sessions`
 
-      Configure the session logging capabilities.
+      Run instruments in IPython, Jupyter notebook, Python scripts, and
+      Bluesky Queueserver sessions.
 
 .. toctree::
    :maxdepth: 1
@@ -43,7 +43,6 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
    sessions
    guides/index
    guides/qserver_service
-   logging_config
    demo
    api/index
    license

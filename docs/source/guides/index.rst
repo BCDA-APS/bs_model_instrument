@@ -1,15 +1,18 @@
 .. _guides:
 
-Guides, how-tos, ...
+Guides & How-Tos
 ====================
 
 Guides show how to use certain features of this instrument.
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :glob:
 
     developing_bits
     template_creation
     qserver_service
     dm
+    sessions
+    logging_config
+

@@ -1,4 +1,4 @@
-Creating a Repository from Template
+Creating a Repository from BITS Starter
 =================================
 
 This guide explains how to create a new repository from this template.
@@ -6,7 +6,7 @@ This guide explains how to create a new repository from this template.
 Steps to Create Repository
 ------------------------
 
-1. On GitHub, navigate to the main page of the `BITS starter repository <https://github.com/BCDA-APS/BITS-Starter-Repo/tree/main>`_.
+1. On GitHub, navigate to the main page of the `BITS Starter <https://github.com/BCDA-APS/BITS-Starter-Repo/tree/main>`_.
 
 2. Above the file list, click "Use this template".
 

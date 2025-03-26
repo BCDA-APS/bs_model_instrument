@@ -1,6 +1,8 @@
-Install for development
+Development
 -----------------------
 
+Install for development
+====
 For development and other activities, replace the ``pip`` command above with:
 
 .. code-block:: bash
@@ -15,7 +17,7 @@ For development and other activities, replace the ``pip`` command above with:
 
 
 Testing
------------------------
+======
 
 Use this command to run the test suite locally:
 
@@ -26,13 +28,13 @@ Use this command to run the test suite locally:
 
 
 Documentation
------------------------
+======
 
 Use this command to build the documentation locally:
 
 .. code-block:: bash
     :linenos:
-    
+
     make -C docs clean html
 
 

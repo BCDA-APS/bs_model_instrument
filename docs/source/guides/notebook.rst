@@ -2,9 +2,7 @@ Jupyter notebook
 ================
 
 There are several alternatives to running a notebook.
-An example notebook is provided: :doc:`demo.ipynb <demo>` [#]_
-
-.. [#] download notebook: :download:`demo.ipynb`
+An example notebook is provided: :doc:`../resources/demo.ipynb <demo>`
 
 Jupyter
 -------
@@ -15,13 +13,6 @@ Instructions for running a notebook with Jupyter are on the web [#]_.
 
 Once in the web browser, open a new notebook.  Pick the kernel with your bluesky
 installation, including the `instrument` package you installed.
-
-When ready to load the bluesky data acquisition for use, type this in a notebook
-code cell:
-
-.. code-block:: py
-
-    from apsbits.demo_instrument.startup import *
 
 Jupyter Lab
 -----------

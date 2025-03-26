@@ -6,7 +6,7 @@ Queue Server
 The Queue Server provides a way to run Bluesky plans remotely.
 
 Configuration
-=============
+---
 
 The Queue Server configuration is stored in ``src/apsbits/demo_qserver/qs-config.yml``:
 
@@ -14,15 +14,14 @@ The Queue Server configuration is stored in ``src/apsbits/demo_qserver/qs-config
    :language: yaml
 
 Starting the Server
-====================
-
+---
 The Queue Server can be started using the script at ``src/apsbits/demo_qserver/qs_host.sh``:
 
 .. literalinclude:: ../../src/apsbits/demo_qserver/qs_host.sh
    :language: bash
 
 Example Usage
-=============
+---
 
 Here's an example of how to use the Queue Server:
 
