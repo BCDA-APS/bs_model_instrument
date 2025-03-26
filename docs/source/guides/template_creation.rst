@@ -6,7 +6,7 @@ This guide explains how to create a new repository from this template.
 Steps to Create Repository
 ------------------------
 
-1. On GitHub, navigate to the main page of the repository.
+1. On GitHub, navigate to the main page of the `BITS starter repository <https://github.com/BCDA-APS/BITS-Starter-Repo/tree/main>`_.
 
 2. Above the file list, click "Use this template".
 
@@ -24,13 +24,9 @@ Steps to Create Repository
 
 5. Type a name for your repository, and an optional description.
 
-   .. image:: ../../resources/create-repository-from-template.webp
+   .. image:: ../../resources/create-repository-name.webp
       :alt: Screenshot of a the first step in creating a repository. The "Repository name" field contains the text "hello-world" and is outlined in orange.
 
 6. Choose a repository visibility. For more information, see `About repositories <https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories>`_.
 
-7. Optionally, to include the directory structure and files from all branches in the template, and not just the default branch, select "Include all branches".
-
-8. Optionally, if the personal account or organization in which you're creating uses any GitHub Apps from GitHub Marketplace, select any apps you'd like to use in the repository.
-
-9. Click "Create repository from template".
+7. Click "Create repository from template".
