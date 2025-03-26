@@ -10,7 +10,7 @@ Guides show how to use certain features of this instrument.
     :glob:
 
     template_creation
-    How to Create BITS Devices
+    creating_instrument
     sessions
     qserver
     dm

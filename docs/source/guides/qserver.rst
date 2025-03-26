@@ -6,22 +6,24 @@ Queue Server
 The Queue Server provides a way to run Bluesky plans remotely.
 
 Configuration
----
+----
 
 The Queue Server configuration is stored in ``src/apsbits/demo_qserver/qs-config.yml``:
 
-.. literalinclude:: ../../src/apsbits/demo_qserver/qs-config.yml
+.. literalinclude:: ../../../src/apsbits/demo_qserver/qs-config.yml
    :language: yaml
 
 Starting the Server
----
+----
+
+
 The Queue Server can be started using the script at ``src/apsbits/demo_qserver/qs_host.sh``:
 
-.. literalinclude:: ../../src/apsbits/demo_qserver/qs_host.sh
+.. literalinclude:: ../../../src/apsbits/demo_qserver/qs_host.sh
    :language: bash
 
 Example Usage
----
+----
 
 Here's an example of how to use the Queue Server:
 
@@ -75,7 +77,7 @@ use this one.
 Configure the QS Host
 ---------------------
 
-File ``qs-config.yml`` [#]_ contains all configuration of the QS host process.
+File ``qs-config.yml`` contains all configuration of the QS host process.
 The source code contains lots of comments about the various settings. See the
 bluesky-queueserver documentation [#]_ for more details of the configuration.
 
@@ -83,18 +85,16 @@ The QS host process writes files into this directory. This directory can be
 relocated. However, it should not be moved into the instrument package since
 that might be installed into a read-only directory.
 
-.. [#] download file: :download:`qs-config.yml <../../src/apsbits/demo_qserver/qs-config.yml>`
 .. [#] https://blueskyproject.io/bluesky-queueserver/manager_config.html
 
 shell script ``qs_host.sh``
 ---------------------------
 
-A shell script ``qs_host.sh`` [#]_ is used to start the QS host process. Typically,
+A shell script ``qs_host.sh`` is used to start the QS host process. Typically,
 it is run in the background: ``./qserver/qs_host.sh restart``. This command looks for
 a running QS host process.  If found, that process is stopped.  Then, a new QS
 host process is started in a *screen* [#]_ session.
 
-.. [#] download file: :download:`qs_host.sh <../../src/apsbits/demo_qserver/qs_host.sh>`
 .. [#] https://www.gnu.org/software/screen/manual/screen.html
 
 .. code-block:: bash

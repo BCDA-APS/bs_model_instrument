@@ -1,7 +1,7 @@
 Creating a Repository from BITS Starter
 =================================
 
-This guide explains how to create a new repository from this template.
+This guide explains how to create a new repository from our template for instrument repositories.
 
 Steps to Create Repository
 ------------------------
@@ -30,7 +30,3 @@ Steps to Create Repository
 6. Choose a repository visibility. For more information, see `About repositories <https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories>`_.
 
 7. Click "Create repository from template".
-
-
-Creating An Instrument
-----
