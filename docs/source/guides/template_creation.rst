@@ -30,3 +30,7 @@ Steps to Create Repository
 6. Choose a repository visibility. For more information, see `About repositories <https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories>`_.
 
 7. Click "Create repository from template".
+
+
+Creating An Instrument
+----

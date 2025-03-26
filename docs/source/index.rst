@@ -39,8 +39,6 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
    :hidden:
 
    install
-   guides/template_creation
-   sessions
    guides/index
    api/index
 
@@ -48,11 +46,10 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
 About ...
 ---------
 
-:home: https://BCDA-APS.github.io/BITS/
 :bug tracker: https://github.com/BCDA-APS/BITS/issues
 :source: https://github.com/BCDA-APS/BITS
 :license: :ref:`license`
 :full version: |version|
 :published: |today|
-:reference: :ref:`genindex`, :ref:`modindex`, :ref:`search`
+:reference: :ref:`genindex`, :ref:`modindex`
 :release notes: :doc:`History of Changes with each Release <history>`
