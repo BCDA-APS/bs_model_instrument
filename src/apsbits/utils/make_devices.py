@@ -17,13 +17,13 @@ import sys
 import time
 
 import guarneri
-from apsbits.utils.config_loaders import load_config_yaml
 from apstools.plans import run_blocking_function
 from apstools.utils import dynamic_import
-from apstools.utils.aps_functions import host_on_aps_subnet
+from apstools.utils import host_on_aps_subnet
 from bluesky import plan_stubs as bps
 
 from apsbits.utils.config_loaders import get_config
+from apsbits.utils.config_loaders import load_config_yaml
 from apsbits.utils.controls_setup import oregistry  # noqa: F401
 
 logger = logging.getLogger(__name__)
@@ -186,8 +186,6 @@ class Instrument(guarneri.Instrument):
                 for device in parser(k, v)
             ]
         return devices
-
-
 
 
 _instr = Instrument({}, registry=oregistry)  # singleton

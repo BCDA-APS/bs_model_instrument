@@ -11,7 +11,7 @@ Includes:
 
 import logging
 
-from apstools.utils.aps_data_management import dm_setup as aps_dm_setup
+from apstools.utils import dm_setup as aps_dm_setup
 
 from apsbits.core.best_effort_init import init_bec_peaks
 from apsbits.core.catalog_init import init_catalog
