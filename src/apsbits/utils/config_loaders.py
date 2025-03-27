@@ -89,7 +89,6 @@ def update_config(updates: Dict[str, Any]) -> None:
     """
     _iconfig.update(updates)
 
-
 def load_config_yaml(config_obj) -> dict:
     """
     Load configuration from a YAML file.

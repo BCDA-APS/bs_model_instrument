@@ -11,10 +11,11 @@ Includes:
 
 import logging
 
+from apstools.utils.aps_data_management import dm_setup as aps_dm_setup
+
 from apsbits.core.best_effort_init import init_bec_peaks
 from apsbits.core.catalog_init import init_catalog
 from apsbits.core.run_engine_init import init_RE
-from apsbits.utils.aps_functions import aps_dm_setup
 from apsbits.utils.config_loaders import get_config
 from apsbits.utils.controls_setup import oregistry
 from apsbits.utils.helper_functions import register_bluesky_magics
