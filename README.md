@@ -18,7 +18,7 @@ Please create a bits instrument using our template repository: https://github.co
 
 ```bash
 export INSTALL_ENVIRONMENT_NAME=apsbits_env
-conda create -y -n "${INSTALL_ENVIRONMENT_NAME}" python pyepics
+conda create -y -n "${INSTALL_ENVIRONMENT_NAME}" python=3.11 pyepics
 conda activate "${INSTALL_ENVIRONMENT_NAME}"
 pip install apsbits
 ```
