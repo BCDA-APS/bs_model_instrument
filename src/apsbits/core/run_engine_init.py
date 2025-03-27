@@ -9,7 +9,7 @@ Setup the Bluesky RunEngine, provides ``RE`` and ``sd``.
 import logging
 
 import bluesky
-from apstools.utils.stored_dict import StoredDict
+from apstools.utils import StoredDict
 from bluesky.utils import ProgressBarManager
 
 from apsbits.utils.controls_setup import connect_scan_id_pv
