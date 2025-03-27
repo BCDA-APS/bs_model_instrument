@@ -11,10 +11,11 @@ Includes:
 
 import logging
 
+from apstools.utils import dm_setup as aps_dm_setup
+
 from apsbits.core.best_effort_init import init_bec_peaks
 from apsbits.core.catalog_init import init_catalog
 from apsbits.core.run_engine_init import init_RE
-from apsbits.utils.aps_functions import aps_dm_setup
 from apsbits.utils.config_loaders import get_config
 from apsbits.utils.controls_setup import oregistry
 from apsbits.utils.helper_functions import register_bluesky_magics
@@ -42,15 +43,15 @@ RE, sd = init_RE(iconfig, bec_instance=bec, cat_instance=cat)
 
 # Import optional components based on configuration
 if iconfig.get("NEXUS_DATA_FILES", {}).get("ENABLE", False):
-    from .callbacks.nexus_data_file_writer import nxwriter_init
+    from .callbacks.demo_nexus_callback import nxwriter_init
 
     nxwriter = nxwriter_init(RE)
 
 if iconfig.get("SPEC_DATA_FILES", {}).get("ENABLE", False):
-    from .callbacks.spec_data_file_writer import init_specwriter_with_RE
-    from .callbacks.spec_data_file_writer import newSpecFile  # noqa: F401
-    from .callbacks.spec_data_file_writer import spec_comment  # noqa: F401
-    from .callbacks.spec_data_file_writer import specwriter  # noqa: F401
+    from .callbacks.demo_spec_callback import init_specwriter_with_RE
+    from .callbacks.demo_spec_callback import newSpecFile  # noqa: F401
+    from .callbacks.demo_spec_callback import spec_comment  # noqa: F401
+    from .callbacks.demo_spec_callback import specwriter  # noqa: F401
 
     init_specwriter_with_RE(RE)
 
