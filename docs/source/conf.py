@@ -32,6 +32,7 @@ extensions = """
     sphinx.ext.mathjax
     sphinx.ext.todo
     sphinx.ext.viewcode
+    sphinx.ext.graphviz
     sphinx_design
 """.split()
 myst_enable_extensions = ["colon_fence"]
