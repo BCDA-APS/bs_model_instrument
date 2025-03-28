@@ -3,10 +3,7 @@ Setting up your instrument
 
 The iconfig file is a YAML file that contains the configuration for your instrument.
 It is used to set up the instrument preferences and settings. The iconfig file is
-located in the ``configs`` directory of your instrument package. Below we go through the settings available in the iconfig file.
-
-.. .. literalinclude:: ../../../src/apsbits/demo_instrument/configs/iconfig.yml
-..    :language: yaml
+located in the ``configs`` directory of your instrument package.
 
 RUN_ENGINE
 -----------------------------
@@ -37,8 +34,72 @@ The ``RUN_ENGINE`` section contains the configuration for the run engine. The ru
 
 .. _iconfig:
 
+BEC
+-----------------------------
+
+.. code-block:: yaml
+
+    BEC:
+        BASELINE: true
+        HEADING: true
+        PLOTS: false
+        TABLE: true
+
+Callbacks
+-----------------------------
+.. code-block:: yaml
+
+    NEXUS_DATA_FILES:
+    ENABLE: false
+    FILE_EXTENSION: hdf
+
+    SPEC_DATA_FILES:
+        ENABLE: true
+        FILE_EXTENSION: dat
+
+Devices
+-----------------------------
+.. code-block:: yaml
+
+    ### Local OPHYD Device Control Yaml
+    DEVICES_FILES:
+    - devices.yml
+    APS_DEVICES_FILES:
+    - devices_aps_only.yml
+
+    # Log when devices are added to console (__main__ namespace)
+    MAKE_DEVICES:
+        LOG_LEVEL: info
+
+
+OPHYD SETTINGS
+----------------------------------
+.. code-block:: yaml
+
+    OPHYD:
+        ### Control layer for ophyd to communicate with EPICS.
+        ### Default: PyEpics
+        ### Choices: "PyEpics" or "caproto" # caproto is not yet supported
+        CONTROL_LAYER: PyEpics
+
+        ### default timeouts (seconds)
+        TIMEOUTS:
+            PV_READ: &TIMEOUT 5
+            PV_WRITE: *TIMEOUT
+            PV_CONNECTION: *TIMEOUT
+
 
 Logging levels
 -----------------------------
 
+XMODE_DEBUG_LEVEL: Plain
+
 ['Plain', 'Context', 'Verbose', 'Minimal', 'Docs']
+
+Full Iconfig file
+-----------------------------
+
+Below we go through the settings available in the iconfig file.
+
+.. literalinclude:: ../../../src/apsbits/demo_instrument/configs/iconfig.yml
+   :language: yaml
