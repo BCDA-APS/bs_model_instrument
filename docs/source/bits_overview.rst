@@ -41,20 +41,12 @@ The following figure describes the relationships among the various repositories 
        new_instrument [label="new_instrument\n(New Instrument)", shape=ellipse, fillcolor=lightblue];
 
        BITS -> apsbits [label="includes"];
-       apsbits -> demo_instr [label="provides"];
-       demo_instr -> BITS_Starter [label="source for"];
-       demo_qserver -> BITS_Starter [label="source for"];
+       {demo_instr demo_qserver} -> BITS_Starter [label="source for"];
        BITS_Starter -> new_instrument [label="template for"];
-       apsbits -> demo_qserver [label="provides"];
+       apsbits -> {demo_instr demo_qserver} [label="provides"];
        BITS -> apstools [label="uses"];
-       apstools -> apst_devices [label="includes"];
-       apstools -> apst_plans [label="includes"];
-       apstools -> apst_callbacks [label="includes"];
-       apstools -> apst_utils [label="includes"];
-       apst_devices -> new_instrument [label="provides"];
-       apst_plans -> new_instrument [label="provides"];
-       apst_callbacks -> new_instrument [label="provides"];
-       apst_utils -> new_instrument [label="provides"];
+       apstools -> {apst_devices apst_plans apst_callbacks apst_utils} [label="includes"];
+       {apst_devices apst_plans apst_callbacks apst_utils} -> new_instrument [label="provides"];
        BITS -> guarneri [label="uses"];
        guarneri -> guarneri_maker [label="includes"];
        guarneri_maker -> new_instrument [label="provides"];
