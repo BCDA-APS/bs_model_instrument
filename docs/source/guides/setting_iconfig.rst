@@ -24,7 +24,6 @@ The ``RUN_ENGINE`` section contains the configuration for the run engine. The ru
 
         ### Where to "autosave" the RE.md dictionary.
         ### Defaults:
-        MD_STORAGE_HANDLER: StoredDict
         MD_PATH: .re_md_dict.yml
 
         ### The progress bar is nice to see,
@@ -33,6 +32,9 @@ The ``RUN_ENGINE`` section contains the configuration for the run engine. The ru
         USE_PROGRESS_BAR: false
 
 .. _iconfig:
+
+- This is a bullet point using a hyphen
+- Another hyphen bullet point
 
 BEC
 -----------------------------

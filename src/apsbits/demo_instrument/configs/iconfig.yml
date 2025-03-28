@@ -22,7 +22,6 @@ RUN_ENGINE:
 
     ### Where to "autosave" the RE.md dictionary.
     ### Defaults:
-    MD_STORAGE_HANDLER: StoredDict
     MD_PATH: .re_md_dict.yml
 
     ### The progress bar is nice to see,
