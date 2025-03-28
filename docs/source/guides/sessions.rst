@@ -1,3 +1,5 @@
+.. _sessions:
+
 Starting Data Acquisition Sessions
 ========
 

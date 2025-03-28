@@ -40,6 +40,10 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
 
    install
    guides/index
+   guides/template_creation
+   guides/creating_instruments
+   guides/setting_iconfig
+   guides/sessions
    api/index
 
 

@@ -11,6 +11,7 @@ Guides show how to use certain features of this instrument.
 
     template_creation
     creating_instrument
+    setting_iconfig
     sessions
     qserver
     dm
