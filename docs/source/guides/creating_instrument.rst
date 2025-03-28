@@ -1,7 +1,7 @@
 Creating An Instrument
 ----
 
-Once the repository is set up and the environment is ready, the next step is to create the instrument. 
+Once the repository is set up and the environment is ready, the next step is to create the instrument.
 This guide explains how to create a new instrument from our template for instrument repositories.
 
 Inside the root folder inside of the templated repository run create

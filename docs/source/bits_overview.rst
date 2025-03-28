@@ -76,4 +76,3 @@ Summary
 -------
 
 These packages form a modular and extensible software stack supporting the transition to Bluesky at APS. They emphasize reuse, standardization, and training, enabling robust and scalable data acquisition workflows across beamlines.
-
