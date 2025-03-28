@@ -34,8 +34,6 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
         iconfig (dict): Configuration dictionary containing settings for the
             RunEngine. Expected keys include:
             - "RUN_ENGINE": A dictionary with RunEngine-specific settings.
-            - "MD_STORAGE_HANDLER": (Optional) The handler for metadata storage
-              (default is "StoredDict").
             - "DEFAULT_METADATA": (Optional) Default metadata to be added to
               the RunEngine.
             - "USE_PROGRESS_BAR": (Optional) Boolean to enable/disable the

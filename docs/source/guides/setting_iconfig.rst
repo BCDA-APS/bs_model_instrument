@@ -3,7 +3,8 @@ Setting up your instrument
 
 The iconfig file is a YAML file that contains the configuration for your instrument.
 It is used to set up the instrument preferences and settings. The iconfig file is
-located in the ``configs`` directory of your instrument package.
+located in the ``configs`` directory of your instrument package. Below we go through the settings available in the iconfig file.
+
 
 RUN_ENGINE
 -----------------------------
@@ -33,8 +34,11 @@ The ``RUN_ENGINE`` section contains the configuration for the run engine. The ru
 
 .. _iconfig:
 
-- This is a bullet point using a hyphen
-- Another hyphen bullet point
+- ``beamline_id`` the metadata id you want saved for the beamline associated with the data aquosition runs you are about to conduct
+- ``instrument_name`` the metadata name you want saved for your instrument associated with the data aquosition runs you are about to conduct
+- ``proposal_id`` the metadata id you want saved for the proposal associated with the data aquosition runs you are about to conduct
+- ``MD_PATH`` the path to the file where the metadata dictionary will be saved
+- ``USE_PROGRESS_BAR`` whether to use a progress bar or not to showcase the progress the run engine is making with the data aquisition
 
 BEC
 -----------------------------
@@ -101,7 +105,6 @@ XMODE_DEBUG_LEVEL: Plain
 Full Iconfig file
 -----------------------------
 
-Below we go through the settings available in the iconfig file.
 
 .. literalinclude:: ../../../src/apsbits/demo_instrument/configs/iconfig.yml
    :language: yaml
