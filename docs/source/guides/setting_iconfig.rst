@@ -39,6 +39,7 @@ The ``RUN_ENGINE`` section contains the configuration for the run engine. The ru
 - ``proposal_id`` the metadata id you want saved for the proposal associated with the data aquosition runs you are about to conduct
 - ``MD_PATH`` the path to the file where the metadata dictionary will be saved
 - ``USE_PROGRESS_BAR`` whether to use a progress bar or not to showcase the progress the run engine is making with the data aquisition
+- ``SCAN_ID_PV`` can be uncommented if you need a PV to be used for the scan id.
 
 BEC
 -----------------------------
@@ -51,6 +52,12 @@ BEC
         PLOTS: false
         TABLE: true
 
+- ``BASELINE`` Print hinted fields from the ‘baseline’ stream.
+- ``HEADING`` Print timestamp and IDs at the top of a run.
+- ``PLOTS`` Outputs a matplotlib plot of your data aquisition at the end of stream
+- ``TABLE`` If your data gets tabulated or not
+
+
 Callbacks
 -----------------------------
 .. code-block:: yaml
@@ -62,6 +69,20 @@ Callbacks
     SPEC_DATA_FILES:
         ENABLE: true
         FILE_EXTENSION: dat
+
+The ``enable`` fields allow for data to be outputted within a NEXUS or SPEC file format. The file extension is the file type you want to save your data as.
+If the callback is enabled, the data will be stored from where you initialized the ipython session or notebook.
+
+DM_SETUP_FILE Path
+-----------------------------
+.. code-block:: yaml
+
+    ### APS Data Management
+    ### Use bash shell, deactivate all conda environments, source this file:
+    DM_SETUP_FILE: "/home/dm/etc/dm.setup.sh"
+
+The above file is a bash script that sets up the environment for the APS Data Management system. It is used to set up the environment variables to access the APS Data Management system.
+The path should reference where this bash script lives.
 
 Devices
 -----------------------------
@@ -77,6 +98,9 @@ Devices
     MAKE_DEVICES:
         LOG_LEVEL: info
 
+- ``DEVICES_FILES`` the name to the yaml file that contains the devices you want to use in your data aquisition. This file has to be stored in the configs folder of your instrument
+- ``APS_DEVICES_FILES`` the name to the yaml file that contains the devices you want to use in your data aquisition. This file is for devices that work exclusively on the APS network.
+- ``LOG_LEVEL`` the log level for the devices you want to use in your data aquisition. The default is info.
 
 OPHYD SETTINGS
 ----------------------------------
@@ -94,13 +118,23 @@ OPHYD SETTINGS
             PV_WRITE: *TIMEOUT
             PV_CONNECTION: *TIMEOUT
 
+- ``CONTROL_LAYER`` the control layer you want to use to communicate with EPICS. The default is PyEpics, the other option would be caproto
+- ``TIMEOUTS`` the timeouts for the different types of communication with EPICS. The default is 5 seconds for all types of communication.
 
 Logging levels
 -----------------------------
+.. code-block:: yaml
 
-XMODE_DEBUG_LEVEL: Plain
+    XMODE_DEBUG_LEVEL: Plain
 
-['Plain', 'Context', 'Verbose', 'Minimal', 'Docs']
+The options for the debugging levels in your iconfig file are:
+
+- ``Plain``: Displays basic traceback information with error type and message. No additional context or special formatting is included.
+- ``Context``: Shows code surrounding the error line for better understanding. Includes several lines before and after the problematic code.
+- ``Verbose``: Provides comprehensive debugging information including variable values and system details. Best for complex debugging scenarios where maximum information is needed.
+-  ``Minimal``: Shows only the exception type and error message without traceback. Cleanest output for quick error identification or production environments.
+- ``Docs``: Enhances error messages with relevant documentation for the exception type. Helpful in learning environments or when working with unfamiliar code.
+
 
 Full Iconfig file
 -----------------------------
