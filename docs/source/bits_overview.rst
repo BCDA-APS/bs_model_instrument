@@ -17,7 +17,7 @@ The following figure describes the relationships among the various repositories 
        BITS [label="BITS\n(Main Package)", shape=ellipse, fillcolor=lightblue];
        BITS_Starter [label="BITS-Starter\n(Starter Repo)", shape=ellipse, fillcolor=lightblue];
 
-       apsbits [label="apsbits\n(Core Functionality)"];
+       apsbits [label="apsbits\n(Core Functionality)", shape=ellipse, fillcolor=lightblue];
        demo_instr [label="demo_instrument\n(Standard Instrument)"];
        demo_qserver [label="demo_qserver\n(Standard QServer)"];
 
