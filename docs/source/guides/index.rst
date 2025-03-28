@@ -15,6 +15,7 @@ Guides show how to use certain features of this instrument.
     qserver
     dm
     logging_config
+    setting_iconfig
 
 Developer
 ---
