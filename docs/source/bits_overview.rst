@@ -14,24 +14,30 @@ The following figure describes the relationships among the various repositories 
        rankdir=LR;
        node [shape=box style=filled fillcolor=lightgrey fontname="Arial"];
 
+       {rank=min;
        BITS [label="BITS\n(Main Package)", shape=ellipse, fillcolor=lightblue];
-       BITS_Starter [label="BITS-Starter\n(Starter Repo)", shape=ellipse, fillcolor=lightblue];
+       training [label="Bluesky_training\n(Training Resources)", shape=ellipse, fillcolor=lightblue];
+       }
 
-       apsbits [label="apsbits\n(Core Functionality)", shape=ellipse, fillcolor=lightblue];
+       apsbits [label="apsbits\n(Core Functionality)", shape=ellipse, fillcolor=lightyellow];
        demo_instr [label="demo_instrument\n(Standard Instrument)"];
        demo_qserver [label="demo_qserver\n(Standard QServer)"];
 
-       apstools [label="apstools\n(Devices, Plans, Callbacks)", shape=ellipse, fillcolor=lightblue];
+       {rank=same;
+        apstools [label="apstools\n(Devices, Plans, Callbacks)", shape=ellipse, fillcolor=lightblue];
+       guarneri [label="guarneri\n(Ophyd Loader)", shape=ellipse, fillcolor=lightblue];
+       hkl2 [label="hkl2\n(Diffraction Tools)", shape=ellipse, fillcolor=lightblue];
+       }
+
+       {rank=same;
+       BITS_Starter [label="BITS-Starter\n(Starter Repo)", shape=ellipse, fillcolor=lightblue];
+       guarneri_maker [label="guarneri_maker\n(Ophyd Loader Maker)", shape=ellipse, fillcolor=lightyellow];
        apst_devices [label="apstools_devices\n(Devices)", shape=ellipse, fillcolor=lightyellow];
        apst_plans [label="apstools_plans\n(Plans)", shape=ellipse, fillcolor=lightyellow];
        apst_callbacks [label="apstools_callbacks\n(Callbacks)", shape=ellipse, fillcolor=lightyellow];
        apst_utils [label="apstools_utils\n(Utils)", shape=ellipse, fillcolor=lightyellow];
+       }
 
-       guarneri [label="guarneri\n(Ophyd Loader)", shape=ellipse, fillcolor=lightblue];
-       guarneri_maker [label="guarneri_maker\n(Ophyd Loader Maker)", shape=ellipse, fillcolor=lightyellow];
-
-       hkl2 [label="hkl2\n(Diffraction Tools)", shape=ellipse, fillcolor=lightblue];
-       training [label="Bluesky_training\n(Training Resources)", shape=ellipse, fillcolor=lightblue];
        new_instrument [label="new_instrument\n(New Instrument)", shape=ellipse, fillcolor=lightblue];
 
        BITS -> apsbits [label="includes"];
