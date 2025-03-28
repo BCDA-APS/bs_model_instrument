@@ -34,8 +34,6 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
         iconfig (dict): Configuration dictionary containing settings for the
             RunEngine. Expected keys include:
             - "RUN_ENGINE": A dictionary with RunEngine-specific settings.
-            - "MD_STORAGE_HANDLER": (Optional) The handler for metadata storage
-              (default is "StoredDict").
             - "DEFAULT_METADATA": (Optional) Default metadata to be added to
               the RunEngine.
             - "USE_PROGRESS_BAR": (Optional) Boolean to enable/disable the
@@ -77,7 +75,7 @@ def init_RE(iconfig, bec_instance=None, cat_instance=None):
     MD_PATH = get_md_path(iconfig)
     # Save/restore RE.md dictionary, in this precise order.
     if MD_PATH is not None:
-        handler_name = re_config.get("MD_STORAGE_HANDLER", "StoredDict")
+        handler_name = StoredDict
         logger.debug(
             "Selected %r to store 'RE.md' dictionary in %s.",
             handler_name,
