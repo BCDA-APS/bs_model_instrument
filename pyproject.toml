@@ -71,6 +71,8 @@ doc = [
     "sphinx-design",
     "sphinx-tabs",
     "sphinx",
+    "graphviz",
+    "dot",
 ]
 
 all = ["apsbits[dev,doc]"]

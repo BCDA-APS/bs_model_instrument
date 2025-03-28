@@ -42,4 +42,3 @@ Logging levels
 -----------------------------
 
 ['Plain', 'Context', 'Verbose', 'Minimal', 'Docs']
-
