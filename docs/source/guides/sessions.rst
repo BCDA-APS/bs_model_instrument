@@ -20,8 +20,8 @@ Start the console session with the environment with your bluesky installation.
 Jupyter Notebook
 ----
 
-There are several alternatives to running a notebook.
-An example notebook is provided: :doc:`../../resources/demo.ipynb <demo>`
+There are several methods to running a notebook.
+An example notebook is provided: :download:`Download Demo Notebook <../../resources/demo.ipynb>`
 
 Once a notebook is opened, pick the kernel with your bluesky
 installation.

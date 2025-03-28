@@ -2,7 +2,9 @@ Jupyter notebook
 ================
 
 There are several alternatives to running a notebook.
-An example notebook is provided: :doc:`../resources/demo.ipynb <demo>`
+An example notebook is provided:
+.. [#] download notebook: :download:`../resources/demo.ipynb`
+
 
 Jupyter
 -------
