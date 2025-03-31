@@ -27,4 +27,4 @@ Configuration
 
 The demo queue server provides an example implementation of a Bluesky Queue Server using APSBITS.
 
-For more details on using the Queue Server, see :doc:`../qserver_service`.
+For more details on using the Queue Server, see :doc:`../guides/qserver_service`.
