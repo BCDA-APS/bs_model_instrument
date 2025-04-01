@@ -86,7 +86,7 @@ Repository Descriptions
 
 - **`hklpy2`**
 
-  Helper tools for crystallographic diffraction workflows. Supports integration with Bluesky and orientation matrix calculations.
+  Diffractometer as ophyd PseudoPositioner.  Supports Bluesky operations with various diffractometer geometries in both reciprocal space and real space.
 
 - **`Bluesky_training`** (Work In Progress)
 
