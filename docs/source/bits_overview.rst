@@ -84,7 +84,7 @@ Repository Descriptions
 
   A device registry and dynamic loader for Ophyd. Simplifies the instantiation and reuse of instrument configurations.
 
-- **`hkl2`**
+- **`hklpy2`**
 
   Helper tools for crystallographic diffraction workflows. Supports integration with Bluesky and orientation matrix calculations.
 
