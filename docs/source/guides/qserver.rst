@@ -3,12 +3,12 @@
 Queue Server
 ============
 
-The Queue Server provides a way to run Bluesky plans remotely.
+The Queue Server provides a way to run Bluesky plans remotely. We assume you have created used the create-bits command to create an instrument named ``new_instrument``.
 
 Configuration
 ----
 
-The Queue Server configuration is stored in ``src/apsbits/demo_qserver/qs-config.yml``:
+The Queue Server configuration file will be stored inside ``src/new_instrument_qserver/qs-config.yml``:
 
 .. literalinclude:: ../../../src/apsbits/demo_qserver/qs-config.yml
    :language: yaml
@@ -17,12 +17,26 @@ Starting the Server
 ----
 
 
-The Queue Server can be started using the script at ``src/apsbits/demo_qserver/qs_host.sh``:
+The Queue Server can be started using the script at ``src/new_instrument_qserver/qs_host.sh``:
 
 .. literalinclude:: ../../../src/apsbits/demo_qserver/qs_host.sh
    :language: bash
 
-Example Usage
+
+QS host -- queueserver host process
+-----------------------------------
+
+Use the queueserver host management script.  This option stops the server (if it
+is running) and then starts it.  This is the usual way to (re)start the QS host
+process.
+
+.. code-block:: bash
+
+    ./new_instrument_qserver/qs_host.sh restart
+
+.. _qs.client:
+
+Example Usage queueserver commanline
 ----
 
 Here's an example of how to use the Queue Server:
@@ -48,18 +62,6 @@ Here's an example of how to use the Queue Server:
 
 .. _qs.host:
 
-QS host -- queueserver host process
------------------------------------
-
-Use the queueserver host management script.  This option stops the server (if it
-is running) and then starts it.  This is the usual way to (re)start the QS host
-process.
-
-.. code-block:: bash
-
-    ./qserver/qs_host.sh restart
-
-.. _qs.client:
 
 queueserver client GUI
 ----------------------
@@ -91,7 +93,7 @@ shell script ``qs_host.sh``
 ---------------------------
 
 A shell script ``qs_host.sh`` is used to start the QS host process. Typically,
-it is run in the background: ``./qserver/qs_host.sh restart``. This command looks for
+it is run in the background: ``./new_instrument_qserver/qs_host.sh restart``. This command looks for
 a running QS host process.  If found, that process is stopped.  Then, a new QS
 host process is started in a *screen* [#]_ session.
 
@@ -100,7 +102,7 @@ host process is started in a *screen* [#]_ session.
 .. code-block:: bash
     :linenos:
 
-    (bstest) $ ./qserver/qs_host.sh help
+    (bstest) $ ./new_instrument_qserver/qs_host.sh help
     Usage: qs_host.sh {start|stop|restart|status|checkup|console|run} [NAME]
 
         COMMANDS
@@ -115,7 +117,7 @@ host process is started in a *screen* [#]_ session.
         OPTIONAL TERMS
             NAME      name of process (default: bluesky_queueserver-)
 
-Alternatively, run the QS host's startup command directly within the ``./qserver/``
+Alternatively, run the QS host's startup command directly within the ``./new_instrument_qserver/``
 subdirectory.
 
 .. code-block:: bash

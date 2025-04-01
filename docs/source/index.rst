@@ -15,7 +15,7 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
 
     .. grid-item-card:: :material-regular:`preview;3em` :doc:`guides/template_creation`
 
-      Demo: Using the demo instrument.
+      Creating A Plug & Play Repository for BITS
 
     .. grid-item-card:: :material-regular:`description;3em` :doc:`guides/developing_bits`
 
@@ -31,8 +31,7 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
 
     .. grid-item-card:: :material-regular:`play_arrow;3em` :doc:`guides/sessions`
 
-      Run instruments in IPython, Jupyter notebook, Python scripts, and
-      Bluesky Queueserver sessions.
+      Run instruments in IPython, Jupyter notebook, & Python scripts
 
 .. toctree::
    :maxdepth: 1
@@ -41,6 +40,7 @@ A Python package providing tools and utilities to build Bluesky Data Acquisition
    install
    guides/index
    api/index
+   bits_overview
 
 
 About ...

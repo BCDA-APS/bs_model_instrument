@@ -4,6 +4,7 @@ Adding Devices to an Instrument
 ----
 
 Every new instrument comes pre-loaded with a simulated motor and a detector. To add a new device to your instrument startup a couple of steps must be taken.
+For the purpose of this tutorial we assume you have already used BITS to create an instrument called `new_instrument`.
 
 1. Create a new device class in the devices folder
 
@@ -30,7 +31,7 @@ Every new instrument comes pre-loaded with a simulated motor and a detector. To 
 - Depending on if the device can only function on the aps network or not add it to the ``device.yml`` file or the ``devices_aps_only.yml`` file.
 .. code-block:: yaml
 
-    instrument.devices.StageXY:
+    new_instrument.devices.StageXY:
     - name: stage
       prefix: BITS
       labels: ["motors"]

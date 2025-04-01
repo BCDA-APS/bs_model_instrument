@@ -1,4 +1,4 @@
-Development
+Developing BITS
 -----------------------
 
 Install for development
@@ -11,7 +11,7 @@ For development and other activities, replace the ``pip`` command above with:
     export INSTALL_ENVIRONMENT_NAME=apsbits_env
     git clone github.com:BCDA-APS/BITS.git
     cd BITS
-    conda create -y -n "${INSTALL_ENVIRONMENT_NAME}" python pyepics
+    conda create -y -n "${INSTALL_ENVIRONMENT_NAME}" python=3.11 pyepics
     conda activate "${INSTALL_ENVIRONMENT_NAME}"
     pip install -e ."[all]"
 

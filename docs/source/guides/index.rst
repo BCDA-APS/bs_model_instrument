@@ -5,7 +5,7 @@ Guides & How-Tos
 
 Guides show how to use certain features of this instrument.
 
-Documentation
+User Documentation
 -----------------
 
 .. toctree::
@@ -18,9 +18,8 @@ Documentation
    sessions
    qserver
    dm
-   logging_config
 
-Developer
+Developer Documentation
 ----------------
 
 .. toctree::
@@ -28,13 +27,3 @@ Developer
 
    developing_bits
    qserver_service
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-
-   guides/template_creation
-   guides/creating_instruments
-   guides/creating_devices
-   guides/setting_iconfig
-   guides/sessions

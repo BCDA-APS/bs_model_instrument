@@ -57,22 +57,22 @@ The following figure describes the relationships among the various repositories 
 Repository Descriptions
 -----------------------
 
-- **`BITS <https://github.com/BCDA-APS/BITS>`_**
+- `BITS <https://github.com/BCDA-APS/BITS>`_
 
   The central repository for APS efforts to integrate Bluesky into beamline environments. It provides configuration, utilities, and architectural support for deploying Bluesky-based instruments at the APS.
 
-- **`BITS-Starter <https://github.com/BCDA-APS/BITS-Starter/>`_**
+- `BITS-Starter <https://github.com/BCDA-APS/BITS-Starter/>`_
 
   A template repository for creating new BITS-compatible Bluesky instruments. Offers a boilerplate structure to streamline deployment.
 
-- **`apsbits` (submodule in BITS)**
+- **apsbits (submodule in BITS)**
 
   Core BITS functionality. Encapsulates the logic and base configurations used by BITS instruments.
 
   - `apsbits/demo_instrument`: A reference Bluesky instrument showcasing a standard BITS-compliant setup.
   - `apsbits/demo_qserver`: A reference QServer that integrates with the demo instrument.
 
-- **`apstools <https://github.com/BCDA-APS/apstools>`_**
+- `apstools <https://github.com/BCDA-APS/apstools>`_
 
   A general-purpose utility library with reusable Bluesky components:
 
@@ -80,7 +80,7 @@ Repository Descriptions
   - `apstools.plans`: Frequently used Bluesky plans tailored to APS experiments.
   - `apstools.callbacks`: Ready-made Bluesky callbacks for logging, visualization, and monitoring.
 
-- **`guarneri <https://github.com/spc-group/guarneri>`_**
+- `guarneri <https://github.com/spc-group/guarneri>`_
 
   A device registry and dynamic loader for Ophyd. Simplifies the instantiation and reuse of instrument configurations.
 
@@ -88,7 +88,8 @@ Repository Descriptions
 
   Helper tools for crystallographic diffraction workflows. Supports integration with Bluesky and orientation matrix calculations.
 
-- **`Bluesky_training`**
+- **`Bluesky_training`** (Work In Progress)
+
 
   A complete training suite developed to support APS beamline scientists and users adopting the Bluesky ecosystem. Includes examples, tutorials, and curriculum materials.
 

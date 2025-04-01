@@ -31,8 +31,8 @@ installation.
 
 Starting Your Instrument
 ----
-When ready to load the bluesky data acquisition for use, type this command.
+When ready to load the bluesky data acquisition for use, type this command. For the purpose of this tutorial we assume you have already used BITS to create an instrument called `new_instrument`.
 
 .. code-block:: bash
 
-    from apsbits.demo_instrument.startup import *
+    from new_instrument.startup import *

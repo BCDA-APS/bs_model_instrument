@@ -1,6 +1,6 @@
 .. _install:
 
-Installation
+User Installation
 ============
 
 It is easiest to start installation with a fresh ``conda`` environment. For
