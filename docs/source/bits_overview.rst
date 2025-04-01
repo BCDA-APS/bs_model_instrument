@@ -26,7 +26,7 @@ The following figure describes the relationships among the various repositories 
        {rank=same;
         apstools [label="apstools\n(Devices, Plans, Callbacks)", shape=ellipse, fillcolor=lightblue];
        guarneri [label="guarneri\n(Ophyd Loader)", shape=ellipse, fillcolor=lightblue];
-       hkl2 [label="hkl2\n(Diffraction Tools)", shape=ellipse, fillcolor=lightblue];
+       hklpy2 [label="hklpy2\n(Diffractometer Support)", shape=ellipse, fillcolor=lightblue];
        }
 
        {rank=same;
