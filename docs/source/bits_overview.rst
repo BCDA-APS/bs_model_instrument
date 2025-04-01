@@ -50,7 +50,7 @@ The following figure describes the relationships among the various repositories 
        BITS -> guarneri [label="uses"];
        guarneri -> guarneri_maker [label="includes"];
        guarneri_maker -> new_instrument [label="provides"];
-       BITS -> hkl2 [label="uses"];
+       BITS -> hklpy2 [label="uses"];
        training -> BITS [label="supports"];
    }
 
