@@ -14,11 +14,11 @@ Documentation
    template_creation
    creating_instrument
    setting_iconfig
+   creating_devices
    sessions
    qserver
    dm
    logging_config
-   setting_iconfig
 
 Developer
 ----------------
@@ -35,5 +35,6 @@ Developer
 
    guides/template_creation
    guides/creating_instruments
+   guides/creating_devices
    guides/setting_iconfig
    guides/sessions
