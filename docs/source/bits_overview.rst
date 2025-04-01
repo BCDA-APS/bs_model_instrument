@@ -84,7 +84,7 @@ Repository Descriptions
 
   A device registry and dynamic loader for Ophyd. Simplifies the instantiation and reuse of instrument configurations.
 
-- **`hklpy2`**
+- `hklpy2 <https://prjemian.github.io/hklpy2/>`_
 
   Diffractometer as ophyd PseudoPositioner.  Supports Bluesky operations with various diffractometer geometries in both reciprocal space and real space.
 
