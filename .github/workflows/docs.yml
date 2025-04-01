@@ -42,6 +42,7 @@ jobs:
         set -vxeuo pipefail
         sudo apt-get update
         sudo apt-get -y install pandoc
+        
     - name: Install graphviz
       run: sudo apt install graphviz
 
