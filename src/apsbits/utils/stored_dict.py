@@ -40,10 +40,6 @@ class StoredDict(collections.abc.MutableMapping):
     flushed after a configurable delay. The YAML serialization and
     deserialization are handled by the static methods `dump` and `load`.
 
-    Methods:
-        flush: Force an immediate write of the dictionary contents to disk.
-        popitem: Remove and return an item in LIFO order.
-        reload: Reload the dictionary contents from disk.
     """
 
     def __init__(
