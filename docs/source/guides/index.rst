@@ -1,12 +1,12 @@
 .. _guides:
 
 Guides & How-Tos
-====================
+==========================================
 
 Guides show how to use certain features of this instrument.
 
 User Documentation
------------------
+------------------------------
 
 .. toctree::
    :maxdepth: 1
@@ -20,7 +20,7 @@ User Documentation
    dm
 
 Developer Documentation
-----------------
+----------------------------
 
 .. toctree::
    :maxdepth: 1

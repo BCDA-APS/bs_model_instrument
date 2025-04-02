@@ -1,7 +1,7 @@
 .. _install:
 
 User Installation
-============
+====================
 
 It is easiest to start installation with a fresh ``conda`` environment. For
 any packages that require installation of pre-compiled content (such as Qt,

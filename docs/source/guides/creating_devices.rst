@@ -1,7 +1,7 @@
 .. _creating_devices:
 
 Adding Devices to an Instrument
-----
+-----------------------------------------
 
 Every new instrument comes pre-loaded with a simulated motor and a detector. To add a new device to your instrument startup, a couple of steps must be taken.
 For the purpose of this tutorial we assume you have already used BITS to create an instrument called `new_instrument`.

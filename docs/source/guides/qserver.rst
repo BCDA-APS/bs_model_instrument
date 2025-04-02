@@ -6,7 +6,7 @@ Queue Server
 The Queue Server provides a way to run Bluesky plans remotely. We assume you have created used the create-bits command to create an instrument named ``new_instrument``.
 
 Configuration
-----
+--------------------
 
 The Queue Server configuration file will be stored inside ``src/new_instrument_qserver/qs-config.yml``:
 
@@ -14,7 +14,7 @@ The Queue Server configuration file will be stored inside ``src/new_instrument_q
    :language: yaml
 
 Starting the Server
-----
+-----------------------
 
 
 The Queue Server can be started using the script at ``src/new_instrument_qserver/qs_host.sh``:
@@ -36,8 +36,8 @@ process.
 
 .. _qs.client:
 
-Example Usage queueserver commanline
-----
+Example Usage queueserver commandline
+----------------------------------------
 
 Here's an example of how to use the Queue Server:
 
@@ -64,7 +64,7 @@ Here's an example of how to use the Queue Server:
 
 
 queueserver client GUI
-----------------------
+------------------------
 
 At this time, there is one GUI recommended for use with the bluesky queueserver.
 Other GUI clients are in development and show promise of improvements.  For now,
@@ -77,7 +77,7 @@ use this one.
 .. _qs.host.configure:
 
 Configure the QS Host
----------------------
+-----------------------
 
 File ``qs-config.yml`` contains all configuration of the QS host process.
 The source code contains lots of comments about the various settings. See the
@@ -90,7 +90,7 @@ that might be installed into a read-only directory.
 .. [#] https://blueskyproject.io/bluesky-queueserver/manager_config.html
 
 shell script ``qs_host.sh``
----------------------------
+-----------------------------
 
 A shell script ``qs_host.sh`` is used to start the QS host process. Typically,
 it is run in the background: ``./new_instrument_qserver/qs_host.sh restart``. This command looks for
