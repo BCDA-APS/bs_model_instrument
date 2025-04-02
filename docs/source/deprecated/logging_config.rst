@@ -1,9 +1,9 @@
 .. _logging.session:
 .. index:: !Logging
 
-===============
+=================
 Configure Logging
-===============
+=================
 
 Configure logging for this session.
 

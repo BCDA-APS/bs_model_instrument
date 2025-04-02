@@ -1,5 +1,3 @@
-.. _install:
-
 User Installation
 ====================
 

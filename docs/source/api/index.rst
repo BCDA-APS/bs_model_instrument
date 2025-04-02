@@ -44,7 +44,7 @@ This section contains detailed API documentation for the APSBITS package.
    demo_qserver
 
 Core Components
---------------
+---------------
 
 The core components provide the fundamental building blocks for Bluesky data acquisition:
 
@@ -74,7 +74,7 @@ The utilities module provides helper functions and tools:
    apsbits.utils.stored_dict
 
 Demo Components
---------------
+---------------
 
 Example implementations and templates:
 

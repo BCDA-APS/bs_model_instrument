@@ -19,7 +19,7 @@ For the purpose of this tutorial we assume you have already used BITS to create 
 
 2. Add the new device class to the device ``__init__.py`` file
 
-- If you want to use a device from an external package, make sure to add it to the ``__init__.py`` file in the device folder of your instrument.
+If you want to use a device from an external package, make sure to add it to the ``__init__.py`` file in the device folder of your instrument.
 
 .. code-block:: python
 
@@ -29,6 +29,7 @@ For the purpose of this tutorial we assume you have already used BITS to create 
 3. Add the new device to the instrument configuration file
 
 - Depending on if the device can only function on the aps network or not add it to the ``device.yml`` file or the ``devices_aps_only.yml`` file.
+
 .. code-block:: yaml
 
     new_instrument.devices.StageXY:

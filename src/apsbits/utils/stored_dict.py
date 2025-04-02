@@ -1,11 +1,11 @@
-"""
-Storage-backed Dictionary
+"""Storage-backed Dictionary
 =========================
-A dictionary that writes its contents to YAML file.
-Replaces ``bluesky.utils.PersistentDict``.
-* Contents must be JSON serializable.
-* Contents stored in a single human-readable YAML file.
-* Sync to disk shortly after dictionary is updated.
+
+A dictionary that writes its contents to a YAML file. This mutable mapping automatically
+synchronizes its in-memory state to a human-readable YAML file on disk shortly after
+updates. It replaces ``bluesky.utils.PersistentDict`` and
+ensures that all contents are JSON serializable.
+
 .. autosummary::
     ~StoredDict
 """
@@ -20,6 +20,10 @@ import logging
 import pathlib
 import threading
 import time
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Union
 
 import yaml
 
@@ -29,52 +33,76 @@ logger.bsdev(__file__)
 
 class StoredDict(collections.abc.MutableMapping):
     """
-    Dictionary that syncs to storage.
-    .. autosummary::
-        ~flush
-        ~popitem
-        ~reload
-    .. rubric:: Static methods
-    All support for the YAML format is implemented in the static methods.
-    .. autosummary::
-        ~dump
-        ~load
-    ----
+    Dictionary that synchronizes its contents to a YAML storage file.
+
+    This mutable mapping stores key-value pairs in an internal cache and
+    periodically writes its contents to a YAML file on disk. Changes are
+    flushed after a configurable delay. The YAML serialization and
+    deserialization are handled by the static methods `dump` and `load`.
+
+    Methods:
+        flush: Force an immediate write of the dictionary contents to disk.
+        popitem: Remove and return an item in LIFO order.
+        reload: Reload the dictionary contents from disk.
     """
 
-    def __init__(self, file, delay=5, title=None, serializable=True):
+    def __init__(
+        self,
+        file: Union[str, pathlib.Path],
+        delay: float = 5,
+        title: Optional[str] = None,
+        serializable: bool = True,
+    ) -> None:
         """
-        StoredDict : Dictionary that syncs to storage
-        PARAMETERS
-        file : str or pathlib.Path
-            Name of file to store dictionary contents.
-        delay : number
-            Time delay (s) since last dictionary update to write to storage.
-            Default: 5 seconds.
-        title : str or None
-            Comment to write at top of file.
-            Default: "Written by StoredDict."
-        serializable : bool
-            If True, validate new dictionary entries are JSON serializable.
-        """
-        self._file = pathlib.Path(file)
-        self._delay = max(0, delay)
-        self._title = title or f"Written by {self.__class__.__name__}."
-        self.test_serializable = serializable
-        self.sync_in_progress = False
-        self._sync_deadline = time.time()
-        self._sync_key = f"sync_agent_{id(self):x}"
-        self._sync_loop_period = 0.005
+        Initialize the StoredDict instance.
 
-        self._cache = {}
+        Args:
+            file (str or pathlib.Path): Path to the YAML file for storing dictionary
+            contents.
+            delay (float): Time delay in seconds after the last update before
+            synchronizing to storage. Defaults to 5 seconds.
+            title (str, optional): Comment to include at the top of the YAML file.
+            If not provided, defaults to "Written by StoredDict.".
+            serializable (bool): If True, ensure that new dictionary entries
+            are JSON serializable.
+
+        Returns:
+            None
+        """
+        self._file: pathlib.Path = pathlib.Path(file)
+        self._delay: float = max(0, delay)
+        self._title: str = title or f"Written by {self.__class__.__name__}."
+        self.test_serializable: bool = serializable
+        self.sync_in_progress: bool = False
+        self._sync_deadline: float = time.time()
+        self._sync_key: str = f"sync_agent_{id(self):x}"
+        self._sync_loop_period: float = 0.005
+
+        self._cache: Dict[Any, Any] = {}
         self.reload()
 
-    def __delitem__(self, key):
-        """Delete dictionary value by key."""
+    def __delitem__(self, key: Any) -> None:
+        """
+        Delete an item from the dictionary by its key.
+
+        Args:
+            key (Any): The key of the item to delete.
+
+        Raises:
+            KeyError: If the key does not exist in the dictionary.
+        """
         del self._cache[key]
 
-    def __getitem__(self, key):
-        """Get dictionary value by key."""
+    def __getitem__(self, key: Any) -> Any:
+        """
+        Retrieve the value associated with the given key.
+
+        Args:
+            key (Any): The key to retrieve.
+
+        Returns:
+            Any: The value corresponding to the specified key.
+        """
         return self._cache[key]
 
     def __iter__(self):
@@ -141,8 +169,8 @@ class StoredDict(collections.abc.MutableMapping):
         """
         Remove and return a (key, value) pair as a 2-tuple.
 
-        Pairs are returned in LIFO (last-in, first-out) order.
-        Raises KeyError if the dict is empty.
+        Raises:
+            KeyError: If the dictionary is empty.
         """
         return self._cache.popitem()
 
@@ -168,7 +196,7 @@ class StoredDict(collections.abc.MutableMapping):
 
         file = pathlib.Path(file)
         logger.debug("_load('%s')", file)
-        md = None
+        md: Optional[Dict[Any, Any]] = None
         if file.exists():
             md = load_config_yaml(file)
-        return md or {}  # In case file is empty.
+        return md or {}
