@@ -27,7 +27,7 @@ If you want to use a device from an external package, make sure to add it to the
 
 3. Add the new device to the instrument configuration file
 
-Depending on if the device can only function on the aps network or not add it to the ``device.yml`` file or the ``devices_aps_only.yml`` file. 
+Depending on if the device can only function on the aps network or not add it to the ``device.yml`` file or the ``devices_aps_only.yml`` file.
 
 
 .. code-block:: yaml
