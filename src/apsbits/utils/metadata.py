@@ -3,7 +3,6 @@ RunEngine Metadata
 ==================
 
 .. autosummary::
-    ~MD_PATH
     ~get_md_path
     ~re_metadata
 """

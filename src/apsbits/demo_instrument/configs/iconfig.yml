@@ -22,7 +22,6 @@ RUN_ENGINE:
 
     ### Where to "autosave" the RE.md dictionary.
     ### Defaults:
-    MD_STORAGE_HANDLER: StoredDict
     MD_PATH: .re_md_dict.yml
 
     ### The progress bar is nice to see,
@@ -72,7 +71,7 @@ MAKE_DEVICES:
 OPHYD:
     ### Control layer for ophyd to communicate with EPICS.
     ### Default: PyEpics
-    ### Choices: "PyEpics" or "caproto" # caproto is not yet supported
+    ### Choices: "PyEpics" or "caproto"
     CONTROL_LAYER: PyEpics
 
     ### default timeouts (seconds)
@@ -82,5 +81,5 @@ OPHYD:
         PV_CONNECTION: *TIMEOUT
 
 # Control detail of exception traces in IPython (console and notebook).
-# Options are: Minimal, Plain, Verbose
+# Options are: 'Plain', 'Context', 'Verbose', 'Minimal', 'Docs'
 XMODE_DEBUG_LEVEL: Plain
