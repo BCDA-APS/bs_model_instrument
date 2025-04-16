@@ -234,3 +234,4 @@ write_to = "src/apsbits/_version.py"
 [project.scripts]
 create-bits = "apsbits.utils.create_new_instrument:main"
 delete-bits = "apsbits.utils.delete_instrument:main"
+run-bits = "apsbits.utils.run_instrument:main"

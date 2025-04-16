@@ -41,7 +41,7 @@ def _get_make_devices_log_level() -> int:
     return level
 
 
-def make_devices(*, pause: float = 1, clear: bool = True):
+def make_devices(*, pause: float = 1, clear: bool = True, file: str | pathlib.Path | None = None):
     """
     (plan stub) Create the ophyd-style controls for this instrument.
 
@@ -49,7 +49,8 @@ def make_devices(*, pause: float = 1, clear: bool = True):
 
     EXAMPLE::
 
-        RE(make_devices())
+        RE(make_devices())  # Use default iconfig.yml
+        RE(make_devices(file="custom_devices.yml"))  # Use custom devices file
 
     PARAMETERS
 
@@ -57,9 +58,12 @@ def make_devices(*, pause: float = 1, clear: bool = True):
         Wait 'pause' seconds (default: 1) for slow objects to connect.
     clear : bool
         Clear 'oregistry' first if True (the default).
+    file : str | pathlib.Path | None
+        Optional path to a custom YAML/TOML file containing device configurations.
+        If provided, this file will be used instead of the default iconfig.yml.
+        If None (default), uses the standard iconfig.yml configuration.
 
     """
-
     logger.debug("(Re)Loading local control objects.")
 
     if clear:
@@ -74,49 +78,63 @@ def make_devices(*, pause: float = 1, clear: bool = True):
 
         oregistry.clear()
 
-    iconfig = get_config()
-
-    instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
-    configs_path = instrument_path / "configs"
-
-    # Get device files and ensure it's a list
-    device_files = iconfig.get("DEVICES_FILES", [])
-    if isinstance(device_files, str):
-        device_files = [device_files]
-    logger.debug("Loading device files: %r", device_files)
-
-    # Load each device file
-    for device_file in device_files:
-        device_path = configs_path / device_file
+    if file is not None:
+        # Use the provided file directly
+        device_path = pathlib.Path(file)
         if not device_path.exists():
             logger.error("Device file not found: %s", device_path)
-            continue
+            return
         logger.info("Loading device file: %s", device_path)
         try:
             yield from run_blocking_function(_loader, device_path, main=True)
         except Exception as e:
             logger.error("Error loading device file %s: %s", device_path, str(e))
-            continue
+            return
+    else:
+        # Use standard iconfig.yml configuration
+        iconfig = get_config()
 
-    # Handle APS-specific device files if on APS subnet
-    aps_control_devices_files = iconfig.get("APS_DEVICES_FILES", [])
-    if isinstance(aps_control_devices_files, str):
-        aps_control_devices_files = [aps_control_devices_files]
+        instrument_path = pathlib.Path(iconfig.get("INSTRUMENT_PATH")).parent
+        configs_path = instrument_path / "configs"
 
-    if aps_control_devices_files and host_on_aps_subnet():
-        for device_file in aps_control_devices_files:
+        # Get device files and ensure it's a list
+        device_files = iconfig.get("DEVICES_FILES", [])
+        if isinstance(device_files, str):
+            device_files = [device_files]
+        logger.debug("Loading device files: %r", device_files)
+
+        # Load each device file
+        for device_file in device_files:
             device_path = configs_path / device_file
             if not device_path.exists():
-                logger.error("APS device file not found: %s", device_path)
+                logger.error("Device file not found: %s", device_path)
                 continue
-            logger.info("Loading APS device file: %s", device_path)
+            logger.info("Loading device file: %s", device_path)
             try:
                 yield from run_blocking_function(_loader, device_path, main=True)
             except Exception as e:
-                logger.error(
-                    "Error loading APS device file %s: %s", device_path, str(e)
-                )
+                logger.error("Error loading device file %s: %s", device_path, str(e))
                 continue
+
+        # Handle APS-specific device files if on APS subnet
+        aps_control_devices_files = iconfig.get("APS_DEVICES_FILES", [])
+        if isinstance(aps_control_devices_files, str):
+            aps_control_devices_files = [aps_control_devices_files]
+
+        if aps_control_devices_files and host_on_aps_subnet():
+            for device_file in aps_control_devices_files:
+                device_path = configs_path / device_file
+                if not device_path.exists():
+                    logger.error("APS device file not found: %s", device_path)
+                    continue
+                logger.info("Loading APS device file: %s", device_path)
+                try:
+                    yield from run_blocking_function(_loader, device_path, main=True)
+                except Exception as e:
+                    logger.error(
+                        "Error loading APS device file %s: %s", device_path, str(e)
+                    )
+                    continue
 
     if pause > 0:
         logger.debug(
