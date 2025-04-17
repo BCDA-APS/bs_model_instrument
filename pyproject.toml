@@ -55,7 +55,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["build", "isort", "mypy", "pre-commit", "pytest", "ruff"]
+dev = ["build", "isort", "mypy", "pre-commit", "pytest", "pytest-mock", "ruff"]
 
 # doc: conda install conda-forge::pandoc
 doc = [
