@@ -32,12 +32,13 @@ def get_instrument_paths(name: str) -> Tuple[Path, Path]:
     Get the paths to the instrument and qserver directories.
 
     :param name: The name of the instrument.
-    :return: A tuple containing the instrument directory path and qserver directory path.
+    :return: A tuple containing the instrument directory path and qserver directory
+             path.
     """
     main_path: Path = Path(os.getcwd()).resolve()
     instrument_dir: Path = main_path / "src" / name
     qserver_dir: Path = main_path / "src" / f"{name}_qserver"
-    
+
     return instrument_dir, qserver_dir
 
 
@@ -54,7 +55,7 @@ def delete_instrument(instrument_dir: Path, qserver_dir: Path) -> None:
         print(f"Instrument directory '{instrument_dir}' removed.")
     else:
         print(f"Warning: Instrument directory '{instrument_dir}' does not exist.")
-    
+
     if qserver_dir.exists():
         shutil.rmtree(str(qserver_dir))
         print(f"Qserver directory '{qserver_dir}' removed.")
@@ -71,12 +72,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Delete an instrument and its associated qserver configuration."
     )
+    parser.add_argument("name", type=str, help="Name of the instrument to delete.")
     parser.add_argument(
-        "name", type=str, help="Name of the instrument to delete."
-    )
-    parser.add_argument(
-        "--force", "-f", action="store_true", 
-        help="Skip confirmation prompt and delete immediately."
+        "--force",
+        "-f",
+        action="store_true",
+        help="Skip confirmation prompt and delete immediately.",
     )
     args = parser.parse_args()
 
@@ -85,27 +86,33 @@ def main() -> None:
         sys.exit(1)
 
     instrument_dir, qserver_dir = get_instrument_paths(args.name)
-    
+
     if not instrument_dir.exists() and not qserver_dir.exists():
-        print(f"Error: Neither instrument '{args.name}' nor its qserver configuration exist.", 
-              file=sys.stderr)
+        print(
+            f"Error: Neither instrument '{args.name}' nor its qserver configuration "
+            f"exist.",
+            file=sys.stderr,
+        )
         sys.exit(1)
-    
+
     if not args.force:
         confirmation = input(
-            f"Are you sure you want to delete instrument '{args.name}' and its qserver configuration? [y/N]: "
+            f"Are you sure you want to delete instrument '{args.name}' and its "
+            f"qserver configuration? [y/N]: "
         )
-        if confirmation.lower() != 'y':
+        if confirmation.lower() != "y":
             print("Deletion cancelled.")
             sys.exit(0)
-    
+
     try:
         delete_instrument(instrument_dir, qserver_dir)
-        print(f"Instrument '{args.name}' and its qserver configuration have been deleted.")
+        print(
+            f"Instrument '{args.name}' and its qserver configuration have been deleted."
+        )
     except Exception as exc:
         print(f"Error deleting instrument: {exc}", file=sys.stderr)
         sys.exit(1)
 
 
 if __name__ == "__main__":
-    main() 
+    main()

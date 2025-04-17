@@ -41,7 +41,9 @@ def _get_make_devices_log_level() -> int:
     return level
 
 
-def make_devices(*, pause: float = 1, clear: bool = True, file: str | pathlib.Path | None = None):
+def make_devices(
+    *, pause: float = 1, clear: bool = True, file: str | pathlib.Path | None = None
+):
     """
     (plan stub) Create the ophyd-style controls for this instrument.
 
