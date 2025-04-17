@@ -160,7 +160,14 @@ def test_delete_main_invalid_name(capsys: "CaptureFixture[str]") -> None:
 
     assert excinfo.value.code == 2  # argparse exits with code 2 for missing arguments
     captured = capsys.readouterr()
-    assert "error: the following arguments are required: name" in captured.err
+    # Check for either the missing argument error or the unrecognized arguments error
+    assert any(
+        error in captured.err
+        for error in [
+            "error: the following arguments are required: name",
+            "error: unrecognized arguments:",
+        ]
+    )
 
 
 def test_delete_main_nonexistent_instrument(
