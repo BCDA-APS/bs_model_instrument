@@ -1,6 +1,14 @@
+:orphan:
+
 .. _license:
 
 Software License
 ================
 
-.. literalinclude:: ../../src/instrument/LICENSE
+License
+=======
+
+The project is licensed under the following terms:
+
+.. literalinclude:: ../../LICENSE
+   :language: text

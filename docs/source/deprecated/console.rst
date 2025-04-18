@@ -20,7 +20,7 @@ Note that ``In [1]:`` and ``In [2]:`` are numbered command prompts from IPython.
 
 .. code-block:: ipy
 
-    In [1]: from instrument.startup import *
+    In [1]: from apsbits.demo_instrument.startup import *
     I Mon-12:02:54.126: **************************************** startup
     I Mon-12:02:54.126: /home/prjemian/Documents/projects/prjemian/model_instrument/src/instrument/utils/logging_setup.py
     I Mon-12:02:54.126: Log file: /home/prjemian/Documents/projects/prjemian/model_instrument/.logs/logging.log
@@ -53,10 +53,10 @@ Note that ``In [1]:`` and ``In [2]:`` are numbered command prompts from IPython.
     In [2]:
 
 Shortcut
---------
+========
 
 Here's a shortcut that combines both steps:
 
 .. code-block::
 
-    ipython -i -c "from instrument.startup import *"
+    ipython -i -c "from apsbits.demo_instrument.startup import *"

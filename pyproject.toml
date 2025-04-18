@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64.0", "setuptools_scm[toml]>=8.0"]
+requires = ["setuptools>=77.0", "setuptools_scm[toml]>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.copyright]
@@ -22,14 +22,12 @@ maintainers = [
 readme = "README.md"
 requires-python = ">=3.11"
 keywords = ['bluesky', 'queueserver']
-license = { file = "LICENSE" }
+license = "LicenseRef-ANL-Open-Source-License"
+license-files = ["LICENSE"]
 classifiers = [
-    "Development Status :: 6 - Mature",
+    "Development Status :: 4 - Beta",
     "Environment :: Console",
-    "Intended Audience :: Developers",
-    "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
-    "License :: Freely Distributable",
-    "License :: Public Domain",
+    "Intended Audience :: Science/Research",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Topic :: Utilities",
@@ -57,7 +55,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["build", "isort", "mypy", "pre-commit", "pytest", "ruff"]
+dev = ["build", "isort", "mypy", "pre-commit", "pytest", "pytest-mock", "ruff"]
 
 # doc: conda install conda-forge::pandoc
 doc = [
@@ -73,6 +71,8 @@ doc = [
     "sphinx-design",
     "sphinx-tabs",
     "sphinx",
+    "graphviz",
+    "dot",
 ]
 
 all = ["apsbits[dev,doc]"]
@@ -232,4 +232,15 @@ package-dir = {"apsbits" = "src/apsbits"}
 write_to = "src/apsbits/_version.py"
 
 [project.scripts]
-create-bits = "apsbits.utils.create_new_instrument:main"
+create-bits = "apsbits.api.create_new_instrument:main" ## keeping this one for back compatibility
+#new section of entrypoints for the api.
+bits-create = "apsbits.api.create_new_instrument:main"
+bits-delete = "apsbits.api.delete_instrument:main"
+bits-run = "apsbits.api.run_instrument:main"
+# bits-device-create
+# bits-device-remove
+# bits-device-check
+# bits-plan-create
+# bits-plan-remove
+# bits-plan-check
+#
