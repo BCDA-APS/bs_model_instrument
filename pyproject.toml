@@ -232,6 +232,6 @@ package-dir = {"apsbits" = "src/apsbits"}
 write_to = "src/apsbits/_version.py"
 
 [project.scripts]
-create-bits = "apsbits.utils.create_new_instrument:main"
-delete-bits = "apsbits.utils.delete_instrument:main"
-run-bits = "apsbits.utils.run_instrument:main"
+create-bits = "apsbits.api.create_new_instrument:main"
+delete-bits = "apsbits.api.delete_instrument:main"
+run-bits = "apsbits.api.run_instrument:main"

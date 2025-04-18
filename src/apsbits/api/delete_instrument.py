@@ -33,7 +33,8 @@ def get_instrument_paths(name: str) -> Tuple[Path, Path]:
     Get the paths to the instrument and qserver directories.
 
     :param name: The name of the instrument.
-    :return: A tuple containing the instrument directory path and qserver directory path.
+    :return: A tuple containing the instrument directory path and qserver directory
+             path.
     """
     main_path: Path = Path(os.getcwd()).resolve()
     instrument_dir: Path = main_path / "src" / name
@@ -52,15 +53,15 @@ def delete_instrument(instrument_dir: Path, qserver_dir: Path) -> None:
     """
     main_path: Path = Path(os.getcwd()).resolve()
     deleted_dir: Path = main_path / ".deleted"
-    
+
     # Create .deleted directory if it doesn't exist
     if not deleted_dir.exists():
         deleted_dir.mkdir(parents=True, exist_ok=True)
         print(f"Created .deleted directory at '{deleted_dir}'.")
-    
+
     # Add timestamp to avoid name conflicts
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
+
     if instrument_dir.exists():
         # Create a new path with timestamp
         new_instrument_path = deleted_dir / f"{instrument_dir.name}_{timestamp}"
