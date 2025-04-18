@@ -18,8 +18,8 @@ if TYPE_CHECKING:
     from _pytest.capture import CaptureFixture
     from _pytest.monkeypatch import MonkeyPatch
 
-from apsbits.utils.run_instrument import main
-from apsbits.utils.run_instrument import run_instrument_startup
+from apsbits.api.run_instrument import main
+from apsbits.api.run_instrument import run_instrument_startup
 
 
 @pytest.fixture
@@ -29,7 +29,7 @@ def mock_registry() -> Generator[MagicMock, None, None]:
 
     :yield: A mock ophyd registry.
     """
-    with patch("apsbits.utils.run_instrument.Registry") as mock_registry:
+    with patch("apsbits.api.run_instrument.Registry") as mock_registry:
         # Create a mock registry with some devices
         mock_registry.registry = {
             "device1": MagicMock(
@@ -151,7 +151,7 @@ def test_main_success(
     :param capsys: Pytest fixture for capturing stdout and stderr.
     """
     # Mock the run_instrument_startup function
-    with patch("apsbits.utils.run_instrument.run_instrument_startup") as mock_run:
+    with patch("apsbits.api.run_instrument.run_instrument_startup") as mock_run:
         # Make the function return a successful result
         mock_run.return_value = (
             True,
@@ -200,7 +200,7 @@ def test_main_success_with_output(
     output_file = tmp_path / "output.json"
 
     # Mock the run_instrument_startup function
-    with patch("apsbits.utils.run_instrument.run_instrument_startup") as mock_run:
+    with patch("apsbits.api.run_instrument.run_instrument_startup") as mock_run:
         # Make the function return a successful result
         mock_run.return_value = (
             True,
@@ -253,7 +253,7 @@ def test_main_failure(
     :param capsys: Pytest fixture for capturing stdout and stderr.
     """
     # Mock the run_instrument_startup function
-    with patch("apsbits.utils.run_instrument.run_instrument_startup") as mock_run:
+    with patch("apsbits.api.run_instrument.run_instrument_startup") as mock_run:
         # Make the function return a failure result
         mock_run.return_value = (False, None)
 
@@ -287,7 +287,7 @@ def test_main_no_devices(
     :param capsys: Pytest fixture for capturing stdout and stderr.
     """
     # Mock the run_instrument_startup function
-    with patch("apsbits.utils.run_instrument.run_instrument_startup") as mock_run:
+    with patch("apsbits.api.run_instrument.run_instrument_startup") as mock_run:
         # Make the function return a successful result but with no devices
         mock_run.return_value = (True, {})
 

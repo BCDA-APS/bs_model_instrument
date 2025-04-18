@@ -6,6 +6,7 @@ which are responsible for creating and deleting instruments and their
 associated qserver configurations.
 """
 
+import os
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Generator
@@ -17,13 +18,13 @@ if TYPE_CHECKING:
     from _pytest.monkeypatch import MonkeyPatch
     from pytest_mock.plugin import MockerFixture
 
-from apsbits.utils.create_new_instrument import copy_instrument
-from apsbits.utils.create_new_instrument import create_qserver
-from apsbits.utils.create_new_instrument import main as create_main
-from apsbits.utils.delete_instrument import delete_instrument
-from apsbits.utils.delete_instrument import get_instrument_paths
-from apsbits.utils.delete_instrument import main as delete_main
-from apsbits.utils.delete_instrument import validate_instrument_name
+from apsbits.api.create_new_instrument import copy_instrument
+from apsbits.api.create_new_instrument import create_qserver
+from apsbits.api.create_new_instrument import main as create_main
+from apsbits.api.delete_instrument import delete_instrument
+from apsbits.api.delete_instrument import get_instrument_paths
+from apsbits.api.delete_instrument import main as delete_main
+from apsbits.api.delete_instrument import validate_instrument_name
 
 
 @pytest.fixture
@@ -77,7 +78,7 @@ def mock_demo_dirs(
 
     # Patch the paths in the create_new_instrument module
     monkeypatch.setattr(
-        "apsbits.utils.create_new_instrument.Path",
+        "apsbits.api.create_new_instrument.Path",
         lambda *args: Path(*args)
         if args[0] != __file__
         else tmp_path / "create_new_instrument.py",
@@ -131,9 +132,32 @@ def test_delete_instrument(temp_instrument_dirs: tuple[Path, Path]) -> None:
     # Delete the directories
     delete_instrument(instrument_dir, qserver_dir)
 
-    # Verify directories no longer exist
+    # Verify directories no longer exist in their original location
     assert not instrument_dir.exists()
     assert not qserver_dir.exists()
+
+    # Verify directories exist in .deleted directory
+    deleted_dir = Path(os.getcwd()).resolve() / ".deleted"
+    assert deleted_dir.exists()
+
+    # Check that at least one directory with the instrument name exists in .deleted
+    instrument_name = instrument_dir.name
+    qserver_name = qserver_dir.name
+
+    # Find directories in .deleted that start with the instrument or qserver name
+    instrument_in_deleted = any(
+        d.name.startswith(instrument_name) for d in deleted_dir.iterdir() if d.is_dir()
+    )
+    qserver_in_deleted = any(
+        d.name.startswith(qserver_name) for d in deleted_dir.iterdir() if d.is_dir()
+    )
+
+    assert (
+        instrument_in_deleted
+    ), f"No directory starting with '{instrument_name}' found in .deleted"
+    assert (
+        qserver_in_deleted
+    ), f"No directory starting with '{qserver_name}' found in .deleted"
 
 
 def test_delete_instrument_nonexistent(tmp_path: Path) -> None:
@@ -214,7 +238,7 @@ def test_delete_main_successful_deletion(
 
     # Mock get_instrument_paths to return our test directories
     mocker.patch(
-        "apsbits.utils.delete_instrument.get_instrument_paths",
+        "apsbits.api.delete_instrument.get_instrument_paths",
         return_value=(instrument_dir, qserver_dir),
     )
 
@@ -231,11 +255,34 @@ def test_delete_main_successful_deletion(
 
     captured = capsys.readouterr()
     assert (
-        "Instrument 'test_instrument' and its qserver configuration have been deleted"
-        in captured.out
+        "Instrument 'test_instrument' and its qserver configuration have been "
+        "moved to .deleted directory" in captured.out
     )
     assert not instrument_dir.exists()
     assert not qserver_dir.exists()
+
+    # Verify directories exist in .deleted directory
+    deleted_dir = Path(os.getcwd()).resolve() / ".deleted"
+    assert deleted_dir.exists()
+
+    # Check that at least one directory with the instrument name exists in .deleted
+    instrument_name = instrument_dir.name
+    qserver_name = qserver_dir.name
+
+    # Find directories in .deleted that start with the instrument or qserver name
+    instrument_in_deleted = any(
+        d.name.startswith(instrument_name) for d in deleted_dir.iterdir() if d.is_dir()
+    )
+    qserver_in_deleted = any(
+        d.name.startswith(qserver_name) for d in deleted_dir.iterdir() if d.is_dir()
+    )
+
+    assert (
+        instrument_in_deleted
+    ), f"No directory starting with '{instrument_name}' found in .deleted"
+    assert (
+        qserver_in_deleted
+    ), f"No directory starting with '{qserver_name}' found in .deleted"
 
 
 def test_delete_main_cancelled_deletion(
@@ -256,7 +303,7 @@ def test_delete_main_cancelled_deletion(
 
     # Mock get_instrument_paths to return our test directories
     mocker.patch(
-        "apsbits.utils.delete_instrument.get_instrument_paths",
+        "apsbits.api.delete_instrument.get_instrument_paths",
         return_value=(instrument_dir, qserver_dir),
     )
 
@@ -274,7 +321,7 @@ def test_delete_main_cancelled_deletion(
 
     assert excinfo.value.code == 0
     captured = capsys.readouterr()
-    assert "Deletion cancelled" in captured.out
+    assert "Operation cancelled" in captured.out
     assert instrument_dir.exists()
     assert qserver_dir.exists()
 
@@ -422,8 +469,8 @@ def test_create_main_successful_creation(
     )
 
     # Mock the copy_instrument and create_qserver functions
-    mock_copy = mocker.patch("apsbits.utils.create_new_instrument.copy_instrument")
-    mock_qserver = mocker.patch("apsbits.utils.create_new_instrument.create_qserver")
+    mock_copy = mocker.patch("apsbits.api.create_new_instrument.copy_instrument")
+    mock_qserver = mocker.patch("apsbits.api.create_new_instrument.create_qserver")
 
     create_main()
 
